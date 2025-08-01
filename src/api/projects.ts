@@ -60,47 +60,55 @@ export const getProjectById = async (projectId: string): Promise<Project> => {
 export const addProject = async (data: PostProjectRequest): Promise<ApiResponse<any>> => {
   try {
     console.log('📡 [ADD_PROJECT] Starting project creation...')
-    
+
     const formData = new FormData()
 
-    // ✅ FormData 구성 - API 명세서와 정확히 일치
+    // ✅ 명세에 따라 JSON 객체를 data라는 이름으로 감쌈
+    const jsonPart = {
+      serviceName: data.serviceName,
+      shortDescription: data.shortDescription,
+      description: data.description,
+      githubUrl: data.githubUrl || '',
+      instagramUrl: data.instagramUrl || '',
+      etcUrl: data.etcUrl || '',
+      generation: data.generation,
+      isAlumni: data.isAlumni,
+      isOfficial: data.isOfficial
+    }
+
+    // ⛳ 서버가 `@RequestPart("data")`로 받으므로 반드시 wrapping 필요
+    const jsonBlob = new Blob([JSON.stringify(jsonPart)], {
+      type: 'application/json'
+    })
+
+    formData.append('data', jsonBlob)
     formData.append('image', data.image)
-    formData.append('serviceName', data.serviceName)
-    formData.append('generation', String(data.generation))
-    formData.append('shortDescription', data.shortDescription)
-    formData.append('description', data.description)
-    formData.append('githubUrl', data.githubUrl || '')
-    formData.append('instagramUrl', data.instagramUrl || '')
-    formData.append('etcUrl', data.etcUrl || '')
-    formData.append('isAlumni', String(data.isAlumni))
-    formData.append('isOfficial', String(data.isOfficial))
 
     console.log('📋 [ADD_PROJECT] FormData entries:')
     for (const [key, value] of formData.entries()) {
-      if (value instanceof File) {
-        console.log(`${key}: File(${value.name}, ${value.size} bytes, ${value.type})`)
+      if (value instanceof Blob) {
+        console.log(`${key}: Blob/File (${value.type}, ${value.size} bytes)`)
       } else {
         console.log(`${key}: ${value}`)
       }
     }
 
-    // ✅ deleteProject처럼 명시적으로 헤더 설정하지 않음 (인터셉터가 처리)
+    // ⛳ Content-Type 자동 설정
     const response = await axiosInstance.post('/admin/projects/add', formData)
 
     console.log('✅ [ADD_PROJECT] Success:', {
       status: response.status,
       projectId: response.data.data?.projectId
     })
-    
+
     return response.data
   } catch (error: any) {
     console.error('❌ [ADD_PROJECT] Failed:', {
       status: error.response?.status,
       message: error.response?.data?.message,
-      headers: error.response?.headers,
       url: error.config?.url
     })
-    
+
     if (error.response?.status === 401) {
       throw new Error('인증이 필요합니다.')
     }
@@ -108,61 +116,52 @@ export const addProject = async (data: PostProjectRequest): Promise<ApiResponse<
   }
 }
 
-export const updateProject = async (data: PutProjectRequest): Promise<ApiResponse<null>> => {
-  try {
-    console.log('📡 [UPDATE_PROJECT] Starting project update...', { projectId: data.projectId })
-    
-    const formData = new FormData()
 
-    // ✅ 이미지가 있을 때만 추가
-    if (data.image) {
-      formData.append('image', data.image)
-    }
+/** 프로젝트 수정 */
+export const updateProject = async (
+  data: PutProjectRequest & { imageUrl: string | null }
+): Promise<void> => {
+  const formData = new FormData()
 
-    formData.append('serviceName', data.serviceName)
-    formData.append('generation', String(data.generation))
-    formData.append('shortDescription', data.shortDescription)
-    formData.append('description', data.description)
-    formData.append('githubUrl', data.githubUrl || '')
-    formData.append('instagramUrl', data.instagramUrl || '')
-    formData.append('etcUrl', data.etcUrl || '')
-    formData.append('isAlumni', String(data.isAlumni))
-    formData.append('isOfficial', String(data.isOfficial))
-
-    console.log('📋 [UPDATE_PROJECT] FormData entries:')
-    for (const [key, value] of formData.entries()) {
-      if (value instanceof File) {
-        console.log(`${key}: File(${value.name}, ${value.size} bytes, ${value.type})`)
-      } else {
-        console.log(`${key}: ${value}`)
-      }
-    }
-
-    const response = await axiosInstance.put(
-      `/admin/projects/${data.projectId}/update`,
-      formData
-    )
-
-    console.log('✅ [UPDATE_PROJECT] Success:', response.data)
-    return response.data
-  } catch (error: any) {
-    console.error('❌ [UPDATE_PROJECT] Failed:', {
-      status: error.response?.status,
-      message: error.response?.data?.message,
-      projectId: data.projectId
-    })
-    
-    if (error.response?.status === 401) {
-      throw new Error('인증이 필요합니다.')
-    }
-    throw error
+  // 1. JSON 객체 준비 (image 여부에 따라 imageUrl 조정)
+  const requestData = {
+    serviceName: data.serviceName,
+    generation: data.generation,
+    shortDescription: data.shortDescription,
+    description: data.description,
+    githubUrl: data.githubUrl || '',
+    instagramUrl: data.instagramUrl || '',
+    etcUrl: data.etcUrl || '',
+    isAlumni: data.isAlumni,
+    isOfficial: data.isOfficial,
+    imageUrl: data.image ? null : data.imageUrl // ✅ 조건에 따른 처리
   }
+
+  // 2. JSON을 File 형태로 FormData에 추가
+  const jsonFile = new File(
+    [JSON.stringify(requestData)],
+    'data.json',
+    { type: 'application/json' }
+  )
+  formData.append('data', jsonFile)
+
+  // 3. 이미지가 바뀌었을 경우에만 파일로 추가
+  if (data.image) {
+    formData.append('image', data.image)
+  }
+
+  // 4. 서버 요청 (Content-Type 자동)
+  await axiosInstance.put<ApiResponse<null>>(
+    `/admin/projects/${data.projectId}/update`,
+    formData
+  )
 }
+
 
 export const deleteProject = async (projectId: number): Promise<ApiResponse<null>> => {
   try {
     console.log('📡 [DELETE_PROJECT] Deleting project...', { projectId })
-    
+
     const response = await axiosInstance.delete(`/admin/projects/${projectId}/delete`)
 
     console.log('✅ [DELETE_PROJECT] Success:', response.data)
@@ -173,7 +172,7 @@ export const deleteProject = async (projectId: number): Promise<ApiResponse<null
       message: error.response?.data?.message,
       projectId
     })
-    
+
     if (error.response?.status === 401) {
       throw new Error('인증이 필요합니다.')
     }
