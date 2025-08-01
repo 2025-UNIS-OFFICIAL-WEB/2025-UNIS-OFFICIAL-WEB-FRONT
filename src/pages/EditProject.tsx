@@ -79,78 +79,81 @@ const EditProject = () => {
   }, [])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    
-    if (!project || isSubmitting) return
+  e.preventDefault()
 
-    // 현재 토큰 상태 확인
-    const currentToken = localStorage.getItem('accessToken')
-    console.log('🔑 [SUBMIT] Current token status:', {
-      hasToken: !!currentToken,
-      tokenPreview: currentToken ? `${currentToken.substring(0, 20)}...` : 'none'
+  if (!project || isSubmitting) return
+
+  const currentToken = localStorage.getItem('accessToken')
+  console.log('🔑 [SUBMIT] Current token status:', {
+    hasToken: !!currentToken,
+    tokenPreview: currentToken ? `${currentToken.substring(0, 20)}...` : 'none'
+  })
+
+  setIsSubmitting(true)
+
+  try {
+    const formData = new FormData(e.currentTarget)
+
+    const isAlumniChecked = (document.getElementById('isAlumni') as HTMLInputElement)?.checked || false
+    const isOfficialChecked = (document.getElementById('isOfficial') as HTMLInputElement)?.checked || false
+
+    const imageFile = formData.get('image') as File
+    const shouldUploadImage = imageFile && imageFile.size > 0
+
+    const updateData: PutProjectRequest & { imageUrl: string | null } = {
+      projectId,
+      serviceName: formData.get('serviceName') as string,
+      generation: Number(formData.get('generation')),
+      shortDescription: formData.get('shortDescription') as string,
+      description: formData.get('description') as string || project.description,
+      githubUrl: formData.get('githubUrl') as string || project.githubUrl || undefined,
+      instagramUrl: formData.get('instagramUrl') as string || project.instagramUrl || undefined,
+      etcUrl: formData.get('etcUrl') as string || project.etcUrl || undefined,
+      isAlumni: isAlumniChecked,
+      isOfficial: isOfficialChecked,
+      imageUrl: shouldUploadImage ? null : project.imageUrl // ✅ 중요
+    }
+
+    if (shouldUploadImage) {
+      updateData.image = imageFile
+      console.log('📷 [SUBMIT] Image file selected:', {
+        name: imageFile.name,
+        size: imageFile.size,
+        type: imageFile.type
+      })
+    }
+
+    console.log('📤 [SUBMIT] Sending update request:', updateData)
+
+    const response = await updateProject(updateData)
+    console.log('✅ [SUBMIT] Update successful:', response)
+
+    alert('프로젝트가 성공적으로 수정되었습니다.')
+    navigate('/projects')
+
+  } catch (err: any) {
+    console.error('❌ [SUBMIT] 프로젝트 업데이트 에러:', {
+      error: err,
+      status: err.response?.status,
+      message: err.response?.data?.message || err.message,
+      config: err.config
     })
 
-    setIsSubmitting(true)
-    
-    try {
-      const formData = new FormData(e.currentTarget)
-      
-      const isAlumniChecked = (document.getElementById('isAlumni') as HTMLInputElement)?.checked || false
-      const isOfficialChecked = (document.getElementById('isOfficial') as HTMLInputElement)?.checked || false
-      
-      const updateData: PutProjectRequest = {
-        projectId: projectId,
-        serviceName: formData.get('serviceName') as string,
-        generation: Number(formData.get('generation')),
-        shortDescription: formData.get('shortDescription') as string,
-        description: formData.get('description') as string || project.description,
-        githubUrl: formData.get('githubUrl') as string || project.githubUrl || undefined,
-        instagramUrl: formData.get('instagramUrl') as string || project.instagramUrl || undefined,
-        etcUrl: formData.get('etcUrl') as string || project.etcUrl || undefined,
-        isAlumni: isAlumniChecked,
-        isOfficial: isOfficialChecked,
-      }
+    const errorMessage = err?.response?.data?.message || err?.message || '프로젝트 수정에 실패했습니다.'
 
-      const imageFile = (formData.get('image') as File)
-      if (imageFile && imageFile.size > 0) {
-        updateData.image = imageFile
-        console.log('📷 [SUBMIT] Image file selected:', {
-          name: imageFile.name,
-          size: imageFile.size,
-          type: imageFile.type
-        })
-      }
-
-      console.log('📤 [SUBMIT] Sending update request:', updateData)
-      
-      const response = await updateProject(updateData)
-      console.log('✅ [SUBMIT] Update successful:', response)
-      
-      alert('프로젝트가 성공적으로 수정되었습니다.')
-      navigate('/projects')
-      
-    } catch (err: any) {
-      console.error('❌ [SUBMIT] 프로젝트 업데이트 에러:', {
-        error: err,
-        status: err.response?.status,
-        message: err.response?.data?.message || err.message,
-        config: err.config
-      })
-      
-      const errorMessage = err?.response?.data?.message || err?.message || '프로젝트 수정에 실패했습니다.'
-      
-      if (err.response?.status === 401 || err.message === '인증이 필요합니다.') {
-        alert('로그인이 만료되었습니다. 다시 로그인해주세요.')
-        localStorage.removeItem('accessToken')
-        localStorage.removeItem('refreshToken')
-        navigate('/')
-      } else {
-        alert(`프로젝트 수정 실패: ${errorMessage}`)
-      }
-    } finally {
-      setIsSubmitting(false)
+    if (err.response?.status === 401 || err.message === '인증이 필요합니다.') {
+      alert('로그인이 만료되었습니다. 다시 로그인해주세요.')
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('refreshToken')
+      navigate('/')
+    } else {
+      alert(`프로젝트 수정 실패: ${errorMessage}`)
     }
+  } finally {
+    setIsSubmitting(false)
   }
+}
+
 
   console.log('🔄 EditProject 렌더링:', {
     rawId: id,
