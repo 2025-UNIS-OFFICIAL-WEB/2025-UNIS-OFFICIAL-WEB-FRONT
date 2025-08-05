@@ -1,0 +1,319 @@
+html, body, #root { height: 100%; }
+body { margin: 0; background-color: transparent; }
+
+.home {
+    width: 100%;
+    height: 4634px;
+}
+
+.home-hero {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 319 / 160;            
+  max-height: 900px;                  
+  min-height: 520px;                  
+  background-image: var(--hero-bg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.home-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.05) 0%,   
+      rgba(0, 0, 0, 0.25) 30%,  
+      rgba(0, 0, 0, 0.6) 80%,   
+      rgba(0, 0, 0, 1) 100%     
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+.home-hero__container {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 1;
+  }
+  
+  .home-hero__text-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateY(160px);
+    color: #fff;
+  }
+  
+  .home-hero__text-group h1 {
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 76px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: 0px;
+  }
+  
+  .home-hero__text-group .highlight {
+    background: linear-gradient(
+      90deg,
+      #DFF0FF 0%,
+      #80C2FF 100%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  
+    font-family: Pretendard;
+    font-size: 76px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+  
+  .home-hero__text-group p {
+    color: #FFF;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 400;
+    margin-top: 12px;
+  }
+  
+  .learn-more-btn {
+    width: 299px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 39px;
+    border: 1px solid rgba(255, 255, 255, 0.60);
+    background: rgba(221, 221, 221, 0.30);
+    box-shadow: 0 0 9px 1px rgba(0, 0, 0, 0.60);
+    backdrop-filter: blur(7.5px);
+
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  }
+  .learn-more-btn:hover { filter: brightness(0.95); }
+  
+/* Intro Section */
+.home-intro {
+    background: linear-gradient(to bottom, #000 0%, #0a0a0a 100%);
+    color: #fff;
+    text-align: center;
+    padding: 300px 50px 140px;
+  }
+  
+.home-intro__top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 65px;
+}
+  
+
+  .home-intro__logo {
+    width: 113px;
+    height: 113px;;
+    margin: 0 342px;
+  }
+  
+  .line-with-circle {
+    display: flex;
+    align-items: center;
+  }
+  
+  .line-with-circle.left .line {
+    background: linear-gradient(to left, rgba(255,255,255,0.85), transparent);
+  }
+
+  .line-with-circle.right .line {
+    background: linear-gradient(to right, rgba(255,255,255,0.85), transparent);
+  }
+  
+  .line {
+    width: 515px;
+    height: 1px;
+  }
+  
+  .circle {
+    width: 6px;
+    height: 6px;
+    background-color: rgba(255,255,255,0.85);
+    border-radius: 50%;
+  }
+  
+  .home-intro h2 {
+    color: #FFF;
+    font-family: Helvetica;
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+  }
+  
+  .home-intro__caption {
+    width: 945px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto;
+    margin-top: 155px;
+
+    border-radius: 39px;
+    border: 1px solid rgba(255, 255, 255, 0.60);
+    background: rgba(221, 221, 221, 0.30);
+    box-shadow: 0 0 9px 1px rgba(0, 0, 0, 0.60);
+    backdrop-filter: blur(7.5px);
+
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  }
+
+  /* ============ Program Section ============ */
+
+.home-program {
+    padding: clamp(64px, 8vw, 120px) 24px;
+    background: radial-gradient(120% 140% at 50% 0%, #0E151C 0%, #070B10 60%, #050607 100%);
+    color: #fff;
+  }
+  
+  .home-program__inner {
+    max-width: 1654px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr; /* 좌측이 약간 더 넓게 */
+    gap: clamp(24px, 5vw, 64px);
+    align-items: center; 
+  }
+  
+  /* LEFT */
+  .program-left h3 {
+    font-family: Pretendard;
+    font-size: 60px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+  
+  .program-block + .program-block { margin-top: 28px; }
+  
+  .chip {
+    width: 375px;
+    height: 57px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 39px;
+    border: 1px solid rgba(255, 255, 255, 0.60);
+    background: rgba(221, 221, 221, 0.30);
+    box-shadow: 0 0 9px 1px rgba(0, 0, 0, 0.60);
+    backdrop-filter: blur(7.5px);
+
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 31px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-bottom: 30px;
+  }
+  
+.dot-list {
+    margin: 14px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .dot-list li {
+    position: relative;
+    padding-left: 30px;
+
+    color: #ECECEC;
+    font-family: Pretendard;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 50px;
+  }
+  
+  .dot-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.95em;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: #CFCFCF; /* 내부 원 색 */
+    box-shadow: inset 0 0 0 3px #7C8085;  /* 안쪽 3px 테두리 */
+    transform: translateY(-50%);
+  }
+  
+  
+  .program-media {
+    width: clamp(360px, 34vw, 564px); /* 반응형 가로 */
+    aspect-ratio: 1 / 1;              /* 정사각 유지 */
+    justify-self: end;                 /* ← 그리드 셀의 오른쪽 끝 */
+    align-self: center;                /* ← 세로 가운데 */
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,0.15);
+    overflow: hidden;           
+    margin-top: 80px;
+
+  }
+  .program-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .home-closing {
+    background: linear-gradient(180deg, #0B2B4C 0%, #071D36 100%);
+    padding: clamp(80px, 12vh, 160px) 20px;
+    text-align: center;
+    color: #fff;
+  }
+  
+  .home-closing h2 {
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 60px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+  
+  .home-closing p {
+    color: #FFF;
+    font-family: Helvetica;
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 300;
+
+  }
+  
+  

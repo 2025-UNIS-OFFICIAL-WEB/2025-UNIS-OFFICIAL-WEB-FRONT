@@ -1,0 +1,69 @@
+.unis-header {
+  position: fixed; 
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  width: 100%;
+  max-width: 1920px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.unis-logo-link {
+  display: flex;
+  align-items: center;
+  gap: 16px; 
+  text-decoration: none;
+}
+
+.unis-header__logo {
+  display: flex;
+  align-items: center;
+  padding: 37px 79px;
+}
+
+.unis-logo-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.unis-logo-text {
+  line-height: 26px;
+  color: #FFF;
+  font-family: Helvetica;
+  font-size: 23px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 6.9px;
+  align-items: center;
+}
+
+
+.unis-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 71px;
+  margin-right: 78px;
+}
+
+.unis-header__nav a {
+  font-family: Pretendard;
+  font-size: 21px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  color: #FFF;
+}
+
+.unis-header__nav a:hover {
+  text-decoration: underline;
+}
