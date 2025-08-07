@@ -1,4 +1,3 @@
-// src/hooks/useAuthInterceptor.ts
 import axiosInstance from '@/api/axiosInstance'
 import { refreshAccessToken } from '@/api/auth'
 import type { InternalAxiosRequestConfig, AxiosResponse } from 'axios'
@@ -22,12 +21,11 @@ const processQueue = (error: any, token: string | null = null) => {
 
 export const setupAuthInterceptor = () => {
   if (isInterceptorInitialized) {
-    console.warn('⚠️ useAuthInterceptor: 이미 초기화되었습니다. 중복 등록 방지됨.')
+    console.warn('useAuthInterceptor: 이미 초기화되었습니다. 중복 등록 방지됨.')
     return
   }
   isInterceptorInitialized = true
 
-  // ✅ Request Interceptor
   axiosInstance.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
       const token = localStorage.getItem('accessToken')
@@ -39,10 +37,10 @@ export const setupAuthInterceptor = () => {
 
       if (config.data instanceof FormData) {
         delete config.headers['Content-Type']
-        console.log('📋 [REQUEST] FormData detected, removed Content-Type header')
+        console.log('[REQUEST] FormData detected, removed Content-Type header')
       }
 
-      console.log('🔑 [REQUEST] Adding token to request:', {
+      console.log('[REQUEST] Adding token to request:', {
         url: config.url,
         method: config.method,
         token: token ?? 'none'
@@ -81,7 +79,7 @@ export const setupAuthInterceptor = () => {
 
             if (retryConfig.data instanceof FormData) {
               delete retryConfig.headers['Content-Type']
-              console.log('📋 [AUTH] Queue retry - FormData detected, removed Content-Type')
+              console.log('[AUTH] Queue retry - FormData detected, removed Content-Type')
             }
 
             return axiosInstance(retryConfig)
@@ -115,7 +113,7 @@ export const setupAuthInterceptor = () => {
 
           if (retryConfig.data instanceof FormData) {
             delete retryConfig.headers['Content-Type']
-            console.log('📋 [AUTH] Original retry - FormData detected, removed Content-Type')
+            console.log('[AUTH] Original retry - FormData detected, removed Content-Type')
           }
 
           return axiosInstance(retryConfig)

@@ -59,11 +59,9 @@ export const getProjectById = async (projectId: string): Promise<Project> => {
 
 export const addProject = async (data: PostProjectRequest): Promise<ApiResponse<any>> => {
   try {
-    console.log('📡 [ADD_PROJECT] Starting project creation...')
+    console.log('[ADD_PROJECT] Starting project creation...')
 
     const formData = new FormData()
-
-    // ✅ 명세에 따라 JSON 객체를 data라는 이름으로 감쌈
     const jsonPart = {
       serviceName: data.serviceName,
       shortDescription: data.shortDescription,
@@ -76,7 +74,7 @@ export const addProject = async (data: PostProjectRequest): Promise<ApiResponse<
       isOfficial: data.isOfficial
     }
 
-    // ⛳ 서버가 `@RequestPart("data")`로 받으므로 반드시 wrapping 필요
+    // 서버가 `@RequestPart("data")`로 받으므로 반드시 wrapping 필요
     const jsonBlob = new Blob([JSON.stringify(jsonPart)], {
       type: 'application/json'
     })
@@ -93,7 +91,6 @@ export const addProject = async (data: PostProjectRequest): Promise<ApiResponse<
       }
     }
 
-    // ⛳ Content-Type 자동 설정
     const response = await axiosInstance.post('/admin/projects/add', formData)
 
     console.log('✅ [ADD_PROJECT] Success:', {
@@ -117,7 +114,7 @@ export const addProject = async (data: PostProjectRequest): Promise<ApiResponse<
 }
 
 
-/** 프로젝트 수정 */
+/* 프로젝트 수정 */
 export const updateProject = async (
   data: PutProjectRequest & { imageUrl: string | null }
 ): Promise<void> => {
@@ -134,7 +131,7 @@ export const updateProject = async (
     etcUrl: data.etcUrl || '',
     isAlumni: data.isAlumni,
     isOfficial: data.isOfficial,
-    imageUrl: data.image ? null : data.imageUrl // ✅ 조건에 따른 처리
+    imageUrl: data.image ? null : data.imageUrl
   }
 
   // 2. JSON을 File 형태로 FormData에 추가
