@@ -1,54 +1,52 @@
 .footer {
-  padding: 24px 0;
+  padding: 24px 0 36px;
+  background-color: #000;
+  color: #d4d4d4;
   font-family: Pretendard, sans-serif;
-  color: #fff;
 }
 
 .footer__inner {
-  max-width: 1678.87px;
+  max-width: 1440px;
   margin: 0 auto;
-  margin-bottom: 36px;
+  padding: 0 24px;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
+  align-items: flex-end; /* ✅ 마지막 줄 기준 정렬 */
 }
 
-.footer__left p {
-  margin: 9px;
-  font-size: 14px;
-  color: #FFF;
-  font-family: Pretendard;
-  font-size: 24px;
-  font-style: normal;
+.footer__left,
+.footer__right {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* ✅ 아래 기준 맞추기 */
+  gap: 8px;
+}
+
+.footer__description p {
+  margin: 0;
+  font-size: 20px;
   font-weight: 300;
-  line-height: normal;
 }
 
 .footer__title {
-  font-weight: 700;
-  margin-bottom: 4px;
+  font-weight: 700 !important;
 }
 
-.footer__right {
-  align-items: right;
-  margin: 9px;
-  font-size: 14px;
-  color: #FFF;
-  font-family: Pretendard;
-  font-size: 24px;
-  font-style: normal;
+.footer__copyright,
+.footer__makers {
+  margin: 0;
+  font-size: 20px;
   font-weight: 300;
-  line-height: normal;
 }
 
 .footer__icons {
   display: flex;
+  justify-content: flex-end;
   gap: 8px;
 }
 
-.footer__icons span {
-  font-size: 18px;
+.footer__icons img {
+  width: 24px;
+  height: 24px;
   cursor: pointer;
 }
- 

@@ -1,0 +1,189 @@
+/* 전체 페이지 여백과 색상 */
+.sessions {
+    padding-top: 210px;
+    padding-left: 80px;
+    padding-right: 80px;
+    padding-left: 134px; 
+    color: white;
+    box-sizing: border-box;
+    margin: 0 auto;
+  }
+  
+  /* 탭 버튼 영역 */
+  .sessions__tab-buttons {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 123px; /* 버튼 아래 충분한 간격 */
+  }
+  
+  /* 탭 버튼 스타일 */
+  .tab-button {
+    width: 197px;
+    height: 64px;
+    border-radius: 39px;
+    font-family: "Pretendard", sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-color: transparent;
+    border: 2px solid #C1C1C1;
+    color: #A7A7A7;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    gap: 47px;
+  }
+  
+  .tab-button.active {
+    background-color: #434445;
+    color: #FFF;
+    font-weight: 600;
+    border: 2px solid #696969;
+  }
+  
+  /* 섹션 전체 간격 */
+  .sessions__section {
+    margin-bottom: 120px; /* 섹션 간 충분한 여백 */
+  }
+  
+  /* 1학기 라벨 */
+  .section-with-label {
+    position: relative;
+    padding-top: 0;
+  }
+  
+  .semester-label {
+    width: 127px;
+    height: 48px;
+    border-radius: 8px;
+    border: 1px solid #CCC;
+    background-color: black;
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 24px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 72px; /* 타이틀과 여백 */
+  }
+  
+  /* 제목 */
+  .sessions__section h2 {
+    margin-bottom: 16px;
+    color: #FFF;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 100%;
+    letter-spacing: -2.4px;
+  }
+  
+  /* 설명문 */
+  .sessions__section p {
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 140%;
+  }
+  
+  /* 카드 그리드 */
+  .card-grid {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 50px;
+  }
+  
+  /* 카드 하나 */
+  .card {
+    width: 429px;
+    height: 260px;
+    border-radius: 23px;
+    overflow: hidden;
+    background-color: #222;
+  }
+  
+  /* 카드 이미지 */
+  .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+/* 🔽 하이라이트 이벤트 섹션 */
+.highlighted-events {
+    display: flex;
+    flex-direction: column;
+    margin-top: 120px;
+    gap: 10px;
+  }
+  
+  /* 각각의 행: 배지 + 설명 */
+  .event-row {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+  
+  /* 뱃지 + 선 + 점 전체 감싸는 wrapper */
+  .event-badge-with-line {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    position: relative;
+    min-width: 375px;
+  }
+  
+  /* 배지 스타일 */
+  .event-badge {
+    display: flex;
+    align-items: center;     
+    justify-content: center; 
+    width: 375px;
+    height: 57px;
+    background-color: #434B55;
+    color: white;
+    font-size: 32px;
+    font-weight: 600;
+    border-radius: 39px;
+    letter-spacing: -0.48px;
+    flex-shrink: 0;
+    z-index: 1;
+    white-space: nowrap;
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.70);
+  }
+  
+  /* 배지 오른쪽 선 */
+  .event-line {
+    width: 95px;
+    flex-grow: 1;
+    height: 2px;
+    background-color: #7d7d7d;
+    position: relative;
+  }
+  
+  /* 선 끝에 점 */
+  .event-dot {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 13px;
+    height: 13px;
+    background-color: #7d7d7d;
+    border-radius: 50%;
+  }
+  
+  /* 오른쪽 설명 텍스트 */
+  .event-description {
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 600;
+  }
