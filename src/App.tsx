@@ -1,6 +1,4 @@
-import { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { setupAuthInterceptor } from '@/hooks/useAuthInterceptor'
 
 import Login from '@/pages/Login'
 import ProjectList from '@/pages/ProjectList'
@@ -18,10 +16,6 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
 }
 
 const App = () => {
-  // ✅ 앱 최초 실행 시 인터셉터 등록
-  useEffect(() => {
-    setupAuthInterceptor()
-  }, [])
 
   return (
     <Routes>

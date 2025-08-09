@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.css'
 import { BrowserRouter } from 'react-router-dom'
+import axiosInstance from '@/api/axiosInstance'
 import { setupAuthInterceptor } from '@/hooks/useAuthInterceptor'
 
-setupAuthInterceptor()
+setupAuthInterceptor(axiosInstance)
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
