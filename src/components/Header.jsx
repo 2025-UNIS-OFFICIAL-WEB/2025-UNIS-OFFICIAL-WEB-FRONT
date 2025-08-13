@@ -12,8 +12,8 @@ export default function Header() {
         </Link>
       </div>
       <nav className="unis-header__nav">
-        <Link to="/activities">활동</Link>
-        <Link to="/projects">프로젝트</Link>
+        <Link to="/sessions">활동</Link>
+        <Link to="/projectlist">프로젝트</Link>
         <Link to="/apply">지원하기</Link>
       </nav>
     </header>

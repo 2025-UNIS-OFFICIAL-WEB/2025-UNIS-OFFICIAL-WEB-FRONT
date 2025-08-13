@@ -118,7 +118,6 @@
 .highlighted-events {
     display: flex;
     flex-direction: column;
-    margin-top: 120px;
     gap: 10px;
   }
   

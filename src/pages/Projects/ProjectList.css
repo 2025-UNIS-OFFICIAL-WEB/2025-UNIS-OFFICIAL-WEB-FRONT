@@ -1,0 +1,124 @@
+.page-container {
+    padding-left: 134px;
+  }
+
+/* ========== Intro ========== */
+.project-intro {
+    margin-top: 235px;
+    margin-bottom: 60px;
+
+  }
+  .project-intro__title {
+    font-family: Pretendard;
+    font-size: 60px;
+    font-style: normal;
+    font-weight: 700;
+    background: linear-gradient(to right, #ffffff 0%, #999999 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .project-gallery__images {
+    padding-bottom: 47px;
+  }
+
+.event-badge {
+    width: 318px;
+}
+
+
+.event-description {
+    color: #D4D4D4;
+    font-family: Pretendard;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+  
+  .project-gallery__images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 26px;
+    padding-top: 55px;
+  }
+  
+  .project-gallery__images img {
+    width: 96px; /* 썸네일 크기 */
+    height: 96px;
+    object-fit: cover;
+    transition: transform 0.2s ease;
+  }
+
+/* ===== Cards ===== */
+.project-cards__row {
+    display: grid;
+    grid-template-columns: repeat(3, 388px);
+    gap: 73px;
+    justify-content: start;
+  }
+  
+  .project-card {
+    width: 388px;
+    /* ⛔ 기존: height: 252px; → 삭제 */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;  /* ✅ 가운데 정렬 → stretch */
+    text-align: left;      /* ✅ 카드 내부 텍스트 좌측 정렬 */
+  }
+  
+  .project-card__image {
+    /* 기존: width: 388px; height: 252px; */
+    width: 100%;           /* ✅ 고정폭 대신 100% */
+    height: 252px;
+    object-fit: cover;
+    border-radius: 23px;
+    display: block;        /* ✅ 인라인 간격 제거 */
+    margin-bottom: 16px;   /* ✅ 살짝만 간격 */
+  }
+  
+
+  /* 메타 박스 */
+  .project-card__meta {
+    width: 100%;           /* ✅ 카드 폭에 맞추기 */
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #CCC;
+    border-radius: 8px;
+    background: transparent;
+    backdrop-filter: blur(2px);
+    margin-top: 8px;       /* ✅ 이미지와 분리 */
+  }
+
+.project-card__name { 
+  padding: 8px 12px; 
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 21px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.project-card__gen  { 
+  padding: 8px 12px; 
+  color: #FFF;
+  font-family: Pretendard;
+  font-size: 21px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+
+  /* 설명 */
+  .project-card__description {
+    max-width: 100%;       /* ✅ 카드 폭에 맞추기 */
+    margin-top: 10px;      /* ✅ 메타와 간격 */
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 29px;
+  }
