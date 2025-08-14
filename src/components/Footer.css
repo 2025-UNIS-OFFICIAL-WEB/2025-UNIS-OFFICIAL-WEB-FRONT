@@ -6,7 +6,7 @@
 }
 
 .footer__inner {
-  max-width: 1679px;
+  max-width: 87.45vw;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -16,7 +16,7 @@
 .footer__left {
   display: flex;
   flex-direction: column;
-  gap: 0px; /* 제목~설명~저작권 줄 간격 */
+  gap: 0px;
 }
 
 .footer__right {
