@@ -6,6 +6,7 @@ import Sessions from "./pages/Activities/Sessions.jsx";
 import Networking from "./pages/Activities/Networking.jsx";
 import ProjectList from "./pages/Projects/ProjectList.jsx";
 import ProjectDetail from "./pages/Projects/ProjectDetail.jsx";
+import Recruiting from "./pages/Recruit/Recruiting.jsx";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
         <Route path="networking" element={<Networking />} />
         <Route path="projectlist" element={<ProjectList />} />
         <Route path="projectdetail" element={<ProjectDetail />} />
+        <Route path="recruiting" element={<Recruiting />} />
       </Route>
     </Routes>
   );

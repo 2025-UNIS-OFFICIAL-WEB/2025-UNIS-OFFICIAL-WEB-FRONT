@@ -66,3 +66,155 @@
 .unis-header__nav a:hover {
   text-decoration: underline;
 }
+
+/* ====== 추가: 햄버거/드로어 기본 (데스크탑에선 숨김) ====== */
+.unis-hamburger{
+  display: none;
+  width: 44px; height: 44px;
+  background: none; border: 0; color: #fff; cursor: pointer;
+  margin-right: 16px;
+}
+
+/* 오버레이 & 드로어 */
+.nav-overlay{
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0);
+  visibility: hidden; opacity: 0; transition: 220ms ease;
+  z-index: 1100;
+}
+.nav-overlay.is-open{ visibility: visible; opacity: 1; background: rgba(0,0,0,.45); }
+
+.nav-drawer{
+  position: fixed; top:0; right:0; height:100%; width:min(86vw, 320px);
+  background:#0b0b0b; color:#fff;
+  transform: translateX(100%); transition: transform 260ms cubic-bezier(.2,.8,.2,1);
+  display:flex; flex-direction:column; z-index:1101;
+  box-shadow: -20px 0 40px rgba(0,0,0,.45);
+}
+.nav-drawer.is-open{ transform: translateX(0); }
+
+.drawer-header{
+  height: 60px; display:flex; align-items:center; justify-content:space-between;
+  padding: 0 12px; border-bottom: 1px solid rgba(255,255,255,.14);
+}
+.drawer-title{ font-weight:700; }
+.drawer-close{
+  width:40px; height:40px; border:0; border-radius:10px;
+  background: rgba(255,255,255,.08); color:#fff; cursor:pointer;
+}
+
+.nav-mobile{ display:flex; flex-direction:column; padding: 12px; }
+.nav-mobile a{
+  display:block; padding: 14px 12px; border-radius:12px;
+  color:#cfd6e4; text-decoration:none; font-weight:600;
+}
+.nav-mobile a:hover{ color:#fff; background: rgba(255,255,255,.08); }
+
+/* ====== 반응형: 모바일에서만 레이아웃 변경 ====== */
+@media (max-width: 1024px){
+  /* 헤더를 3칸 그리드로 바꿔 중앙 UNIS 확보 */
+  .unis-header{
+    display: grid;
+    grid-template-columns: 44px 1fr 44px; /* 왼쪽(숨김) | 가운데 | 오른쪽(햄버거) */
+    align-items: center;
+    padding: 20px 0 0 0;
+    font-weight: 300;
+  }
+
+  /* 왼쪽 로고 블록은 중앙 텍스트 용도로만 사용 */
+  .unis-header__logo{
+    grid-column: 2; justify-self: center; padding: 0; /* 가운데 배치 */
+  }
+
+  /* 모바일에선 svg 로고 숨기고 텍스트만 노출(가운데) */
+  .unis-logo-icon{ display: none; }
+  .unis-logo-text{
+    font-size: 13px; letter-spacing: .35em; line-height: 1; 
+  }
+
+  /* 데스크탑 네비 숨김 */
+  .unis-header__nav{ display: none; }
+
+  /* 햄버거 보이기: 오른쪽 끝 */
+  .unis-hamburger{ 
+    display: inline-flex; 
+    justify-self: end;
+    width: 36px;   /* 버튼 가로 */
+    height: 36px;
+  }
+}
+
+/* 아주 작은 모바일 보정 (선택) */
+@media (max-width: 360px){
+  .unis-logo-text{ font-size: 16px; letter-spacing: .28em; }
+}
+
+/* 헤더가 fixed라면 본문 상단 여백 (필요 시) */
+@media (max-width:1024px){ main{ padding-top: 60px; } }
+
+/* 드로어 자체 톤 & 폭 */
+.nav-drawer{
+  width: min(65vw, 360px);         /* 조금 더 넓게 */
+  background: #000;                /* 완전 블랙 */
+  color:#fff;
+}
+
+/* 헤더: 타이틀 숨기고, 닫기 버튼만 우상단 배치(배경 없이) */
+.drawer-header{
+  height: 60px;
+  padding: max(env(safe-area-inset-top), 10px) 16px 0 16px; /* iOS notch 대응 */
+  border-bottom: none;              /* 구분선 제거 */
+  background: transparent;
+  justify-content: flex-end;        /* 우측 정렬 */
+}
+.drawer-title{ display: none; }
+.drawer-close{
+  width: 40px; height: 40px;
+  border: 0; background: none;      /* 배경 도형 제거 */
+  color: #fff; cursor: pointer;
+}
+
+/* 메뉴 리스트: 우측 정렬, 넉넉한 간격 */
+.nav-mobile{
+  display: flex; flex-direction: column;
+  align-items: flex-end;            /* 항목 우측 붙이기 */
+  gap: 28px;                        /* 항목 간격 */
+  padding: 24px 24px 40px 24px;     /* 우측 여백 확대 */
+}
+
+/* 각 항목: 우측 정렬 + 시각 톤 */
+.nav-mobile a{
+  width: 100%;
+  text-align: right;                /* 텍스트 우측 정렬 */
+  color: #fff;
+  font-family: Pretendard, system-ui, -apple-system;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 300;               /* 필요시 20px */
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  padding: 10px 0;
+  transition: transform .18s ease, opacity .18s ease;
+  opacity: .92;
+}
+.nav-mobile a:hover{
+  opacity: 1;
+  transform: translateX(-4px);      /* 살짝 왼쪽으로 슬라이드 */
+}
+
+/* 활성 메뉴(원하면 NavLink active 클래스로 적용) */
+.nav-mobile a.active{
+  opacity: 1;
+  position: relative;
+}
+.nav-mobile a.active::after{
+  content: "";
+  position: absolute; right: 0; bottom: -6px;
+  width: 28px; height: 2px; background: #fff; border-radius: 999px;
+}
+
+/* 포커스 접근성 */
+.nav-mobile a:focus-visible, .drawer-close:focus-visible{
+  outline: 2px solid rgba(255,255,255,.5);
+  outline-offset: 3px;
+}

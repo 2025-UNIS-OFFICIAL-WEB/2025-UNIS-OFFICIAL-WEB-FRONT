@@ -1,52 +1,139 @@
 .footer {
-  padding: 24px 0 36px;
-  background-color: #000;
+  padding: 0 0 80px; /* 위쪽 간격 제거, 아래만 36px */
+  background: transparent !important;
   color: #d4d4d4;
   font-family: Pretendard, sans-serif;
 }
 
 .footer__inner {
-  max-width: 1440px;
+  max-width: 1679px;
   margin: 0 auto;
-  padding: 0 24px;
   display: flex;
   justify-content: space-between;
-  align-items: flex-end; /* ✅ 마지막 줄 기준 정렬 */
+  align-items: flex-end;
 }
 
-.footer__left,
+.footer__left {
+  display: flex;
+  flex-direction: column;
+  gap: 0px; /* 제목~설명~저작권 줄 간격 */
+}
+
 .footer__right {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end; /* ✅ 아래 기준 맞추기 */
-  gap: 8px;
+  align-items: flex-end;
+  gap: 18px; /* 아이콘 블록과 만든 사람들 텍스트 간격 */
 }
 
 .footer__description p {
   margin: 0;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 300;
 }
 
 .footer__title {
   font-weight: 700 !important;
+  margin-bottom: 16px !important; /* 제목과 설명 사이 */
 }
 
 .footer__copyright,
 .footer__makers {
-  margin: 0;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 300;
+  margin: 0;
 }
 
 .footer__icons {
   display: flex;
-  justify-content: flex-end;
-  gap: 8px;
+  gap: 14px; /* 아이콘 사이 간격 */
 }
 
 .footer__icons img {
   width: 24px;
   height: 24px;
   cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .footer {
+    padding: 0 0 24px;
+  }
+
+  /* 2열 그리드: 1fr | auto  (왼쪽 텍스트, 오른쪽 아이콘) */
+  .footer__inner {
+    max-width: none;
+    padding: 0 16px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 16px;
+    row-gap: 4px;
+    align-items: start;
+    text-align: left;                 /* 전체 좌측 정렬(요구 1) */
+  }
+
+  .footer__left {
+    grid-column: 1 / 2;
+    gap: 8px;
+  }
+
+  /* .footer__right 껍데기는 걷어내고, 내부 자식들을 그리드에 직접 배치 */
+  .footer__right { display: contents; }
+
+  /* ── 상단 라인: "UNIS 회칙 >" ── */
+  .footer__title {
+    grid-column: 1 / 2;
+    margin: 0 0 6px 0 !important;
+    font-size: 10px;
+    font-weight: 800 !important;
+  }
+  /* 버튼/박스/추가 화살표 만들지 않음(요구 3) */
+  .footer__title::after { content: none; }
+
+  /* ── 본문 텍스트 ── */
+  .footer__description p {
+    grid-column: 1 / 2;
+    margin: 0;
+    font-size: 13px;
+  }
+
+  .footer__copyright {
+    grid-column: 1 / 2;
+    font-size: 13px;
+    margin: 0;
+  }
+
+  /* ── 하단 라인: 만든 사람들 + 아이콘을 같은 줄로(요구 2) ── */
+  .footer__makers {
+    grid-column: 1 / 2;      /* 왼쪽 칼럼 */
+    grid-row: 3;             /* 아이콘과 같은 행 */
+    margin: 0;
+    font-size: 13px;
+    text-align: left;  
+  }
+
+  .footer__icons {
+    grid-column: 2 / 3;      /* 오른쪽 칼럼 */
+    grid-row: 3;             /* makers와 같은 행 */
+    justify-self: end;
+    margin: 0;
+    gap: 8px;
+  }
+  .footer__icons img { width: 13px; height: 13px; }
+}
+
+/* 아주 좁은 화면(아이콘을 아래 줄로 자동 내리기, 요구 2의 보조 규칙) */
+@media (max-width: 375px) {
+  .footer__icons {
+    grid-row: 4;             /* makers 아래 줄로 이동 */
+    grid-column: 1 / 2;      /* 왼쪽으로 내려옴 */
+    justify-self: start;
+    margin-top: 6px;
+  }
+
+  .footer__title { font-size: 13px; }
+  .footer__description p,
+  .footer__copyright,
+  .footer__makers { font-size: 13px; }
+  .footer__icons img { width: 13px; height: 13px; }
 }

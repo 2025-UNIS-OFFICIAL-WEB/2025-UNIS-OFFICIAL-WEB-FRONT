@@ -1,0 +1,315 @@
+.recruit {
+    --bg-dark: #060d1a;
+    --bg-grad-top: rgba(0, 0, 0, 0);
+    --bg-grad-mid: #0b1320;
+    --bg-grad-bot: #081a36;
+    --text: #e8edf7;
+    --muted: #a7b0c3;
+    --card: rgba(255, 255, 255, 0.06);
+    --card-border: rgba(255, 255, 255, 0.12);
+    --pill: rgba(255, 255, 255, 0.08);
+    --accent: #9ecbff;
+    --primary: #cddcff;
+    --primary-ink: #0b1220;
+  
+    color: var(--text);
+    background:
+      radial-gradient(1200px 400px at 50% -120px, rgba(158, 203, 255, 0.12), transparent 60%),
+      linear-gradient(180deg, var(--bg-grad-top) 0%, var(--bg-grad-mid) 38%, var(--bg-grad-bot) 100%),
+      var(--bg-dark);
+    min-height: 100dvh;
+    font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, "Helvetica Neue", Arial, "Apple SD Gothic Neo", "Noto Sans KR",
+      sans-serif;
+    line-height: 1.65;
+  }
+  
+  .container {
+    width: min(1100px, 92%);
+    margin-inline: auto;
+  }
+  
+  .section {
+    padding-block: clamp(56px, 7vw, 96px);
+  }
+  .section.center {
+    text-align: center;
+  }
+  .section.tiny {
+    padding-block: 32px;
+  }
+  
+  .section-title {
+    font-size: clamp(18px, 1.6vw + 12px, 22px);
+    letter-spacing: 0.2px;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+  
+  /* ========== Hero ========== */
+  .recruit-hero {
+    position: relative;
+    min-height: 62vh;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  
+  .recruit-hero::before {
+    /* 배경 장식(상단 반복 패턴 느낌) */
+    content: "";
+    position: absolute;
+    inset: -10% -10% auto -10%;
+    height: 280px;
+    background:
+      repeating-linear-gradient(
+        110deg,
+        rgba(255, 255, 255, 0.05) 0 24px,
+        transparent 24px 64px
+      );
+    filter: blur(6px);
+    opacity: .35;
+    mask-image: linear-gradient(to bottom, black, transparent);
+  }
+  
+  .hero-inner {
+    position: relative;
+    text-align: center;
+    padding-inline: 16px;
+  }
+  
+  .eyebrow {
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 60px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: 10px;
+  }
+  
+  .recruit-hero h1 {
+    font-size: clamp(26px, 2.5vw + 20px, 42px);
+    font-weight: 800;
+    letter-spacing: -0.4px;
+    margin: 0 0 24px;
+  }
+  
+  .recruit-hero .muted {
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+  }
+
+  .btn-primary {
+    width: 299px;
+    height: 64px;
+    flex-shrink: 0;
+    border-radius: 39px;
+    border: 2px solid rgba(255, 255, 255, 0.60);
+    background: rgba(221, 221, 221, 0.30);
+    box-shadow: 0 0 9px 1px rgba(0, 0, 0, 0.60);
+    backdrop-filter: blur(7.5px);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    color: var(--primary-ink);
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .08s ease, filter .2s ease;
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 35px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+
+  }
+  .btn-primary:hover { transform: translateY(-1px); filter: brightness(1.02); }
+  .btn-primary:active { transform: translateY(0); }
+  
+  /* ========== 모집 대상 ========== */
+
+  .section-title {
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 43px;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .center-pill {
+    width: 756px;
+    height: 86px;
+    border-radius: 43px;
+    border: 3px solid rgba(255, 255, 255, 0.60);
+    box-shadow: 0 0 9px 1px rgba(0, 0, 0, 0.60);
+    backdrop-filter: blur(7.5px);
+    margin: 0 auto;
+    display: flex;
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 45px;
+    font-weight: 700;
+    align-items: center;       
+    justify-content: center;
+
+  }
+  
+  .three-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 115px;
+    align-items: center;   
+    justify-content: center;    
+  }
+  
+  .card {
+    display: flex;  
+    width: 474px;
+    height: 343px;
+    background: transparent;
+    border-radius: 35px;
+    border: 3px solid #828282;
+    color: #FFF;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 205.556%;     
+    align-items: center;   
+    justify-content: center;  
+    padding: 0 24px;         
+    box-sizing: border-box;  
+  }
+
+  .highlight-line {
+    font-weight: 900;
+  }
+
+  .vline {
+    display: block;
+    width: 2px;
+    margin: 0 auto;
+  }
+  
+  /* 배지 ↘ 카드 */
+  .vline-top, .vline-bottom   {
+    width: 3px;
+    height: 145px;
+    background-color: #96989A;
+  }
+  
+  /* 구분용 점 */
+  .vline-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    margin: 0 auto;
+    background-color: #BCBDBD;
+  }
+  
+  /* ========== 정답은 UNIS ========== */
+  .answer {
+    color: #FFF;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+  }
+
+  .vline-bottom-roles {
+    width: 3px;
+    height: 113px;
+    background-color: #96989A;
+  }
+  
+  /* ========== 모집 직군 ========== */
+  .roles { position: relative; }
+  
+  .role-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 62.29px;
+    align-items: center;   
+    justify-content: center;   
+  }
+  
+  .role-card {
+    display: flex;  
+    width: 368.284px;
+    height: 329px;
+    background: transparent;
+    border-radius: 35px;
+    border: 3px solid #828282;
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 600;   
+    justify-content: center;        
+    box-sizing: border-box;
+    display: flex;            
+    flex-direction: column;    
+    align-items: center;       
+    text-align: center;
+  }
+
+  .role-card h4 {
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 38px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin: 0;
+    margin-top: 24px;
+  }
+
+  .role-card p {
+    color: #FFF;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 26px;
+    font-style: normal;
+    font-weight: 300;
+  }
+  
+  /* ========== 모집 일정 ========== */
+  .schedule-desc.main-line {
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 45px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: 28px;
+  }
+
+  .schedule-desc.sub-line {
+    color: #FFF;
+    font-family: Pretendard;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+  
+  .btn-primary.schedule-btn {
+    width: 463px;
+    height: 99px;
+    border-radius: 49.5px;
+    border: 2px solid rgba(255, 255, 255, 0.60);
+    background: rgba(221, 221, 221, 0.30);
+    box-shadow: 0 0 9px 1px rgba(0, 0, 0, 0.60);
+    backdrop-filter: blur(7.5px);
+    font-size: 45px;
+    font-weight: 800;
+  }
