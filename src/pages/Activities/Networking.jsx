@@ -1,6 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import mockImage from "../../assets/mock-image-2.png";
+import external1 from "../../assets/external1.png";
+import external2 from "../../assets/external2.png";
+import external3 from "../../assets/external3.png";
+import internal1 from "../../assets/internal1.png";
+import internal2 from "../../assets/internal2.png";
+import internal3 from "../../assets/internal3.png";
 import "./sessions.css";
 
 
@@ -27,13 +32,13 @@ export default function Sessions() {
           </p>
           <div className="card-grid">
             <div className="card">
-              <img src={mockImage} alt="프로젝트1" className="card-image" />
+              <img src={external1} alt="프로젝트1" className="card-image" />
             </div>
             <div className="card">
-              <img src={mockImage} alt="프로젝트2" className="card-image" />
+              <img src={external2} alt="프로젝트2" className="card-image" />
             </div>
             <div className="card">
-              <img src={mockImage} alt="프로젝트3" className="card-image" />
+              <img src={external3} alt="프로젝트3" className="card-image" />
             </div>
           </div>
         </div>
@@ -41,20 +46,20 @@ export default function Sessions() {
 
       <section className="sessions__section">
         <div className="section-with-label">
-          <div className="semester-label">내부 결속 프로그램</div>
-          <h2>실전 창업 프로젝트</h2>
+          <div className="semester-label">내부 활동</div>
+          <h2>내부 결속 프로그램</h2>
           <p>
           학회 내부 짝궁 프로그램 ‘유니벗', 식사를 함께하는 ‘네트워킹 주간', MT와 LT 등의 활동을 통해 팀워크를 강화합니다.
           </p>
           <div className="card-grid">
             <div className="card">
-              <img src={mockImage} alt="프로젝트1" className="card-image" />
+              <img src={internal1} alt="프로젝트1" className="card-image" />
             </div>
             <div className="card">
-              <img src={mockImage} alt="프로젝트2" className="card-image" />
+              <img src={internal2} alt="프로젝트2" className="card-image" />
             </div>
             <div className="card">
-              <img src={mockImage} alt="프로젝트3" className="card-image" />
+              <img src={internal3} alt="프로젝트3" className="card-image" />
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom"; // ✅ Navigate 추가
 import DefaultLayout from "./layout/DefaultLayout";
 import Home from "./pages/Home/Home";
 import Sessions from "./pages/Activities/Sessions.jsx";
@@ -15,9 +15,10 @@ const App = () => {
         <Route index element={<Home />} />
         <Route path="sessions" element={<Sessions />} />
         <Route path="networking" element={<Networking />} />
-        <Route path="projectlist" element={<ProjectList />} />
-        <Route path="projectdetail" element={<ProjectDetail />} />
+        <Route path="projects" element={<ProjectList />} />
+        <Route path="projects/:id" element={<ProjectDetail />} />
         <Route path="recruiting" element={<Recruiting />} />
+        <Route path="projectlist" element={<Navigate to="/projects" replace />} />
       </Route>
     </Routes>
   );

@@ -1,6 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import mockImage from "../../assets/mock-image-2.png";
+import ideaproject1 from "../../assets/ideaproject1.png";
+import ideaproject2 from "../../assets/ideaproject2.png";
+import ideaproject3 from "../../assets/ideaproject3.png";
+import study1 from "../../assets/study1.png";
+import study2 from "../../assets/study2.png";
+import study3 from "../../assets/study3.png";
+import realproject1 from "../../assets/realproject1.png";
+import realproject2 from "../../assets/realproject2.png";
+import realproject3 from "../../assets/realproject3.png";
 import "./Sessions.css";
 
 export default function Sessions() {
@@ -26,13 +34,13 @@ export default function Sessions() {
           </p>
           <div className="card-grid">
             <div className="card">
-              <img src={mockImage} alt="프로젝트1" className="card-image" />
+              <img src={ideaproject1} alt="프로젝트1" className="card-image" />
             </div>
             <div className="card">
-              <img src={mockImage} alt="프로젝트2" className="card-image" />
+              <img src={ideaproject2} alt="프로젝트2" className="card-image" />
             </div>
             <div className="card">
-              <img src={mockImage} alt="프로젝트3" className="card-image" />
+              <img src={ideaproject3} alt="프로젝트3" className="card-image" />
             </div>
           </div>
         </div>
@@ -46,13 +54,13 @@ export default function Sessions() {
         </p>
         <div className="card-grid">
           <div className="card">
-            <img src={mockImage} alt="스터디1" className="card-image" />
+            <img src={study1} alt="스터디1" className="card-image" />
           </div>
           <div className="card">
-            <img src={mockImage} alt="스터디2" className="card-image" />
+            <img src={study2} alt="스터디2" className="card-image" />
           </div>
           <div className="card">
-            <img src={mockImage} alt="스터디3" className="card-image" />
+            <img src={study3} alt="스터디3" className="card-image" />
           </div>
         </div>
       </section>
@@ -97,13 +105,13 @@ export default function Sessions() {
           </p>
           <div className="card-grid">
             <div className="card">
-              <img src={mockImage} alt="프로젝트1" className="card-image" />
+              <img src={realproject1} alt="프로젝트1" className="card-image" />
             </div>
             <div className="card">
-              <img src={mockImage} alt="프로젝트2" className="card-image" />
+              <img src={realproject2} alt="프로젝트2" className="card-image" />
             </div>
             <div className="card">
-              <img src={mockImage} alt="프로젝트3" className="card-image" />
+              <img src={realproject3} alt="프로젝트3" className="card-image" />
             </div>
           </div>
         </div>
@@ -112,10 +120,6 @@ export default function Sessions() {
       {/* 🔽 하이라이트 이벤트 섹션 */}
       <section className="highlighted-events">
         {[
-          {
-            title: "창립제(10월)",
-            description: "창업팀별 IR 피칭과 포스터 발표",
-          },
           {
             title: "모의투자대회 (11월)",
             description: "투자 심사단의 모의투자를 통해 시장성 검증",

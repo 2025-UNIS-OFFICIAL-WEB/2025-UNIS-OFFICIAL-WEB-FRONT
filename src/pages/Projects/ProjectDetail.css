@@ -1,49 +1,34 @@
 /* ===== 페이지 공통 ===== */
 .project-detail {
-    /* 🔁 히어로 높이와 동일하게 공유 (최소/기본/최대) */
-    --hero-h: min(max(520px, 62vh), 900px);
+    --hero-h: min(max(520px, 62vh), 1312px);
     position: relative;
     color: #ffffff;
     min-height: 100vh;
     font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
     line-height: 1.65;
-  
-    /* ⛔ 기존 background 그라데이션 삭제 */
     background: transparent;
-  }
-  
-  /* 사진 아래 전체 배경: 검정 → 파랑 */
-  .project-detail::after {
-    content: "";
-    position: absolute;
-    left: 0; right: 0;
-    top: var(--hero-h);   /* 히어로가 끝나는 바로 아래부터 시작 */
-    bottom: 0;
-    background: linear-gradient(180deg, #000000 0%, #0B2B4C 100%);
-    z-index: 0;
   }
   
   /* ===== Hero ===== */
   .pd-hero {
     position: relative;
-    height: 62vh;
-    min-height: 520px;
-    background-size: cover;
     background-position: center;
     display: grid;
     place-items: center;
     overflow: hidden;
+    height: var(--hero-h);
+    background-size: cover;          /* 유지 */
+    background-position: center 25%;
   }
   
-  /* 위는 밝고 아래는 짙어지는 오버레이 (피그마 분위기) */
   .pd-hero__overlay {
     position: absolute;
     inset: 0;
     background: linear-gradient(
       to bottom,
       rgba(0, 0, 0, 0.05) 0%,   
-      rgba(0, 0, 0, 0.25) 30%,  
-      rgba(0, 0, 0, 0.6) 80%,   
+      rgba(0, 0, 0, 0.25) 85%,  
+      rgba(0, 0, 0, 0.6) 95%,   
       rgba(0, 0, 0, 1) 100%     
     );
     pointer-events: none;
@@ -51,53 +36,83 @@
   }
   
   .pd-hero__center {
-    position: relative; /* overlay 위로 */
+    position: relative; 
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
-    transform: translateY(6px); /* 스샷처럼 아주 살짝 아래 */
+    transform: translateY(6px); 
     z-index: 1;
   }
   
   /* 작은 기수 배지 */
   .pd-badge {
+    margin-top: 700px;;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 6px 14px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.9);
-    color: #1a1a1a;
-    font-weight: 700;
-    letter-spacing: -0.2px;
-    backdrop-filter: blur(2px);
-    box-shadow: 0 2px 8px rgba(0,0,0,.18);
+    font-style: normal;
+    line-height: normal;
+    margin-bottom: 18px;
   }
-  .pd-badge--small { font-size: 13px; }
+
+  .pd-badge--small {
+    font-size: 13px;
+    width: 91px;
+    height: 35px;
+    font-size: 24px;
+    font-weight: 600;
+    background-color: transparent !important;
+    border: 1px solid #CCC;
+    border-radius: 8px;
+  }
   
   /* 가운데 큰 제목 배지 */
   .pd-title {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 318px;
+    height: 81px;
     margin: 0;
-    padding: 14px 28px;
-    border-radius: 18px;
-    background: rgba(255, 255, 255, 0.94);
-    color: #121212;
-    font-size: 28px;
-    font-weight: 800;
-    letter-spacing: -0.3px;
+    color: #FFFFFF;
+    font-size: 50px;
+    font-weight: 700;
     line-height: 1;
-    backdrop-filter: blur(3px);
-    box-shadow: 0 4px 18px rgba(0,0,0,.22);
+    border-radius: 51px;
+    border: 1.5px solid rgba(255, 255, 255, 0.50);
+    background: rgba(221, 221, 221, 0.30);
+    box-shadow: 0 0 9px 1px rgba(0, 0, 0, 0.60);
+    backdrop-filter: blur(7.5px);
   }
+
+  .pd-vline {
+    display: block;
+    width: 3px;
+    height: 95px;
+    margin: 0 auto;
+    background-color: #696969;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .pd-vline-dot {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+  
   
   /* ===== 본문 ===== */
   .pd-content {
     position: relative;
     z-index: 1;           /* ::after보다 위 */
-    max-width: 1080px;
-    margin: 0 auto;
-    padding: 40px 24px 64px;
+    max-width: 1638px;
+    margin: 0 auto; font-weight: 500;
+    text-align: center;
+    font-size: 30px;
+    line-height: 62px;
+    margin-top: 100px;
   
     /* ⛔ 혹시 남아있던 배경/그림자 제거 */
     background: transparent !important;
@@ -106,15 +121,33 @@
   }
   .pd-text {
     background: transparent !important;
+    text-align: center;
   }
-  
-  /* 나머지(배지/타이틀/텍스트/소셜)는 그대로 */
-  .pd-badge{display:inline-flex;align-items:center;justify-content:center;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.9);color:#1a1a1a;font-weight:700;letter-spacing:-.2px;backdrop-filter:blur(2px);box-shadow:0 2px 8px rgba(0,0,0,.18);}
-  .pd-badge--small{font-size:13px;}
-  .pd-title{margin:0;padding:14px 28px;border-radius:18px;background:rgba(255,255,255,.94);color:#121212;font-size:28px;font-weight:800;letter-spacing:-.3px;line-height:1;backdrop-filter:blur(3px);box-shadow:0 4px 18px rgba(0,0,0,.22);}
-  .pd-section-title{position:relative;margin:6px 0 18px;font-size:18px;font-weight:800;letter-spacing:-.2px;display:inline-block;padding-bottom:8px;border-bottom:2px solid #5aa5ff;}
-  .pd-text{color:#f2f5fb;font-size:16px;letter-spacing:.1px;text-shadow:0 0 1px rgba(0,0,0,.08);}
-  .pd-text p + p{margin-top:14px;}
-  .pd-socials{display:flex;justify-content:center;gap:22px;margin-top:28px;}
-  .pd-social{width:44px;height:44px;display:grid;place-items:center;border-radius:999px;background:rgba(255,255,255,.12);color:#fff;text-decoration:none;font-size:18px;transition:transform .15s ease, background .15s ease, box-shadow .15s ease;box-shadow:0 2px 8px rgba(0,0,0,.12) inset, 0 2px 12px rgba(0,0,0,.12);}
-  .pd-social:hover{transform:translateY(-2px);background:rgba(255,255,255,.18);}
+
+  .pd-socials {
+    display: flex;
+    justify-content: center; /* 가운데 정렬 */
+    align-items: center;
+    gap: 32px; /* 아이콘 간격 */
+    margin-top: 100px;
+  }
+
+  .pd-social img {
+    width: 48px;   /* 원 크기 조정 가능 */
+    height: 48px;
+    object-fit: contain;
+  }
+
+  .pd-photo {
+    max-width: 1554px;
+    margin: 150px auto 80px;
+    padding: 0 8px;
+  }
+  .pd-photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 14px;
+    outline: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  }
