@@ -107,7 +107,7 @@ html, body, #root { height: 100%; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  transform: translateY(160px);
+  transform: ;
   color: var(--white);
 }
 .home-hero__text-group h1,
@@ -336,20 +336,87 @@ html, body, #root { height: 100%; }
   .home-intro__logo { margin: 0 200px; }
   .line-with-circle .line { width: 340px; }
   .home-intro__caption { width: min(900px, 92vw); }
-
-  /* 1440px 패턴 기반 축소 */
-  .program-left h3 { font-size: 40px; }  /* 45px → 한 단계 축소 */
+  .program-left h3 { font-size: 40px; } 
   .chip { height: 36px; font-size: 21px; }
   .dot-list li { font-size: 18px; line-height: 30px; }
+  .home-closing h2 {font-size: 50px;}
+  .home-closing p {font-size: 40px;}
 }
 
-/* 1080px ↓ */
+/* ==== 1080px 이하 전용 (교체) ==== */
 @media (max-width: 1080px) {
-  /* 프로그램 텍스트 요소 조금 더 축소 */
-  .program-left h3 { font-size: 36px; }
-  .chip { height: 34px; font-size: 19px; }
-  .dot-list li { font-size: 16px; line-height: 28px; }
+
+  :root {
+    --intro-pt: 220px;
+    --intro-pb: 200px;
+    --program-pt: 80px;
+    --gap-intro-to-program: 280px;
+    --block-gap: 24px;
+    --chip-gap: 24px;
+    --page-padding-x: 100px;
+  }
+
+  /* 공통 섹션 좌우 패딩 + 중앙정렬 */
+  .home-intro,
+  .home-program,
+  .home-closing {
+    max-width: 1000px;
+    margin-inline: auto;
+    padding-left: var(--page-padding-x);
+    padding-right: var(--page-padding-x);
+  }
+
+  /* ========== HERO ========== */
+  .home-hero__text-group { transform: translateY(100px); }
+  .home-hero__text-group h1,
+  .home-hero__text-group .highlight { font-size: 56px; }
+  .home-hero__text-group p { font-size: 22px; margin-top: 16px; margin-bottom: 32px; }
+  .learn-more-btn { width: 220px; height: 52px; font-size: 22px; }
+
+  /* ========== INTRO ========== */
+  .home-intro__top { gap: 28px; margin-bottom: 52px; }
+  .home-intro__logo { margin: 0 160px; width: 100px; height: 100px; }
+  .line-with-circle .line { width: 300px; }
+  .home-intro h2 { font-size: 42px; }
+  .home-intro__caption {
+    width: 760px; height: 54px; font-size: 24px; margin-top: 120px;
+  }
+
+  /* ========== PROGRAM ========== */
+  /* 칼럼/미디어 폭을 일치 + 위쪽 들뜸 제거 */
+  .home-program__inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 420px 380px; /* ← 오른쪽 칼럼 420px */
+    gap: 32px;
+    align-items: start;                 /* 카드 상단 정렬 */
+  }
+
+  .program-left h3 { font-size: 32px; }
+  .program-block + .program-block { margin-top: 28px; }
+
+  .chip { height: 28px; font-size: 16px; }
+  .dot-list li { font-size: 15px; line-height: 28px; }
+  .dot-list li::before { width: 12px; height: 12px; }
+
+  .program-media {
+    width: 420px;            /* ← 칼럼과 동일 */
+    max-width: 100%;
+    border-radius: 20px;
+    margin-top: 0;           /* ← 56px 제거: 들뜸 방지 */
+    justify-self: end;
+    align-self: start;
+    overflow: hidden;        /* 라운드 누수 방지 */
+  }
+  .program-media img { display:block; width:100%; height:100%; object-fit:cover; }
+
+  /* ========== CLOSING ========== */
+  .home-closing { padding: 56px var(--page-padding-x) 120px; }
+  .home-closing h2 { font-size: 40px; margin-top: 240px; }
+  .home-closing p  { font-size: 32px; margin-bottom: 220px; }
 }
+
 
 @media (max-width: 768px) {
   /* 전체 컨테이너 폭 제한 */

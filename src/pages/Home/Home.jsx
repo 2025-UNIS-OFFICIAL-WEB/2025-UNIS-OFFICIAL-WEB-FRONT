@@ -21,7 +21,9 @@ export default function Home() {
               이화여대 유일의 중앙 실전IT창업학회 유니스는
               더 나은 세상을 위한 실행력 있는 혁신 창업가를 양성합니다.
             </p>
-            <button className="learn-more-btn">자세히 알아보기</button>
+            <button className="learn-more-btn"
+              onClick={() => window.location.href = "https://www.instagram.com/unis_ewha?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="}
+            >자세히 알아보기</button>
           </div>
         </div>
       </section>
