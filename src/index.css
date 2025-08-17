@@ -15,8 +15,11 @@ html, body, #root {
 
   /* 🖼 Hero 개별 배경 (기본값 없음) */
   --hero-bg: none;
-}
 
+  /* ✨ 폰트 변수 */
+  --font-kr: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI",
+             Roboto, "Helvetica Neue", Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+}
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -31,6 +34,13 @@ body {
 
   background: var(--page-bg);
   color: rgba(255, 255, 255, 0.87);
+
+  /* ✨ 전역 폰트 적용 */
+  font-family: var(--font-kr);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  word-break: keep-all;
 }
 
 img, svg {
