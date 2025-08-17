@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom"; // ✅ Navigate 추가
+import { Routes, Route, Navigate } from "react-router-dom"; 
 import DefaultLayout from "./layout/DefaultLayout";
 import Home from "./pages/Home/Home";
 import Sessions from "./pages/Activities/Sessions.jsx";

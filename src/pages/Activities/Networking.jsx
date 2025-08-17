@@ -6,7 +6,7 @@ import external3 from "../../assets/external3.png";
 import internal1 from "../../assets/internal1.png";
 import internal2 from "../../assets/internal2.png";
 import internal3 from "../../assets/internal3.png";
-import "./sessions.css";
+import "./Sessions.css";
 
 
 export default function Sessions() {
