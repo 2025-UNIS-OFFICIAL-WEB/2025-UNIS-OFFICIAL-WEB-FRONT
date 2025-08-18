@@ -46,8 +46,10 @@ const ALLOW_ORIGINS = new Set([
       // 공통 prefix(/v1 등)
       const base = API_TARGET_BASE_PATH ? `/${API_TARGET_BASE_PATH.replace(/^\/|\/$/g, "")}` : "";
   
-      const { search } = new URL(req.url, "http://local");
-  
+      const u = new URL(req.url, "http://local");
+      u.searchParams.delete("path");         // ← 캐치올 파라미터 제거
+      const search = u.search || "";
+      
       // 전달 헤더 정리
       const fwdHeaders = { ...req.headers };
       delete fwdHeaders.host;
