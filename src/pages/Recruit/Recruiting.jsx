@@ -12,7 +12,7 @@ export default function Recruit() {
   useEffect(() => {
     const fetchApplyInfo = async () => {
       try {
-        const res = await fetch("/api/apply/info"); // 👉 실제 백엔드 주소로 변경
+        const res = await fetch("/apply/info"); // 👉 실제 백엔드 주소로 변경
         const json = await res.json();
         if (json.status === 200) {
           setApplyInfo(json.data);

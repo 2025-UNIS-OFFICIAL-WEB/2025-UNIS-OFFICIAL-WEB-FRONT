@@ -331,7 +331,8 @@ html, body, #root { height: 100%; }
 
 @media (max-width: 1280px) {
   :root { --intro-pt: 500px; }
-  .home-hero__text-group { transform: translateY(120px); }
+  /* .home-hero__text-group { transform: translateY(120px); } */
+  .home-hero__text-group p { font-size: 24px; }
   .home-program__inner { gap: 40px; }
   .program-media { width: clamp(320px, 40vw, 520px); }
   .home-intro__logo { margin: 0 200px; }
@@ -344,113 +345,204 @@ html, body, #root { height: 100%; }
   .home-closing p {font-size: 40px;}
 }
 
+@media (max-width: 1080px) {
+  :root {
+    --intro-pt: 420px; /* 인트로 위 여백 조금 줄이기 */
+  }
+
+  .home-hero__text-group h1 { font-size: 48px; }
+  .home-hero__text-group p  { font-size: 18px; margin: 16px 0 32px; }
+  .learn-more-btn           { width: 220px; height: 52px; font-size: 20px; }
+  .home-intro__caption { margin-top: 100px; margin-bottom: -100px !important; width: 720px; height: 52px; font-size: 22px; line-height: 1.4; }
+  .home-intro__logo         { margin: 0 160px; width: 96px; height: 96px; }
+
+  .program-left h3          { font-size: 26px; }
+  .chip                     { height: 30px; font-size: 15px; }
+  .dot-list li              { font-size: 14px; line-height: 20px; }
+
+  .home-closing h2          { font-size: 40px; }
+  .home-closing p           { font-size: 32px; }
+}
+
 @media (max-width: 768px) {
-  /* 전체 컨테이너 폭 제한 */
-  .home-intro,
-  .home-program,
-  .home-closing {
-    max-width: 460px;
-    margin-inline: auto;
-    padding-inline: 16px;
+  .home-intro::after { display: none !important; }      /* 이전에 만든 연결선 제거 */
+  .line-with-circle { display: none !important; } 
+
+  .home-hero__text-group {
+    margin-top: 300px;   /* 기존 500px → 모바일에서는 훨씬 줄임 */
   }
 
-  /* 히어로 */
-  .home-hero { min-height: 420px; }
-  .home-hero__text-group { transform: translateY(72px); padding-inline: 16px; }
-  .home-hero__text-group h1 { font-size: 34px; line-height: 1.2; }
-  .home-hero__text-group p { font-size: 16px; margin: 12px 0 20px; }
-  .learn-more-btn { width: 196px; height: 46px; font-size: 18px; }
+  .home-hero__text-group h1 { font-size: 45px; }
+  .home-hero__text-group p {
+    position: relative;
+    font-size: 0;                 /* 원문 텍스트 시각적으로 숨김 */
+    line-height: 0;               /* 여백 제거 */
+    margin: 20px 0 20px;          /* 기존 여백 유지용 */
+    white-space: normal;
+    word-break: keep-all;
+  }
+  .home-hero__text-group p::before {
+    content: "이화여대 유일의 중앙 실전IT창업학회 유니스는\A더 나은 세상을 위한 실행력 있는 혁신 창업가를 양성합니다.";
+    display: block;
+    white-space: pre-line;        
+    font-size: 16px;
+    line-height: 1.45;
+    color: var(--white);
+    text-align: center;
+  }
 
-  /* Intro */
-  .home-intro__top { gap: 12px; margin-bottom: 28px; }
-  .line-with-circle { display: none; }
-  .home-intro__logo { width: 72px; height: 72px; margin: 0; }
+  .learn-more-btn {
+    position: relative;          /* 의사요소 기준점 */
+    width: 170px;
+    height: 36px;
+    font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .learn-more-btn::after {       /* 세로 라인 */
+    content: "";
+    position: absolute;
+    left: 50%; transform: translateX(-50%);
+    top: 100%;                   /* 버튼 바로 아래에서 시작 */
+    width: 1px; height: 150px;
+    background: linear-gradient(to top, rgba(255,255,255,.8), rgba(255,255,255,0.1));
+  }
+  .learn-more-btn::before {      /* 끝 점(원) */
+    content: "";
+    position: absolute;
+    left: 50%; transform: translate(-50%, 0);
+    top: calc(100% + 144px + 6px); /* 라인 끝에서 6px 아래에 점 */
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(255,255,255,.85);
+  }
 
-  .home-intro h2 { font-size: 22px; font-weight: 500; }
+  /* 3) "독보적인 아이디어~" 캡션 바로 밑 세로선 정확 위치 */
   .home-intro__caption {
-    width: 100%; height: auto;
-    margin-top: 16px; font-size: 14px;
-    padding: 10px 14px; white-space: normal;
+    position: relative;          /* 의사요소 기준점 */
+    width: 70%; height: 100%;;
+    padding: 10px 10px;
+    margin-top: 16px;
+    font-size: 14px;
+    white-space: normal;
+    text-align: center;
+  }
+  .home-intro__caption::after {  /* 세로 라인 */
+    content: "";
+    position: absolute;
+    left: 50%; transform: translateX(-50%);
+    top: 100%;                   /* 캡션 바로 아래에서 시작 */
+    width: 1px; height: 150px;
+    background: linear-gradient(to top, rgba(255,255,255,.8), rgba(255,255,255,0.1));
+  }
+  .home-intro__caption::before { /* 끝 점(원) */
+    content: "";
+    position: absolute;
+    left: 50%; transform: translateX(-50%);
+    top: calc(100% + 144px + 6px);
+    width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(255,255,255,.85);
   }
 
-  /* 연결선 */
-  .home-intro { position: relative; padding-bottom: 72px; }
-  .home-intro::after {
-    content: ""; position: absolute; left: 50%;
-    transform: translateX(-50%);
-    bottom: 16px; width: 1px; height: 56px;
-    background: linear-gradient(to bottom, rgba(255,255,255,.8), rgba(255,255,255,0));
+  .home > .home-program:nth-of-type(1) .home-program__inner {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+    grid-auto-flow: row !important;
   }
 
-  /* Program 1열 */
-  .home-program__inner { grid-template-columns: 1fr; gap: 20px; }
-  .program-left { order: 1; text-align: left; }
-  .program-media { order: 2; justify-self: center; width: 100%; max-width: 420px; }
+  /* 2) 기존의 order 영향 제거 + 자식들을 그리드로 직접 올리기 */
+  .home > .home-program:nth-of-type(1) .program-left {
+    /* 기존에 있던 order/마진을 무력화 */
+    order: unset !important;
+    margin: 0 !important;
 
-  /* 타이포 축소 */
-  .program-left h3 { font-size: 22px; }
-  .chip { height: 38px; font-size: 14px; padding: 0 14px; }
-  .dot-list li { font-size: 14px; line-height: 24px; }
-
-  /* 카드 */
-  .program-media {
-    border-radius: 18px;
-    border: 1px solid rgba(255,255,255,0.12);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
-    aspect-ratio: 16/10;
+    /* 핵심: 내부 h3와 .program-block들을 그리드 자식으로 승급 */
+    display: contents !important;
   }
 
-  /* Closing */
-  .home-closing { padding: 72px 16px 100px; }
-  .home-closing h2 { font-size: 22px; margin-bottom: 8px; }
-  .home-closing p { font-size: 18px; margin: 0; }
-}
+  /* 3) 순서 고정: h3 → media → blocks */
+  .home > .home-program:nth-of-type(1) .program-left > h3 { order: 1 !important; }
+  .home > .home-program:nth-of-type(1) .program-media     { order: 2 !important; }
+  .home > .home-program:nth-of-type(1) .program-left .program-block { order: 3 !important; }
 
-/* 430px ↓ : 일반 모바일 */
-@media (max-width: 430px) {
-  .home-intro,
-  .home-program,
-  .home-closing {
-    max-width: 380px;
-    padding-inline: 14px;
+  /* 4) h3를 칩(pill)로 — 하얀 테두리 */
+  .home > .home-program:nth-of-type(1) .program-left > h3 {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 auto 12px !important;
+    padding: 0 18px !important;
+    height: 38px !important;
+    border-radius: 999px !important;
+    border: 1px solid rgba(255,255,255,0.85) !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    width: max-content !important;
+    text-align: center !important;
   }
 
-  .home-hero__text-group h1 { font-size: 30px; }
-  .home-hero__text-group p { font-size: 15px; }
-  .learn-more-btn { width: 180px; height: 42px; font-size: 16px; }
-
-  .home-intro h2 { font-size: 20px; }
-  .home-intro__caption { font-size: 13px; padding: 8px 12px; }
-
-  .program-left h3 { font-size: 20px; }
-  .chip { font-size: 13px; height: 36px; padding: 0 12px; }
-  .dot-list li { font-size: 13px; line-height: 22px; }
-
-  .home-closing h2 { font-size: 20px; }
-  .home-closing p { font-size: 16px; }
-}
-
-/* 375px ↓ : 초소형 모바일 */
-@media (max-width: 375px) {
-  .home-intro,
-  .home-program,
-  .home-closing {
-    max-width: 340px;
-    padding-inline: 12px;
+  /* 5) 이미지 카드 */
+  .home > .home-program:nth-of-type(1) .program-media {
+    width: 100% !important;
+    max-width: 560px !important;
+    aspect-ratio: 16/10 !important;
+    border-radius: 18px !important;
+    border: 1px solid rgba(255,255,255,0.12) !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35) !important;
+    overflow: hidden !important;
+    margin: 16px auto 20px !important;
+    justify-self: center !important;
+  }
+  .home > .home-program:nth-of-type(1) .program-media img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
   }
 
-  .home-hero__text-group h1 { font-size: 26px; }
-  .home-hero__text-group p { font-size: 14px; }
-  .learn-more-btn { width: 168px; height: 40px; font-size: 15px; }
+  /* 6) 두 블록: 칩을 ‘텍스트만’으로 보이게 (pill 제거) */
+  .home > .home-program:nth-of-type(1) .program-left .program-block > .chip {
+    border: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+    height: auto !important;
+    display: inline !important;
+    color: var(--white) !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    margin-bottom: 8px !important;
+  }
 
-  .home-intro__logo { width: 64px; height: 64px; }
-  .home-intro h2 { font-size: 18px; }
-  .home-intro__caption { font-size: 12px; padding: 6px 10px; }
+  /* 7) 도트 아이콘 전부 제거 + 중앙 정렬 */
+  .home > .home-program:nth-of-type(1) .program-left .dot-list {
+    margin: 6px 0 18px !important;
+    padding: 0 !important;
+    list-style: none !important;
+    text-align: center !important;
+  }
+  .home > .home-program:nth-of-type(1) .program-left .dot-list li {
+    padding-left: 0 !important;
+    font-size: 14px !important;
+    line-height: 22px !important;
+  }
+  .home > .home-program:nth-of-type(1) .program-left .dot-list li::before {
+    display: none !important;
+    content: none !important;
+  }
 
-  .program-left h3 { font-size: 18px; }
-  .chip { font-size: 12px; height: 34px; }
-  .dot-list li { font-size: 12px; line-height: 20px; }
-
-  .home-closing h2 { font-size: 18px; }
-  .home-closing p { font-size: 14px; }
+  /* 8) 첫 블록 리스트만 ‘/’로 한 줄 */
+  .home > .home-program:nth-of-type(1) .program-left .program-block:first-of-type .dot-list {
+    display: inline-flex !important;
+    gap: 6px !important;
+    flex-wrap: wrap !important;            /* 폭 좁을 때 자동 줄바꿈 */
+    justify-content: center !important;
+  }
+  .home > .home-program:nth-of-type(1) .program-left .program-block:first-of-type .dot-list li {
+    display: inline !important;
+  }
+  .home > .home-program:nth-of-type(1) .program-left .program-block:first-of-type .dot-list li:not(:last-child)::after {
+    content: " /" !important;
+    margin-left: 4px !important;
+    opacity: .9 !important;
+  }
 }

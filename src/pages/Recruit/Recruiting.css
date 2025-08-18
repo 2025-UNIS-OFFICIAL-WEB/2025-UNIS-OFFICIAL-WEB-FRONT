@@ -238,3 +238,97 @@
   font-size: 45px; font-weight: 800;
   margin-bottom: 96px;
 }
+
+@media (max-width: 1920px) and (min-width: 1441px) {
+  .recruit {
+    --rs: calc(100vw / 1920);
+  }
+}
+@media (max-width: 1440px) {
+  /* 레이아웃 폭/여백 */
+  .recruit .container { width: min(1080px, 94%); }
+
+  /* ── Hero ───────────────────────────── */
+  .recruit .recruit-hero { min-height: 58vh; }
+  .recruit .hero-art-img { transform: translate(-50%, -60%); opacity: .78; }
+
+  .recruit .eyebrow { font-size: 48px; }
+  .recruit .recruit-hero h1 { margin-bottom: 72px; }
+  .recruit .recruit-hero .muted { font-size: 30px; }
+
+  .recruit .btn-primary {
+    min-width: 260px;
+    height: 56px;
+    font-size: 28px;
+    padding: 0 24px;
+    border-width: 2px;
+  }
+
+  /* Hero 아래 섹션 살짝 당김 */
+  .recruit .recruit-hero + .section { margin-top: -64px; }
+
+  /* ── 공통 섹션 타이틀 / 중앙 필 ───── */
+  .recruit .section-title { font-size: 38px; margin-bottom: 38px; }
+
+  .recruit .center-pill {
+    width: 640px;
+    height: 72px;
+    font-size: 36px;
+    border-width: 2px;
+    border-radius: 40px;
+  }
+
+  /* 세로 라인/점 길이 보정 */
+  .recruit .vline-top,
+  .recruit .vline-bottom { height: 120px; }
+  .recruit .vline-dot { width: 12px; height: 12px; }
+
+  /* ── 모집 대상 : 3카드 ─────────────── */
+  .recruit .three-cards {
+    gap: 64px;
+  }
+  .recruit .card {
+    width: 360px;
+    height: 280px;
+    border-radius: 30px;
+    border-width: 3px;
+    font-size: 28px;
+    line-height: 1.8;
+    padding: 0 20px;
+  }
+
+  /* ── 정답은 UNIS ──────────────────── */
+  .recruit .answer { font-size: 44px; margin-bottom: 200px; }
+
+  /* ── 모집 직군 ───────────────────── */
+  .recruit .vline-bottom-roles { height: 96px; }
+  .recruit .roles .container { width: min(1080px, 94%); }
+
+  .recruit .role-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 48px;
+    margin-top: 80px;
+    margin-bottom: 260px;
+  }
+  .recruit .role-card {
+    width: 300px;
+    height: 300px;
+    border-radius: 30px;
+    font-size: 28px;
+  }
+  .recruit .role-card h4 { font-size: 32px; margin-top: 18px; }
+  .recruit .role-card p  { font-size: 22px; }
+
+  /* ── 모집 일정 ───────────────────── */
+  .recruit .schedule-desc.main-line {
+    font-size: 38px;
+    margin-top: 72px;
+  }
+  .recruit .schedule-desc.sub-line {
+    font-size: 24px;
+    margin-bottom: 72px;
+  }
+  .recruit .btn-primary.schedule-btn {
+    width: 400px; height: 88px; font-size: 38px; border-radius: 46px; margin-bottom: 80px;
+  }
+}
