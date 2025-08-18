@@ -25,7 +25,7 @@ async function fetchJSON(path, { timeout = 12000, ...opts } = {}) {
 
   try {
     const res = await fetch(url, {
-      credentials: "include",
+      ...(import.meta.env.VITE_API_WITH_CREDENTIALS === 'true' ? { credentials: 'include' } : {}),
       headers: { Accept: "application/json", ...(opts.headers || {}) },
       signal: controller.signal,
       ...opts,
