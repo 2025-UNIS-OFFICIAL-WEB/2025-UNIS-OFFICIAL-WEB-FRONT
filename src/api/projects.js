@@ -1,10 +1,4 @@
-// src/api/projects.js
-// ───────────────────────────────────────────────────────────
-// ✅ .env.local 에서 둘 다 제어 가능
-//    - 프록시(개발): VITE_API_BASE_URL 비우고, VITE_API_BASE_PATH=/api   (기본값 유지)
-//    - 배포:        VITE_API_BASE_URL=https://your-backend  (CORS 필요)
-//                   VITE_API_BASE_PATH=/api  또는 /api/v1 등 실제 프리픽스
-// ───────────────────────────────────────────────────────────
+
 const API_BASE  = import.meta?.env?.VITE_API_BASE_URL  || "";     // 예) ""(프록시) / "https://loopyxyz.duckdns.org"
 const API_PATH  = import.meta?.env?.VITE_API_BASE_PATH || "/api"; // 예) "/api" 또는 "/api/v1"
 const PLACEHOLDER = "/placeholder-project.png";
