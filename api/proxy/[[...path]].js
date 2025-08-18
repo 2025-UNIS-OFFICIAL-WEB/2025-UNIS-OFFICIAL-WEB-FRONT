@@ -1,5 +1,4 @@
 const ALLOW_ORIGINS = new Set([
-    "https://www.unis-ewha.com",
     "https://unis-ewha.com",
     "http://localhost:5173", // (선택) 로컬 테스트
   ]);
@@ -25,7 +24,7 @@ const ALLOW_ORIGINS = new Set([
   export default async function handler(req, res) {
     try {
       const reqOrigin = req.headers.origin || "";
-      const allowOrigin = ALLOW_ORIGINS.has(reqOrigin) ? reqOrigin : "https://www.unis-ewha.com";
+      const allowOrigin = ALLOW_ORIGINS.has(reqOrigin) ? reqOrigin : "https://unis-ewha.com";
       setCORS(res, allowOrigin);
   
       if (req.method === "OPTIONS") {
@@ -69,7 +68,7 @@ const ALLOW_ORIGINS = new Set([
       res.statusCode = upstream.status;
       res.end(buf);
     } catch (e) {
-      setCORS(res, "https://www.unis-ewha.com");
+      setCORS(res, "https://unis-ewha.com");
       res.statusCode = 502;
       res.setHeader("Content-Type", "application/json; charset=utf-8");
       res.end(JSON.stringify({ error: "Bad gateway", detail: String(e?.message || e) }));

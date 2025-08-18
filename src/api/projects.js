@@ -1,6 +1,6 @@
-
-const API_BASE  = import.meta?.env?.VITE_API_BASE_URL  || "";     // 예) ""(프록시) / "https://loopyxyz.duckdns.org"
-const API_PATH  = import.meta?.env?.VITE_API_BASE_PATH || "/api"; // 예) "/api" 또는 "/api/v1"
+const PROD = import.meta.env.PROD;
+const API_BASE = PROD ? "" : (import.meta?.env?.VITE_API_BASE_URL || "");
+const API_PATH = PROD ? "/api/proxy" : (import.meta?.env?.VITE_API_BASE_PATH || "/api");
 const PLACEHOLDER = "/placeholder-project.png";
 
 function joinURL(base, path) {
