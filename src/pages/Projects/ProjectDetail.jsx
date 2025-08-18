@@ -1,3 +1,4 @@
+// src/pages/Projects/ProjectDetail.jsx
 import React, { useEffect, useState } from "react";
 import { useLocation, useParams, Link } from "react-router-dom";
 import "./ProjectDetail.css";
@@ -5,44 +6,74 @@ import projectdetailthumbnail from "../../assets/projectdetail_thumbnail.png";
 import githublogo from "../../assets/github.png";
 import instalogo from "../../assets/instagram.png";
 import linkicon from "../../assets/link.png";
-import { fetchProjectDetail } from "../../api/projects";
+// ✅ 상세 전용 API로 변경
+import { fetchProjectDetail } from "../../api/project";
 
 export default function ProjectDetail() {
   const { id } = useParams();
   const { state } = useLocation();
+  const preview = state?.preview || null;
 
+  // 프리뷰로 먼저 그리기(제목/인트로/임시 커버)
   const [data, setData] = useState(
-    state?.preview
+    preview
       ? {
-          id: state.preview.id,
-          gen: state.preview.gen,
-          title: state.preview.title,
-          intro: state.preview.intro,
+          id: preview.id,
+          title: preview.title,
+          intro: preview.intro,
+          coverImage: projectdetailthumbnail, // 커버는 항상 고정 이미지
         }
       : null
   );
-  const [loading, setLoading] = useState(!state?.preview);
+  const [loading, setLoading] = useState(true); // 항상 상세 호출
   const [error, setError] = useState("");
 
   useEffect(() => {
     let off = false;
-    if (!state?.preview) {
-      setLoading(true);
-      fetchProjectDetail(id)
-        .then((d) => {
-          if (off) return;
-          if (!d) setError("NOT_FOUND");
-          setData(d || null);
-        })
-        .catch(() => !off && setError("LOAD_FAIL"))
-        .finally(() => !off && setLoading(false));
-    }
+    setLoading(true);
+    setError("");
+
+    fetchProjectDetail(id)
+      .then((d) => {
+        if (off) return;
+
+        if (!d) {
+          // 상세가 없으면: 프리뷰가 있으면 그대로, 없으면 NOT_FOUND
+          if (!preview) setError("NOT_FOUND");
+          return;
+        }
+
+        // 상세로 보강(필드 없으면 프리뷰/기본 유지)
+        setData((prev) => ({
+          id: d.id ?? prev?.id ?? Number(id),
+          title: d.title ?? prev?.title ?? "프로젝트명",
+          intro: d.intro ?? prev?.intro ?? "",
+          detail: d.detail ?? prev?.detail ?? "",
+          coverImage: projectdetailthumbnail, // ✅ 항상 고정 이미지 사용
+          links: {
+            github: d.links?.github || prev?.links?.github || "",
+            instagram: d.links?.instagram || prev?.links?.instagram || "",
+            etc: d.links?.etc || prev?.links?.etc || "",
+          },
+          isAlumni:
+            typeof d.isAlumni === "boolean" ? d.isAlumni : !!prev?.isAlumni,
+          isOfficial:
+            typeof d.isOfficial === "boolean" ? d.isOfficial : !!prev?.isOfficial,
+          gallery: Array.isArray(d.gallery) ? d.gallery : prev?.gallery || [],
+        }));
+      })
+      .catch(() => {
+        if (off) return;
+        if (!preview) setError("LOAD_FAIL");
+      })
+      .finally(() => !off && setLoading(false));
+
     return () => {
       off = true;
     };
-  }, [id, state?.preview]);
+  }, [id]); // id가 바뀌면 매번 상세 재요청
 
-  if (error === "NOT_FOUND") {
+  if (!data && error === "NOT_FOUND") {
     return (
       <main className="project-detail">
         <div className="container">
@@ -52,7 +83,8 @@ export default function ProjectDetail() {
       </main>
     );
   }
-  if (loading && !data) {
+
+  if (!data && loading) {
     return (
       <main className="project-detail">
         <div className="container">불러오는 중…</div>
@@ -62,20 +94,18 @@ export default function ProjectDetail() {
 
   const DETAIL_MAX = 1000;
   const title = data?.title ?? "프로젝트명";
-  const gen = data?.gen;
   const intro = data?.intro ?? "";
   const detail = (data?.detail || "").slice(0, DETAIL_MAX);
   const links = data?.links || {};
   const isAlumni = !!data?.isAlumni;
   const gallery = Array.isArray(data?.gallery) ? data.gallery : [];
+  const heroImage = projectdetailthumbnail; // ✅ 고정
 
   const orderedLinks = [
     links.github && { label: "GitHub", href: links.github, icon: githublogo },
     links.instagram && { label: "Instagram", href: links.instagram, icon: instalogo },
     links.etc && { label: "Link", href: links.etc, icon: linkicon },
   ].filter(Boolean);
-
-  const heroImage = projectdetailthumbnail; // ✅ 고정 이미지
 
   return (
     <div className="project-detail">
@@ -87,13 +117,8 @@ export default function ProjectDetail() {
       >
         <div className="pd-hero__overlay" />
         <div className="pd-hero__center">
-          {gen && (
-            <span className="pd-badge pd-badge--small">
-              {typeof gen === "number" ? `${gen}기` : gen}
-            </span>
-          )}
+          {/* ✅ gen 배지 제거 */}
           <h1 className="pd-title">{title}</h1>
-
           <div className="pd-vline" aria-hidden />
           <div className="pd-vline-dot" aria-hidden />
         </div>
@@ -101,7 +126,7 @@ export default function ProjectDetail() {
 
       {/* 본문 */}
       <main className="pd-content">
-        {/* 한 줄 소개(전체 노출) */}
+        {/* 한 줄 소개 */}
         {intro && (
           <div className="pd-text">
             <p>{intro}</p>
@@ -110,7 +135,7 @@ export default function ProjectDetail() {
 
         {/* 상세 설명 */}
         <div className="pd-text">
-          <p>{detail || "설명이 준비 중입니다."}</p>
+          <p>{detail || (loading ? "상세 정보를 불러오는 중입니다…" : "설명이 준비 중입니다.")}</p>
         </div>
 
         {/* 알럼니 전용 사진 섹션 */}
@@ -143,6 +168,11 @@ export default function ProjectDetail() {
               </a>
             ))}
           </div>
+        )}
+
+        {/* 프리뷰로 먼저 그렸을 때 안내 메시지(선택) */}
+        {preview && loading && (
+          <div className="pd-hint">세부 정보를 보강하는 중…</div>
         )}
       </main>
     </div>
