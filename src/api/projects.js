@@ -58,7 +58,6 @@ function djb2(str) {
   for (let i = 0; i < str.length; i++) h = ((h << 5) + h) + str.charCodeAt(i);
   return Math.abs(h);
 }
-const is404 = (e) => Number(e?.status) === 404 || String(e?.message || "").includes("HTTP 404");
 
 /** 목록: GET {API_PATH}/projects */
 export async function fetchProjects() {
@@ -76,28 +75,16 @@ export async function fetchProjects() {
   }));
 }
 
-/** 상세: GET {API_PATH}/projects/:id  (404면 ?projectId= 로 폴백) */
+/** 상세: GET {API_PATH}/projects?projectId=:id  (쿼리형으로 고정) */
 export async function fetchProjectDetail(id) {
   const idStr = String(id ?? "").trim();
   if (!/^\d+$/.test(idStr)) {
     throw new Error(`Invalid project id: "${id}"`);
   }
 
-  // 1차: 경로형
-  const url1 = `${API_PATH}/projects/${encodeURIComponent(idStr)}`;
-  try {
-    const json = await fetchJSON(url1);
-    return normalizeDetail(json, idStr);
-  } catch (e) {
-    if (!is404(e)) throw e;
-    // 콘솔에 한 번만 힌트 남김
-    console.warn(`[detail] 404 on ${url1} → fallback to query`);
-  }
-
-  // 2차: 쿼리형 (?projectId=)
-  const url2 = `${API_PATH}/projects?projectId=${encodeURIComponent(idStr)}`;
-  const json2 = await fetchJSON(url2);
-  return normalizeDetail(json2, idStr);
+  const url = `${API_PATH}/projects?projectId=${encodeURIComponent(idStr)}`;
+  const json = await fetchJSON(url);
+  return normalizeDetail(json, idStr);
 }
 
 function normalizeDetail(json, idStr) {
