@@ -52,6 +52,7 @@
   align-items: center;
   gap: 71px;
   margin-right: 78px;
+  text-decoration: none;
 }
 
 .unis-header__nav a {
@@ -61,10 +62,11 @@
   font-weight: 500;
   line-height: normal;
   color: #FFF;
+  text-decoration: none;
 }
 
 .unis-header__nav a:hover {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 /* ====== 추가: 햄버거/드로어 기본 (데스크탑에선 숨김) ====== */
@@ -148,9 +150,6 @@
 @media (max-width: 360px){
   .unis-logo-text{ font-size: 16px; letter-spacing: .28em; }
 }
-
-/* 헤더가 fixed라면 본문 상단 여백 (필요 시) */
-@media (max-width:1024px){ main{ padding-top: 60px; } }
 
 /* 드로어 자체 톤 & 폭 */
 .nav-drawer{

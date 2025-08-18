@@ -71,17 +71,22 @@
   display: flex;
   gap: 24px;
   flex-wrap: wrap;
-  margin-top: 0;              /* ✅ 위에서 p에 margin-bottom을 줬으니 0으로 */
+  margin-top: 0;
 }
 
-/* 카드 하나 */
+/* 핵심: 고정 크기 제거 + flex:1 1 0%  */
 .sessions .card {
-  width: 429px; height: 260px; border: none; padding: 0;
+  /* width: 429px; height: 260px;  ← 삭제 */
+  flex: 1 1 0%;        /* tailwind의 flex-1 과 동일: 남는 너비 균등 분배 */
+  min-width: 300px;    /* 너무 좁아지는 것 방지 (원하는 값으로 조절) */
+  aspect-ratio: 16/10; /* 기존 429x260 비율 근사치 */
+  border: none; padding: 0;
   border-radius: 23px; overflow: hidden; background: transparent; box-sizing: border-box;
 }
 
 .sessions .card-image {
-  display: block; width: 100%; height: 100%; object-fit: cover; border-radius: inherit;
+  width: 100%; height: 100%;
+  object-fit: cover; border-radius: inherit; display: block;
 }
 
 /* 하이라이트 이벤트 섹션 */
@@ -134,7 +139,6 @@
 .sessions .event-description {
   color: #FFF; font-family: Pretendard, sans-serif; font-size: 30px; font-style: normal; font-weight: 600;
 }
-
 @media (max-width: 1440px) {
   /* 페이지 여백 살짝 축소 */
   .sessions { padding-left: 80px; padding-right: 64px; }
@@ -164,7 +168,7 @@
 
   /* 카드(사진) : 비율 유지 축소 */
   .sessions .card {
-    width: 320px;           /* 429 -> 408 (약 -5%) */
+    flex: 1 1 calc((100% - 2 * 24px) / 3);      /* 429 -> 408 (약 -5%) */
     aspect-ratio: 429 / 260;/* 높이 자동 계산(≈1.65:1) */
     height: auto;
     border-radius: 17px;
@@ -180,7 +184,6 @@
   }
   .sessions .event-description { font-size: 23px; }      /* 30 -> 26 */
 }
-
 
 @media (max-width: 1280px) {
   /* 페이지 여백 */
@@ -211,7 +214,7 @@
 
   /* 카드(사진) : 3열 유지, 더 작게 */
   .sessions .card {
-    width: 300px;          /* 320 → 300 */
+    flex: 1 1 calc((100% - 2 * 24px) / 3);        /* 320 → 300 */
     aspect-ratio: 429 / 260; /* 자동 높이(≈ 300×0.606 ≈ 182px) */
     height: auto;
     border-radius: 16px;
@@ -230,7 +233,7 @@
 }
 
 @media (max-width: 1080px) {
-  .sessions { padding-top: 60px; padding-left: 40px; padding-right: 32px; }
+  .sessions { padding-top: 150px; padding-left: 40px; padding-right: 32px; }
 
   .sessions .sessions__tab-buttons { margin-bottom: 64px; gap: 12px; }
   .sessions .tab-button {
@@ -252,7 +255,7 @@
   .sessions .card-grid { justify-content: flex-start; gap: 15px; }
 
   .sessions .card {
-    flex: 0 0 180px;        
+    flex: 1 1 calc((100% - 2 * 15px) / 3); 
     height: auto;
     aspect-ratio: 429 / 260;/* ≈ 1.65:1, 높이 자동 */
     border-radius: 12px;
@@ -289,11 +292,26 @@
   .sessions .event-row:last-child  { margin-bottom: 0 !important; }
 }
 
+@media (max-width: 1024px) and (min-width: 769px) {
+  .sessions .card-grid { gap: 20px; } /* 필요하면 15~24로 조절 */
+
+  .sessions .card {
+    /* 이전 width/flex 값을 덮어써서 3등분 */
+    width: auto;               /* 고정폭 제거 */
+    flex: 0 0 calc((100% - 2 * 20px) / 3);  /* 3열 균등 */
+    min-width: 0;
+    height: auto;
+    aspect-ratio: 429 / 260;   /* 기존 비율 유지 */
+    border-radius: 12px;       /* 너가 쓰던 값 유지 가능 */
+  }
+
+  .sessions .card-image { height: 100%; object-fit: cover; }
+}
 
 /* ≤ 768px  → 모바일 레이아웃 전환 */
 @media (max-width: 768px) {
   .sessions {
-    padding-top: 50px;
+    padding-top: 100px;
     padding-left: 27px;
     padding-right: 27px;
   }
@@ -301,8 +319,8 @@
   .sessions .sessions__tab-buttons { margin-bottom: 40px; gap: 12px; justify-content: center;}
   .sessions .tab-button {
     justify-content: center;
-    width: 90px; height: 30px;
-    font-size: 15px; border-radius: 28px; gap: 10px;
+    width: 70px; height: 26px;
+    font-size: 13px; border-radius: 28px; gap: 10px;
   }
 
   .sessions .semester-label {

@@ -55,75 +55,100 @@
   cursor: pointer;
 }
 
-@media (max-width: 1024px) {
-  .footer {
-    padding: 0 0 24px;
-  }
+/* ===== <1440 ===== */
+@media (max-width: 1440px) {
+  .footer__description p,
+  .footer__copyright,
+  .footer__makers { font-size: 22px; }
 
-  /* 2열 그리드: 1fr | auto  (왼쪽 텍스트, 오른쪽 아이콘) */
+  .footer__icons img { width: 22px; height: 22px; }
+}
+
+/* ===== <1280 ===== */
+@media (max-width: 1280px) {
+  .footer__description p,
+  .footer__copyright,
+  .footer__makers { font-size: 20px; }
+
+  .footer__icons { gap: 12px; }
+  .footer__icons img { width: 20px; height: 20px; }
+}
+
+/* ===== <1024 ===== */
+/* 요구: 좌측 정렬, "만든 사람들 | 아이콘" 같은 줄, 타이틀은 단순 텍스트 */
+@media (max-width: 1024px) {
+  .footer { padding: 0 0 24px; } /* 하단만 살짝 줄임(베이스 유지) */
+
+  /* 2열 그리드: 왼쪽 텍스트 | 오른쪽 아이콘 */
   .footer__inner {
     max-width: none;
     padding: 0 16px;
     display: grid;
     grid-template-columns: 1fr auto;
-    column-gap: 16px;
+    grid-auto-rows: min-content;
+    column-gap: 10px;
     row-gap: 4px;
     align-items: start;
-    text-align: left;                 /* 전체 좌측 정렬(요구 1) */
+    text-align: left;
   }
 
-  .footer__left {
-    grid-column: 1 / 2;
-    gap: 8px;
-  }
+  .footer__left { grid-column: 1 / 2; gap: 8px; }
 
-  /* .footer__right 껍데기는 걷어내고, 내부 자식들을 그리드에 직접 배치 */
+  /* 오른쪽 래퍼 걷고 자식들을 그리드에 직접 배치 */
   .footer__right { display: contents; }
 
-  /* ── 상단 라인: "UNIS 회칙 >" ── */
+  /* ─ 상단: UNIS 회칙 > */
   .footer__title {
     grid-column: 1 / 2;
     margin: 0 0 6px 0 !important;
     font-size: 10px;
     font-weight: 800 !important;
   }
-  /* 버튼/박스/추가 화살표 만들지 않음(요구 3) */
   .footer__title::after { content: none; }
 
-  /* ── 본문 텍스트 ── */
+  /* ─ 본문 텍스트 */
   .footer__description p {
     grid-column: 1 / 2;
     margin: 0;
-    font-size: 13px;
+    font-size: 10px;
   }
 
   .footer__copyright {
     grid-column: 1 / 2;
-    font-size: 13px;
+    font-size: 10px;
     margin: 0;
   }
 
-  /* ── 하단 라인: 만든 사람들 + 아이콘을 같은 줄로(요구 2) ── */
+  /* ─ 하단 한 줄: 만든 사람들 + 아이콘 */
   .footer__makers {
-    grid-column: 1 / 2;      /* 왼쪽 칼럼 */
-    grid-row: 3;             /* 아이콘과 같은 행 */
+    grid-column: 1 / 2;
+    grid-row: 3;
     margin: 0;
-    font-size: 13px;
-    text-align: left;  
+    font-size: 10px;
+    text-align: left;
   }
 
   .footer__icons {
-    grid-column: 2 / 3;      /* 오른쪽 칼럼 */
-    grid-row: 3;             /* makers와 같은 행 */
+    grid-column: 2 / 3;
+    grid-row: 3;
     justify-self: end;
     margin: 0;
     gap: 8px;
   }
-  .footer__icons img { width: 13px; height: 13px; }
+  .footer__icons img { width: 10px; height: 10px; }
 }
 
-/* 아주 좁은 화면(아이콘을 아래 줄로 자동 내리기, 요구 2의 보조 규칙) */
-@media (max-width: 375px) {
+/* ===== <768 ===== */
+/* 간격만 조금 여유, 레이아웃은 <1024 규칙 유지 */
+@media (max-width: 768px) {
+  .footer__inner { row-gap: 6px; }
+  .footer__makers { font-size: 10px; }
+  .footer__icons img { width: 10px; height: 10px; }
+}
+
+/* ===== <430 ===== */
+/* 초소형: 아이콘을 다음 줄로 자동 이동 */
+@media (max-width: 430px) {
   .footer__icons {
     grid-row: 4;             /* makers 아래 줄로 이동 */
     grid-column: 1 / 2;      /* 왼쪽으로 내려옴 */
@@ -131,9 +156,9 @@
     margin-top: 6px;
   }
 
-  .footer__title { font-size: 13px; }
+  .footer__title { font-size: 8px; }
   .footer__description p,
   .footer__copyright,
-  .footer__makers { font-size: 13px; }
-  .footer__icons img { width: 13px; height: 13px; }
+  .footer__makers { font-size: 8px; }
+  .footer__icons img { width: 8px; height: 8px; }
 }
