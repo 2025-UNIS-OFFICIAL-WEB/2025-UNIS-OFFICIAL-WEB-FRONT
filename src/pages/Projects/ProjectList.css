@@ -38,17 +38,27 @@
   color:#FFF; font-family:Pretendard, sans-serif; font-size:28px; font-weight:300;
 }
 
-/* ===== Cards ===== */
+/* ===== Cards (기본값) ===== */
 .projectlist .project-cards__row{
   display:grid; grid-template-columns:repeat(3, 388px); gap:73px; justify-content:start;
+  margin-top: 40px;                /* 뱃지와 간격 */
   margin-bottom: 140px;
 }
 .projectlist .project-card{
   width:388px; display:flex; flex-direction:column; align-items:stretch; text-align:left;
 }
-.projectlist .project-card__image{
-  width:100%; height:252px; object-fit:cover; border-radius:23px; display:block; margin-bottom:16px;
+
+/* 💡 이미지: ‘고정 height’ → ‘aspect-ratio’ 로 비율 고정 */
+.projectlist :where(.project-card__image){
+  width: 100% !important;
+  aspect-ratio: 388 / 252;   /* ≒1.539 */
+  height: auto !important;   /* 높이는 비율로 자동 계산 */
+  object-fit: cover !important;
+  border-radius: 23px;
+  display: block;
+  margin-bottom: 16px;
 }
+
 .projectlist .project-card__meta{
   width:100%; height:35px; display:flex; align-items:center; justify-content:space-between;
   border:1px solid #CCC; border-radius:8px; background:transparent; backdrop-filter:blur(2px);
@@ -62,10 +72,9 @@
   max-width:100%; margin-top:10px; color:#FFF; font-family:Pretendard; font-size:18px; font-weight:500; line-height:29px;
 }
 
-.projectlist .project-cards__row {
-  margin-top: 40px;   /* 🔹 뱃지랑 카드 사이 띄우기 */
-  margin-bottom: 140px;
-}
+/* ✅ 전역 스타일 충돌 방지: ProjectList 네임스페이스에서 강제 */
+.projectlist :where(.project-cards__row){ display:grid !important; }
+.projectlist :where(.project-card){ width:388px !important; }
 
 /* 1441px ~ 1920px : 비율 스케일링 */
 @media (min-width: 1441px) and (max-width: 1920px) {
@@ -102,12 +111,8 @@
   .projectlist .highlighted-events { 
     margin-bottom: calc(55px * var(--r1440)); 
   }
-  .projectlist .event-row { 
-    gap: calc(40px * var(--r1440)); 
-  }
-  .projectlist .event-badge-with-line { 
-    min-width: calc(375px * var(--r1440)); 
-  }
+  .projectlist .event-row { gap: calc(40px * var(--r1440)); }
+  .projectlist .event-badge-with-line { min-width: calc(375px * var(--r1440)); }
   .projectlist .event-badge {
     width:  calc(318px * var(--r1440));
     height: calc(57px * var(--r1440));
@@ -116,17 +121,9 @@
     letter-spacing: calc(-0.48px * var(--r1440));
     border-width: calc(1px * var(--r1440));
   }
-  .projectlist .event-line {
-    width: calc(95px * var(--r1440));
-    height: calc(2px * var(--r1440));
-  }
-  .projectlist .event-dot {
-    width:  calc(13px * var(--r1440));
-    height: calc(13px * var(--r1440));
-  }
-  .projectlist .event-description {
-    font-size: calc(28px * var(--r1440));
-  }
+  .projectlist .event-line { width: calc(95px * var(--r1440)); height: calc(2px * var(--r1440)); }
+  .projectlist .event-dot  { width: calc(13px * var(--r1440)); height: calc(13px * var(--r1440)); }
+  .projectlist .event-description { font-size: calc(28px * var(--r1440)); }
 
   /* 카드 리스트 */
   .projectlist .project-cards__row {
@@ -136,15 +133,11 @@
     margin-bottom: calc(140px * var(--r1440));
   }
 
-  /* 카드 본문 */
-  .projectlist .project-card { 
-    width: calc(388px * var(--r1440)); 
-  }
-  .projectlist .project-card__image {
-    height: calc(252px * var(--r1440));
-    border-radius: calc(23px * var(--r1440));
-    margin-bottom: calc(16px * var(--r1440));
-  }
+  /* ✅ 이 구간에서도 충돌 방지 (그리드/폭 강제) */
+  .projectlist :where(.project-cards__row){ display:grid !important; }
+  .projectlist :where(.project-card){ width: calc(388px * var(--r1440)) !important; }
+
+  /* 텍스트/메타 스케일 */
   .projectlist .project-card__meta {
     height: calc(35px * var(--r1440));
     border-width: calc(1px * var(--r1440));
