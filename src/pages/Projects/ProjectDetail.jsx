@@ -135,7 +135,7 @@ export default function ProjectDetail() {
               {Number.isFinite(gen) && <span className="pd-gen">{gen}기</span>}
             </div>
             {orderedLinks.length > 0 && (
-              <div className="pd-hright pd-socials">
+              <div className="pd-hright">
                 {orderedLinks.map((l, i) => (
                   <a
                     key={i}
