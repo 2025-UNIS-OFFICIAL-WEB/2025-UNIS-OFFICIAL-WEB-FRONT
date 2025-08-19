@@ -111,9 +111,9 @@ export default function ProjectDetail() {
     <div className="project-detail">
       {/* Hero */}
       <section
-        className="pd-hero"
-        style={{ backgroundImage: `url(${heroImage})` }}
-        aria-label="프로젝트 대표 이미지"
+      className="pd-hero"
+      style={{ backgroundImage: `url(${heroImage})`, "--hero-bg": `url(${heroImage})` }}
+      aria-label="프로젝트 대표 이미지"
       >
         <div className="pd-hero__overlay" />
         <div className="pd-hero__center">
