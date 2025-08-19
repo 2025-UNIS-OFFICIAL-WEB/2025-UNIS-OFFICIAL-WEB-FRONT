@@ -6,7 +6,6 @@ import projectdetailthumbnail from "../../assets/projectdetail_thumbnail.png";
 import githublogo from "../../assets/github.png";
 import instalogo from "../../assets/instagram.png";
 import linkicon from "../../assets/link.png";
-// ✅ 상세 전용 API로 변경
 import { fetchProjectDetail } from "../../api/projects";
 
 export default function ProjectDetail() {
@@ -14,14 +13,15 @@ export default function ProjectDetail() {
   const { state } = useLocation();
   const preview = state?.preview || null;
 
-  // 프리뷰로 먼저 그리기(제목/인트로/임시 커버)
+  // 프리뷰로 먼저 그리기(제목/인트로/임시 커버 + gen)
   const [data, setData] = useState(
     preview
       ? {
           id: preview.id,
           title: preview.title,
           intro: preview.intro,
-          coverImage: projectdetailthumbnail, // 커버는 항상 고정 이미지
+          gen: preview.gen ?? undefined,        // 🔹 기수 초기값
+          coverImage: projectdetailthumbnail,   // 커버는 항상 고정 이미지
         }
       : null
   );
@@ -38,7 +38,6 @@ export default function ProjectDetail() {
         if (off) return;
 
         if (!d) {
-          // 상세가 없으면: 프리뷰가 있으면 그대로, 없으면 NOT_FOUND
           if (!preview) setError("NOT_FOUND");
           return;
         }
@@ -49,7 +48,8 @@ export default function ProjectDetail() {
           title: d.title ?? prev?.title ?? "프로젝트명",
           intro: d.intro ?? prev?.intro ?? "",
           detail: d.detail ?? prev?.detail ?? "",
-          coverImage: projectdetailthumbnail, // ✅ 항상 고정 이미지 사용
+          gen: d.gen ?? prev?.gen ?? undefined,  // 🔹 상세 값으로 갱신
+          coverImage: projectdetailthumbnail,    // ✅ 항상 고정 이미지 사용
           links: {
             github: d.links?.github || prev?.links?.github || "",
             instagram: d.links?.instagram || prev?.links?.instagram || "",
@@ -95,6 +95,7 @@ export default function ProjectDetail() {
   const DETAIL_MAX = 1000;
   const title = data?.title ?? "프로젝트명";
   const intro = data?.intro ?? "";
+  const gen = data?.gen;                               // 🔹 추가
   const detail = (data?.detail || "").slice(0, DETAIL_MAX);
   const links = data?.links || {};
   const isAlumni = !!data?.isAlumni;
@@ -117,7 +118,13 @@ export default function ProjectDetail() {
       >
         <div className="pd-hero__overlay" />
         <div className="pd-hero__center">
-          {/* ✅ gen 배지 제거 */}
+          {/* 🔹 작은 기수 배지 복원 */}
+          {Number.isFinite(gen) && (
+            <div className="pd-badge pd-badge--small" aria-label="기수 배지">
+              {gen}기
+            </div>
+          )}
+
           <h1 className="pd-title">{title}</h1>
           <div className="pd-vline" aria-hidden />
           <div className="pd-vline-dot" aria-hidden />
@@ -170,7 +177,6 @@ export default function ProjectDetail() {
           </div>
         )}
 
-        {/* 프리뷰로 먼저 그렸을 때 안내 메시지(선택) */}
         {preview && loading && (
           <div className="pd-hint">세부 정보를 보강하는 중…</div>
         )}
