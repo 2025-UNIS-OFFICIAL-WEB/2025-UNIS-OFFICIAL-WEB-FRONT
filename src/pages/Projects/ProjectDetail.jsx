@@ -48,7 +48,7 @@ export default function ProjectDetail() {
           intro: d.intro ?? prev?.intro ?? "",
           detail: d.detail ?? prev?.detail ?? "",
           gen: d.gen ?? prev?.gen ?? undefined,  // 🔹 상세 값으로 갱신
-          coverImage: d.coverImage || prev?.coverImage || projectdetailthumbnail,   // ✅ 항상 고정 이미지 사용
+          coverImage: d.coverImage || prev?.coverImage || projectdetailthumbnail,  // ✅ 항상 고정 이미지 사용
           links: {
             github: d.links?.github || prev?.links?.github || "",
             instagram: d.links?.instagram || prev?.links?.instagram || "",
@@ -99,7 +99,7 @@ export default function ProjectDetail() {
   const links = data?.links || {};
   const isAlumni = !!data?.isAlumni;
   const gallery = Array.isArray(data?.gallery) ? data.gallery : [];
-  const heroImage = projectdetailthumbnail; // ✅ 고정
+  const heroImage = data?.coverImage || projectdetailthumbnail; // ✅ 고정
 
   const orderedLinks = [
     links.github && { label: "GitHub", href: links.github, icon: githublogo },
