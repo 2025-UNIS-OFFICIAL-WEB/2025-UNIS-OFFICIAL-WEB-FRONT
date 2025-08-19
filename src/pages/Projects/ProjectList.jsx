@@ -6,11 +6,12 @@ import { fetchProjects } from "../../api/projects";
 import { enrichProjectsWithGen } from "../../api/projects";
 
 // (그대로 쓰던 작은 로고 갤러리용 에셋)
-import img1 from "../../assets/project-image-1.png";
-import img2 from "../../assets/project-image-2.png";
-import img3 from "../../assets/project-image-3.png";
-import img4 from "../../assets/project-image-4.png";
-import img5 from "../../assets/project-image-5.png";
+import savvy from "../../assets/savvy-thumbnail.png";
+import dalchaebi from "../../assets/dalchaebi-thumbnail.png";
+import uniconnect from "../../assets/uniconnect-thumbnail.png";
+import brazil from "../../assets/brazil-thumbnail.png";
+import moonda from "../../assets/moonda-thumbnail.png";
+import degul from "../../assets/degul-thumbnail.png";
 
 /* ─────────────────────────────────────────────────────────
    하드코딩: 상단 "창업 중인 프로젝트" 6개
@@ -20,45 +21,45 @@ import img5 from "../../assets/project-image-5.png";
 const HARDCODED_STARTUPS = [
   {
     id: "s1",
-    title: "Savvy (더미)",
-    intro: "실제 창업으로 이어진 프로젝트의 간단 소개문구",
-    thumbnail: img1,
-    gen: 12,
+    title: "Savvy",
+    intro: "~",
+    thumbnail: savvy,
+    gen: 1,
   },
   {
     id: "s2",
-    title: "달채비 (더미)",
-    intro: "사용자 문제 해결에 집중한 서비스",
-    thumbnail: img2,
-    gen: 11,
+    title: "달채비",
+    intro: "~",
+    thumbnail: dalchaebi,
+    gen: 1,
   },
   {
     id: "s3",
-    title: "UNI:CONNECT (더미)",
-    intro: "산학 연결을 돕는 매칭 플랫폼",
-    thumbnail: img3,
-    gen: 10,
+    title: "유니커넥트",
+    intro: "~",
+    thumbnail: uniconnect,
+    gen: 1,
   },
   {
     id: "s4",
-    title: "브라질커피 (더미)",
-    intro: "브랜드/커머스 실험 프로젝트",
-    thumbnail: img4,
+    title: "Brazil",
+    intro: "~",
+    thumbnail: brazil,
     gen: 9,
   },
   {
     id: "s5",
-    title: "문답(MoonDa) (더미)",
-    intro: "학습 Q&A 기반 서비스",
-    thumbnail: img5,
-    gen: 9,
+    title: "문다",
+    intro: "~",
+    thumbnail: moonda,
+    gen: 1,
   },
   {
     id: "s6",
-    title: "DeGul (더미)",
-    intro: "커뮤니티 실험 프로젝트",
-    thumbnail: img1, 
-    gen: 8,
+    title: "데굴데굴",
+    intro: "~",
+    thumbnail: degul, 
+    gen: 1,
   },
 ];
 

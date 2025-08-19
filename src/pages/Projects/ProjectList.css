@@ -42,6 +42,7 @@
 .projectlist .project-cards__row{
   display:grid; grid-template-columns:repeat(3, 388px); gap:73px; justify-content:start;
   margin-bottom: 140px;
+  margin-top: 40px;
 }
 .projectlist .project-card{
   width:388px; display:flex; flex-direction:column; align-items:stretch; text-align:left;
