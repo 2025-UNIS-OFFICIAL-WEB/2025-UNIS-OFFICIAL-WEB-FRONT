@@ -1,4 +1,3 @@
-// src/api/projects.js
 // ------------------------------------------------------------------
 // 환경:
 //  - dev(로컬): 프록시 사용 → API_BASE = "" , API_PATH = "/api" (vite proxy)
@@ -52,27 +51,33 @@ async function fetchJSON(path, { timeout = 12000, ...opts } = {}) {
 const s = (v, d = "") => (typeof v === "string" ? v : d);
 function safeUrl(u = "") {
   if (typeof u !== "string" || !u.trim()) return "";
-  try { const url = new URL(u); return /^https?:$/.test(url.protocol) ? u : ""; }
-  catch { return ""; }
+  try {
+    const url = new URL(u);
+    return /^https?:$/.test(url.protocol) ? u : "";
+  } catch {
+    return "";
+  }
 }
 
 // ---------- 목록 ----------
 export async function fetchProjects() {
-  // 경로형 목록만 사용
   const path = `${API_PATH}/projects`;
   const json = await fetchJSON(path);
   console.log("[projects:list] url =", joinURL(API_BASE, path));
 
   const arr = Array.isArray(json?.data) ? json.data : [];
-  return arr.map((d) => ({
-    id: d?.projectId,
-    title: s(d?.serviceName),
-    gen: Number.isFinite(d?.generation) ? d.generation : undefined,
-    intro: s(d?.shortDescription),
-    thumbnail: s(d?.imageUrl) || PLACEHOLDER,
-    isAlumni: Boolean(d?.isAlumni),
-    isOfficial: Boolean(d?.isOfficial),
-  }));
+  return arr.map((d) => {
+    const g = Number(d?.generation);
+    return {
+      id: d?.projectId,
+      title: s(d?.serviceName),
+      gen: Number.isFinite(g) ? g : undefined,
+      intro: s(d?.shortDescription),
+      thumbnail: s(d?.imageUrl) || PLACEHOLDER,
+      isAlumni: Boolean(d?.isAlumni),
+      isOfficial: Boolean(d?.isOfficial),
+    };
+  });
 }
 
 // ---------- 상세 (경로형만! 쿼리형 금지) ----------
@@ -84,7 +89,6 @@ export async function fetchProjectDetail(id) {
   const json = await fetchJSON(path);
   console.log("[projects:detail] url =", joinURL(API_BASE, path));
 
-  // 정상: data는 객체여야 함. (배열이거나 비객체면 잘못된 200으로 간주)
   const d = json?.data;
   if (!d || Array.isArray(d) || typeof d !== "object") {
     const err = new Error("Detail not found or malformed response");
@@ -92,13 +96,15 @@ export async function fetchProjectDetail(id) {
     throw err;
   }
 
+  const g = Number(d?.generation);
+
   return {
     id: Number(idStr),
     title: s(d?.serviceName),
-    gen: Number.isFinite(d?.generation) ? d.generation : undefined,
+    gen: Number.isFinite(g) ? g : undefined,
     intro: s(d?.shortDescription),
     detail: s(d?.description) || s(d?.shortDescription) || "",
-    coverImage: d.coverImage || prev?.coverImage || projectdetailthumbnail,
+    coverImage: s(d?.imageUrl) || PLACEHOLDER, // ← 서버 imageUrl을 커버로 사용
     links: {
       github: safeUrl(d?.githubUrl),
       instagram: safeUrl(d?.instagramUrl),
@@ -113,7 +119,7 @@ export async function fetchProjectDetail(id) {
 // 서버가 generation 제공하므로 보강 불필요
 export async function enrichProjectsWithGen(list) { return list; }
 
-// (옵션) 내부 캐시가 필요하면 유지
+// (옵션) 내부 캐시
 const _detailCache = new Map();
 export async function getProjectDetailCached(id) {
   if (_detailCache.has(id)) return _detailCache.get(id);

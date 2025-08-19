@@ -19,8 +19,9 @@ export default function ProjectDetail() {
           id: preview.id,
           title: preview.title,
           intro: preview.intro,
-          gen: preview.gen ?? undefined,        // 🔹 기수 초기값
-          coverImage: preview.thumbnail || projectdetailthumbnail,  // 커버는 항상 고정 이미지
+          gen: preview.gen ?? undefined,
+          coverImage: preview.thumbnail || projectdetailthumbnail,
+          detail: preview.detail || "",
         }
       : null
   );
@@ -35,7 +36,6 @@ export default function ProjectDetail() {
     fetchProjectDetail(id)
       .then((d) => {
         if (off) return;
-
         if (!d) {
           if (!preview) setError("NOT_FOUND");
           return;
@@ -47,8 +47,8 @@ export default function ProjectDetail() {
           title: d.title ?? prev?.title ?? "프로젝트명",
           intro: d.intro ?? prev?.intro ?? "",
           detail: d.detail ?? prev?.detail ?? "",
-          gen: d.gen ?? prev?.gen ?? undefined,  // 🔹 상세 값으로 갱신
-          coverImage: d.coverImage || prev?.coverImage || projectdetailthumbnail,  // ✅ 항상 고정 이미지 사용
+          gen: d.gen ?? prev?.gen ?? undefined,
+          coverImage: d.coverImage || prev?.coverImage || projectdetailthumbnail,
           links: {
             github: d.links?.github || prev?.links?.github || "",
             instagram: d.links?.instagram || prev?.links?.instagram || "",
@@ -94,12 +94,12 @@ export default function ProjectDetail() {
   const DETAIL_MAX = 1000;
   const title = data?.title ?? "프로젝트명";
   const intro = data?.intro ?? "";
-  const gen = data?.gen;                               // 🔹 추가
-  const detail = (data?.detail || "").slice(0, DETAIL_MAX);
+  const gen = data?.gen;
+  const detail = (data?.detail || "").slice(0, DETAIL_MAX).trim();
   const links = data?.links || {};
   const isAlumni = !!data?.isAlumni;
   const gallery = Array.isArray(data?.gallery) ? data.gallery : [];
-  const heroImage = data?.coverImage || projectdetailthumbnail; // ✅ 고정
+  const heroImage = data?.coverImage || projectdetailthumbnail;
 
   const orderedLinks = [
     links.github && { label: "GitHub", href: links.github, icon: githublogo },
@@ -117,13 +117,11 @@ export default function ProjectDetail() {
       >
         <div className="pd-hero__overlay" />
         <div className="pd-hero__center">
-          {/* 🔹 작은 기수 배지 복원 */}
           {Number.isFinite(gen) && (
             <div className="pd-badge pd-badge--small" aria-label="기수 배지">
               {gen}기
             </div>
           )}
-
           <h1 className="pd-title">{title}</h1>
           <div className="pd-vline" aria-hidden />
           <div className="pd-vline-dot" aria-hidden />
@@ -132,19 +130,22 @@ export default function ProjectDetail() {
 
       {/* 본문 */}
       <main className="pd-content">
-        {/* 한 줄 소개 */}
         {intro && (
           <div className="pd-text">
             <p>{intro}</p>
           </div>
         )}
 
-        {/* 상세 설명 */}
-        <div className="pd-text">
-          <p>{detail || (loading ? "상세 정보를 불러오는 중입니다…" : "설명이 준비 중입니다.")}</p>
-        </div>
+        {detail ? (
+          <div className="pd-text">
+            <p>{detail}</p>
+          </div>
+        ) : loading ? (
+          <div className="pd-text">
+            <p>상세 정보를 불러오는 중입니다…</p>
+          </div>
+        ) : null}
 
-        {/* 알럼니 전용 사진 섹션 */}
         {isAlumni && gallery.length > 0 && (
           <section className="pd-photo" aria-label="프로젝트 이미지">
             {gallery.map((src, i) => (
@@ -158,7 +159,6 @@ export default function ProjectDetail() {
           </section>
         )}
 
-        {/* 소셜 아이콘 */}
         {orderedLinks.length > 0 && (
           <div className="pd-socials" aria-label="프로젝트 소셜 링크">
             {orderedLinks.map((l, i) => (
