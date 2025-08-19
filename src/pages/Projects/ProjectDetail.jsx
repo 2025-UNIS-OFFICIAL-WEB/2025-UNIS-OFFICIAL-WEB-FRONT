@@ -25,7 +25,7 @@ export default function ProjectDetail() {
         }
       : null
   );
-  const [loading, setLoading] = useState(true); // 항상 상세 호출
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -40,8 +40,6 @@ export default function ProjectDetail() {
           if (!preview) setError("NOT_FOUND");
           return;
         }
-
-        // 상세로 보강(필드 없으면 프리뷰/기본 유지)
         setData((prev) => ({
           id: d.id ?? prev?.id ?? Number(id),
           title: d.title ?? prev?.title ?? "프로젝트명",
@@ -70,7 +68,7 @@ export default function ProjectDetail() {
     return () => {
       off = true;
     };
-  }, [id]); // id가 바뀌면 매번 상세 재요청
+  }, [id]);
 
   if (!data && error === "NOT_FOUND") {
     return (
@@ -97,7 +95,6 @@ export default function ProjectDetail() {
   const gen = data?.gen;
   const detail = (data?.detail || "").slice(0, DETAIL_MAX).trim();
   const links = data?.links || {};
-  const isAlumni = !!data?.isAlumni;
   const gallery = Array.isArray(data?.gallery) ? data.gallery : [];
   const heroImage = data?.coverImage || projectdetailthumbnail;
 
@@ -111,9 +108,9 @@ export default function ProjectDetail() {
     <div className="project-detail">
       {/* Hero */}
       <section
-      className="pd-hero"
-      style={{ backgroundImage: `url(${heroImage})`, "--hero-bg": `url(${heroImage})` }}
-      aria-label="프로젝트 대표 이미지"
+        className="pd-hero"
+        style={{ backgroundImage: `url(${heroImage})`, "--hero-bg": `url(${heroImage})` }}
+        aria-label="프로젝트 대표 이미지"
       >
         <div className="pd-hero__overlay" />
         <div className="pd-hero__center">
@@ -130,23 +127,48 @@ export default function ProjectDetail() {
 
       {/* 본문 */}
       <main className="pd-content">
+        {/* ▶ 모바일 전용 헤더: 제목 + (같은 줄) 기수, 오른쪽 아이콘 */}
+        <div className="pd-header--mobile">
+          <div className="pd-hrow">
+            <div className="pd-hleft">
+              <h1 className="pd-title pd-title--mobile">{title}</h1>
+              {Number.isFinite(gen) && <span className="pd-gen">{gen}기</span>}
+            </div>
+            {orderedLinks.length > 0 && (
+              <div className="pd-hright pd-socials">
+                {orderedLinks.map((l, i) => (
+                  <a
+                    key={i}
+                    className="pd-social"
+                    href={l.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={l.label}
+                  >
+                    <img src={l.icon} alt={`${l.label} 아이콘`} />
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* 한 줄 소개 (모바일에선 숨김) */}
         {intro && (
-          <div className="pd-text">
+          <div className="pd-text pd-text--intro">
             <p>{intro}</p>
           </div>
         )}
 
-        {detail ? (
+        {/* 상세 설명(= description만) */}
+        {detail && (
           <div className="pd-text">
             <p>{detail}</p>
           </div>
-        ) : loading ? (
-          <div className="pd-text">
-            <p>상세 정보를 불러오는 중입니다…</p>
-          </div>
-        ) : null}
+        )}
 
-        {isAlumni && gallery.length > 0 && (
+        {/* 알럼니 전용 사진 섹션 */}
+        {gallery.length > 0 && (
           <section className="pd-photo" aria-label="프로젝트 이미지">
             {gallery.map((src, i) => (
               <img
@@ -157,27 +179,6 @@ export default function ProjectDetail() {
               />
             ))}
           </section>
-        )}
-
-        {orderedLinks.length > 0 && (
-          <div className="pd-socials" aria-label="프로젝트 소셜 링크">
-            {orderedLinks.map((l, i) => (
-              <a
-                key={i}
-                className="pd-social"
-                href={l.href}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={l.label}
-              >
-                <img src={l.icon} alt={`${l.label} 아이콘`} />
-              </a>
-            ))}
-          </div>
-        )}
-
-        {preview && loading && (
-          <div className="pd-hint">세부 정보를 보강하는 중…</div>
         )}
       </main>
     </div>
