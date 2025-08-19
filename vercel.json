@@ -1,12 +1,6 @@
 {
   "rewrites": [
-    {
-      "source": "/api/proxy/(.*)",
-      "destination": "https://api-unis.com/api/$1"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/"
-    }
+    { "source": "/api/proxy/(.*)", "destination": "https://api-unis.com/api/$1" },
+    { "source": "/(.*)", "destination": "/" }
   ]
 }
