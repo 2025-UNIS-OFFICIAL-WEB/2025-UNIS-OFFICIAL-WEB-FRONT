@@ -230,3 +230,77 @@
     margin-top: 6px;
   }
 }
+
+/* ===========================
+   1080px ~ 1280px 대응 (3열 유지)
+   =========================== */
+   @media (min-width: 1080px) and (max-width: 1280px) {
+    /* 페이지 여백 더 줄이기 */
+    .projectlist .page-container {
+      padding-left: 56px;    /* 134 → 56 */
+      padding-right: 16px;   /* 안전 여백 */
+    }
+  
+    /* 인트로 타이틀 */
+    .projectlist .project-intro__title {
+      font-size: clamp(32px, 2.5vw, 42px);
+    }
+  
+    /* 작은 로고 갤러리 */
+    .projectlist .project-gallery__images {
+      gap: 16px;
+      padding-bottom: 28px;
+    }
+    .projectlist .project-gallery__images img {
+      width: 64px;
+      height: 64px;
+    }
+  
+    /* 이벤트 배지 */
+    .projectlist .event-badge-with-line {
+      min-width: 240px;
+    }
+    .projectlist .event-badge {
+      width: 200px;
+      height: 40px;
+      font-size: 18px;
+      border-radius: 24px;
+    }
+    .projectlist .event-line { height: 2px; }
+    .projectlist .event-dot { width: 9px; height: 9px; }
+    .projectlist .event-description { font-size: 18px; }
+    .projectlist .event-row { gap: 20px; }
+  
+    /* ===== 카드 ===== */
+    .projectlist .project-cards__row {
+      grid-template-columns: repeat(3, 280px); /* 카드폭 줄임 */
+      gap: 36px;
+      margin-top: 24px;
+      margin-bottom: 80px;
+    }
+  
+    .projectlist .project-card {
+      width: 280px;
+    }
+    .projectlist .project-card__image {
+      height: 190px;
+      border-radius: 14px;
+      margin-bottom: 10px;
+    }
+    .projectlist .project-card__meta {
+      height: 28px;
+      border-radius: 6px;
+      margin-top: 4px;
+    }
+    .projectlist .project-card__name,
+    .projectlist .project-card__gen {
+      font-size: 16px;
+      padding: 5px 8px;
+    }
+    .projectlist .project-card__description {
+      font-size: 15px;
+      line-height: 22px;
+      margin-top: 4px;
+    }
+  }
+  
