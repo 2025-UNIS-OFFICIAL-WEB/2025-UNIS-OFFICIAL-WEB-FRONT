@@ -2,16 +2,17 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import "./ProjectList.css";
-import { fetchProjects } from "../../api/projects";
-import { enrichProjectsWithGen } from "../../api/projects";
+import { fetchProjects } from "../../api/projects"; 
+// enrich 보강은 불필요해져서 제거
 
+// (작은 로고 갤러리용 에셋)
 import img1 from "../../assets/project-image-1.png";
 import img2 from "../../assets/project-image-2.png";
 import img3 from "../../assets/project-image-3.png";
 import img4 from "../../assets/project-image-4.png";
 import img5 from "../../assets/project-image-5.png";
 
-// (그대로 쓰던 작은 로고 갤러리용 에셋)
+// (상단 하드코딩 6개 에셋)
 import savvy from "../../assets/savvy-thumbnail.png";
 import dalchaebi from "../../assets/dalchaebi-thumbnail.png";
 import uniconnect from "../../assets/uniconnect-thumbnail.png";
@@ -20,53 +21,15 @@ import moonda from "../../assets/moonda-thumbnail.png";
 import degul from "../../assets/degul-thumbnail.png";
 
 /* ─────────────────────────────────────────────────────────
-   하드코딩: 상단 "창업 중인 프로젝트" 6개
-   - 이미지/텍스트는 임시값. 자유롭게 교체해도 됨.
-   - 링크 없이 카드만 렌더링(요구사항).
+   하드코딩: 상단 "창업 중인 프로젝트" 6개 (링크 없음)
 ────────────────────────────────────────────────────────── */
 const HARDCODED_STARTUPS = [
-  {
-    id: "s1",
-    title: "Savvy",
-    intro: "~",
-    thumbnail: savvy,
-    gen: 1,
-  },
-  {
-    id: "s2",
-    title: "달채비",
-    intro: "~",
-    thumbnail: dalchaebi,
-    gen: 1,
-  },
-  {
-    id: "s3",
-    title: "유니커넥트",
-    intro: "~",
-    thumbnail: uniconnect,
-    gen: 1,
-  },
-  {
-    id: "s4",
-    title: "Brazil",
-    intro: "~",
-    thumbnail: brazil,
-    gen: 9,
-  },
-  {
-    id: "s5",
-    title: "문다",
-    intro: "~",
-    thumbnail: moonda,
-    gen: 1,
-  },
-  {
-    id: "s6",
-    title: "데굴데굴",
-    intro: "~",
-    thumbnail: degul, 
-    gen: 1,
-  },
+  { id: "s1", title: "Savvy",     intro: "~", thumbnail: savvy,     gen: 1 },
+  { id: "s2", title: "달채비",     intro: "~", thumbnail: dalchaebi, gen: 1 },
+  { id: "s3", title: "유니커넥트", intro: "~", thumbnail: uniconnect, gen: 1 },
+  { id: "s4", title: "Brazil",    intro: "~", thumbnail: brazil,    gen: 9 },
+  { id: "s5", title: "문다",       intro: "~", thumbnail: moonda,    gen: 1 },
+  { id: "s6", title: "데굴데굴",   intro: "~", thumbnail: degul,     gen: 1 },
 ];
 
 export default function ProjectList() {
@@ -79,24 +42,20 @@ export default function ProjectList() {
       try {
         setLoading(true);
 
-        // 1) 기본 목록
+        // 1) 기본 목록 호출
         const base = await fetchProjects();
-        setItems(base); // 먼저 그려주고
 
-        // 2) gen 없는 항목만 상세에서 끌어와 보강 (내부 캐시 있음)
-        const withGen = await enrichProjectsWithGen(base);
-
-        // 3) 정렬: 기수 내림차순 → id 오름차순
-        withGen.sort((a, b) => {
+        // 2) 정렬: 기수 내림차순 → id 오름차순 (서버가 generation 제공)
+        base.sort((a, b) => {
           const ga = Number.isFinite(a.gen) ? a.gen : -Infinity;
           const gb = Number.isFinite(b.gen) ? b.gen : -Infinity;
-          if (ga !== gb) return gb - ga; // gen desc
+          if (ga !== gb) return gb - ga;           // gen desc
           const ia = Number(a.id) || 0;
           const ib = Number(b.id) || 0;
-          return ia - ib; // id asc
+          return ia - ib;                           // id asc
         });
 
-        setItems(withGen);
+        setItems(base);
       } catch (e) {
         setErr(e?.message || "프로젝트 목록 로드 실패");
       } finally {
@@ -162,9 +121,7 @@ export default function ProjectList() {
               />
               <div className="project-card__meta">
                 <span className="project-card__name">{p.title}</span>
-                {p.gen ? (
-                  <span className="project-card__gen">{p.gen}기</span>
-                ) : null}
+                {p.gen ? <span className="project-card__gen">{p.gen}기</span> : null}
               </div>
               {p.intro ? (
                 <p className="project-card__description clamp-2">{p.intro}</p>
@@ -180,9 +137,7 @@ export default function ProjectList() {
               />
               <div className="project-card__meta">
                 <span className="project-card__name">{p.title}</span>
-                {p.gen ? (
-                  <span className="project-card__gen">{p.gen}기</span>
-                ) : null}
+                {p.gen ? <span className="project-card__gen">{p.gen}기</span> : null}
               </div>
               {p.intro ? (
                 <p className="project-card__description clamp-2">{p.intro}</p>
@@ -229,7 +184,7 @@ export default function ProjectList() {
           </div>
         </section>
 
-        {/* 🔹 하드코딩된 상단 6개 (링크 없음) */}
+        {/* 🔹 하드코딩된 상단 6개 (링크 없음) — 뱃지 없이 카드만 */}
         <Section title={undefined} list={HARDCODED_STARTUPS} linked={false} />
 
         {/* 🔹 아래 두 섹션만 API 연동 */}

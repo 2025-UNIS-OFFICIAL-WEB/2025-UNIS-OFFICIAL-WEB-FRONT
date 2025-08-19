@@ -49,36 +49,9 @@ function safeUrl(u = "") {
   try { const url = new URL(u); return /^https?:$/.test(url.protocol) ? u : ""; } catch { return ""; }
 }
 
-function parseGenStrict(txt) {
-  if (txt == null) return undefined;
-  const m = String(txt).match(/(\d+)\s*기\b/i);
-  if (!m) return undefined;
-  const n = parseInt(m[1], 10);
-  return Number.isFinite(n) ? n : undefined;
-}
-function parseGenLoose(txt) {
-  if (txt == null) return undefined;
-  const m = String(txt).match(/\d+/);
-  if (!m) return undefined;
-  const n = parseInt(m[0], 10);
-  return Number.isFinite(n) ? n : undefined;
-}
-function extractGenFromRecord(d) {
-  let g =
-    parseGenStrict(d?.generation) ??
-    parseGenStrict(d?.projectGeneration) ??
-    parseGenStrict(d?.gen) ??
-    parseGenStrict(d?.generationNumber);
-  g ??= parseGenStrict(d?.serviceName) ??
-        parseGenStrict(d?.shortDescription) ??
-        parseGenStrict(d?.description);
-  g ??= parseGenLoose(d?.serviceName);
-  return g;
-}
-
 function pickRecordById(json, idStr) {
   const d = json?.data;
-  if (d && !Array.isArray(d) && typeof d === "object") return d;
+  if (d && !Array.isArray(d) && typeof d === "object") return d;            // 단건
   if (Array.isArray(d)) return d.find(x => String(x?.projectId) === idStr) || d[0] || {};
   return {};
 }
@@ -103,7 +76,6 @@ async function fetchFirstOkJson(paths) {
       return { json, used: p };
     } catch (e) {
       lastErr = e;
-      // 404/405/500 모두 다음 후보로 시도
       console.warn(`[projects] fail @ ${e.url || p}:`, e.message);
     }
   }
@@ -119,7 +91,7 @@ export async function fetchProjects() {
   return arr.map((d) => ({
     id: d?.projectId,
     title: s(d?.serviceName),
-    gen: extractGenFromRecord(d),
+    gen: Number.isFinite(d?.generation) ? d.generation : undefined,  // ★ 서버 값 그대로 사용
     intro: s(d?.shortDescription),
     thumbnail: s(d?.imageUrl) || PLACEHOLDER,
     isAlumni: Boolean(d?.isAlumni),
@@ -132,7 +104,6 @@ export async function fetchProjectDetail(id) {
   const idStr = String(id ?? "").trim();
   if (!/^\d+$/.test(idStr)) throw new Error(`Invalid project id: "${id}"`);
 
-  // 경로형 후보들
   const detailCandidates = [
     `${API_PATH}/projects/${encodeURIComponent(idStr)}`,
     `${API_PATH}/admin/projects/${encodeURIComponent(idStr)}`,
@@ -144,7 +115,6 @@ export async function fetchProjectDetail(id) {
     const d = pickRecordById(json, idStr);
     return normalizeDetailRecord(d, idStr);
   } catch (e) {
-    // 폴백: 쿼리형
     const queryCandidates = [
       `${API_PATH}/projects?projectId=${encodeURIComponent(idStr)}`,
       `${API_PATH}/admin/projects?projectId=${encodeURIComponent(idStr)}`,
@@ -157,12 +127,10 @@ export async function fetchProjectDetail(id) {
 }
 
 function normalizeDetailRecord(d, idStr) {
-  const title = s(d?.serviceName);
-  const gen = extractGenFromRecord(d);
   return {
     id: Number(idStr),
-    title,
-    gen,
+    title: s(d?.serviceName),
+    gen: Number.isFinite(d?.generation) ? d.generation : undefined,  // ★ 서버 값 그대로
     intro: s(d?.shortDescription),
     detail: s(d?.description),
     coverImage: s(d?.imageUrl) || PLACEHOLDER,
@@ -177,7 +145,7 @@ function normalizeDetailRecord(d, idStr) {
   };
 }
 
-// ── 캐시 & 보강 (그대로)
+// ── 캐시 & 보강 (이제 보강 불필요 → no-op로 유지)
 const _detailCache = new Map();
 export async function getProjectDetailCached(id) {
   if (_detailCache.has(id)) return _detailCache.get(id);
@@ -187,9 +155,5 @@ export async function getProjectDetailCached(id) {
 }
 
 export async function enrichProjectsWithGen(list) {
-  const targets = list.filter(p => p?.id != null && (p.gen == null));
-  const results = await Promise.allSettled(targets.map(p => getProjectDetailCached(p.id)));
-  const genById = new Map();
-  results.forEach((r, i) => { if (r.status === "fulfilled") genById.set(targets[i].id, r.value.gen); });
-  return list.map(p => ({ ...p, gen: p.gen ?? genById.get(p.id) }));
+  return list; // 서버가 generation 제공하므로 추가 보강 불필요
 }
