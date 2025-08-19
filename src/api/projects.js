@@ -53,13 +53,15 @@ function safeUrl(u = "") {
   catch { return ""; }
 }
 
+// ✅ 엄격: id 매칭 실패 시 null 반환(첫 요소 반환 금지)
 function pickRecordById(json, idStr) {
   const d = json?.data;
-  // 상세(단건) 응답: data가 객체
-  if (d && !Array.isArray(d) && typeof d === "object") return d;
-  // 리스트 응답: data가 배열
-  if (Array.isArray(d)) return d.find(x => String(x?.projectId) === idStr) || d[0] || {};
-  return {};
+  if (d && !Array.isArray(d) && typeof d === "object") return d; // 단건
+  if (Array.isArray(d)) {
+    const hit = d.find(x => String(x?.projectId) === idStr);
+    return hit || null;
+  }
+  return null;
 }
 
 // v1 경로 보정: /api → /api/v1, /api/proxy → /api/proxy/v1
@@ -86,16 +88,6 @@ async function fetchFirstOkJson(paths) {
 }
 
 // ---------- 목록 ----------
-/*
-  서버 스펙(예):
-  {
-    "status":200, "message":"Success",
-    "data":[
-      { "projectId": 18, "imageUrl": "...", "serviceName":"...", "shortDescription":"...",
-        "generation": 6, "isAlumni":false, "isOfficial":true }, ...
-    ]
-  }
-*/
 const LIST_ENDPOINTS = [
   `${API_PATH}/projects`,
   `${API_V1_PATH}/projects`,
@@ -118,26 +110,16 @@ export async function fetchProjects() {
 }
 
 // ---------- 상세 ----------
-/*
-  서버 스펙(예):
-  {
-    "status":200, "message":"Success",
-    "data": {
-      "imageUrl":"...", "serviceName":"...", "shortDescription":"...",
-      "description":"...", "githubUrl":"", "instagramUrl":"", "etcUrl":"",
-      "generation":6
-    }
-  }
-*/
 export async function fetchProjectDetail(id) {
   const idStr = String(id ?? "").trim();
   if (!/^\d+$/.test(idStr)) throw new Error(`Invalid project id: "${id}"`);
 
-  // 🔁 배포 프록시가 경로형을 안 받을 수 있으므로: 1) 쿼리형 우선 → 2) 경로형 폴백
+  // 1) 쿼리형 우선
   const queryFirst = [
     `${API_PATH}/projects?projectId=${encodeURIComponent(idStr)}`,
     `${API_V1_PATH}/projects?projectId=${encodeURIComponent(idStr)}`,
   ];
+  // 2) 경로형 폴백
   const pathFallback = [
     `${API_PATH}/projects/${encodeURIComponent(idStr)}`,
     `${API_V1_PATH}/projects/${encodeURIComponent(idStr)}`,
@@ -147,11 +129,20 @@ export async function fetchProjectDetail(id) {
     const { json, used } = await fetchFirstOkJson(queryFirst);
     console.log("[projects:detail] endpoint used:", used);
     const d = pickRecordById(json, idStr);
+
+    // ❗️잘못된 200(목록 반환 or id 미존재)은 실패로 간주 → 경로형 폴백 시도
+    if (!d) throw Object.assign(new Error("List returned or id not found"), { code: "LIST_RETURNED" });
+
     return normalizeDetail(d, idStr);
   } catch {
     const { json, used } = await fetchFirstOkJson(pathFallback);
     console.log("[projects:detail-fallback] endpoint used:", used);
     const d = pickRecordById(json, idStr);
+    if (!d) {
+      const err = new Error("Detail not found");
+      err.status = 404;
+      throw err; // 컴포넌트에서 NOT_FOUND 처리
+    }
     return normalizeDetail(d, idStr);
   }
 }
@@ -162,8 +153,8 @@ function normalizeDetail(d, idStr) {
     title: s(d?.serviceName),
     gen: Number.isFinite(d?.generation) ? d.generation : undefined,
     intro: s(d?.shortDescription),
-    detail: s(d?.description),
-    coverImage: s(d?.imageUrl) || PLACEHOLDER, // 컴포넌트에서 고정 이미지로 덮어써도 됨
+    detail: s(d?.description) || s(d?.shortDescription) || "", // ✅ 폴백
+    coverImage: s(d?.imageUrl) || PLACEHOLDER, // 컴포넌트에서 고정 이미지로 덮어써도 OK
     links: {
       github: safeUrl(d?.githubUrl),
       instagram: safeUrl(d?.instagramUrl),
