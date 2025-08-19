@@ -5,6 +5,12 @@ import "./ProjectList.css";
 import { fetchProjects } from "../../api/projects";
 import { enrichProjectsWithGen } from "../../api/projects";
 
+import img1 from "../../assets/project-image-1.png";
+import img2 from "../../assets/project-image-2.png";
+import img3 from "../../assets/project-image-3.png";
+import img4 from "../../assets/project-image-4.png";
+import img5 from "../../assets/project-image-5.png";
+
 // (그대로 쓰던 작은 로고 갤러리용 에셋)
 import savvy from "../../assets/savvy-thumbnail.png";
 import dalchaebi from "../../assets/dalchaebi-thumbnail.png";
