@@ -1,0 +1,5 @@
+{
+    "rewrites": [
+      { "source": "/api/proxy/(.*)", "destination": "https://api-unis.com/api/$1" }
+    ]
+  }
