@@ -98,7 +98,7 @@ export async function fetchProjectDetail(id) {
     gen: Number.isFinite(d?.generation) ? d.generation : undefined,
     intro: s(d?.shortDescription),
     detail: s(d?.description) || s(d?.shortDescription) || "",
-    coverImage: s(d?.imageUrl) || PLACEHOLDER,
+    coverImage: d.coverImage || prev?.coverImage || projectdetailthumbnail,
     links: {
       github: safeUrl(d?.githubUrl),
       instagram: safeUrl(d?.instagramUrl),

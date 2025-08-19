@@ -20,7 +20,7 @@ export default function ProjectDetail() {
           title: preview.title,
           intro: preview.intro,
           gen: preview.gen ?? undefined,        // 🔹 기수 초기값
-          coverImage: projectdetailthumbnail,   // 커버는 항상 고정 이미지
+          coverImage: preview.thumbnail || projectdetailthumbnail,  // 커버는 항상 고정 이미지
         }
       : null
   );
@@ -48,7 +48,7 @@ export default function ProjectDetail() {
           intro: d.intro ?? prev?.intro ?? "",
           detail: d.detail ?? prev?.detail ?? "",
           gen: d.gen ?? prev?.gen ?? undefined,  // 🔹 상세 값으로 갱신
-          coverImage: projectdetailthumbnail,    // ✅ 항상 고정 이미지 사용
+          coverImage: d.coverImage || prev?.coverImage || projectdetailthumbnail,   // ✅ 항상 고정 이미지 사용
           links: {
             github: d.links?.github || prev?.links?.github || "",
             instagram: d.links?.instagram || prev?.links?.instagram || "",
