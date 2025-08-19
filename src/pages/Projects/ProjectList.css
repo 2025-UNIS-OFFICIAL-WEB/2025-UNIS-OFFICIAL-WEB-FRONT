@@ -387,6 +387,10 @@
       padding-right: 20px;
       padding-top: 120px; /* 상단 간격만 유지 */
     }
+
+    .projectlist .project-intro {
+      margin-bottom: 64px; /* 기존 131px의 절반 정도 */
+    }
   
     /* 인트로 타이틀 */
     .projectlist .project-intro__title {
@@ -405,21 +409,37 @@
       width: 48px;
       height: 48px;
     }
-  
+    .projectlist .event-line,
+    .projectlist .event-dot {
+      display: none;
+    }
+
     /* 이벤트 배지 */
     .projectlist .event-badge-with-line {
       min-width: auto;
     }
+
     .projectlist .event-badge {
+      background: none;
+      border: none;
       width: auto;
-      padding: 0 20px;
-      height: 32px;
-      font-size: 15px;
-      border-radius: 18px;
+      height: auto;
+      padding: 0;
+      color: #fff;
+      font-weight: 800;
+      /* 화면 너비에 따라 유동: 모바일에서 조금 크게 보이게 */
+      font-size: clamp(18px, 5.2vw, 22px);
+      line-height: 1.25;
+      border-radius: 0;
     }
+
     .projectlist .event-description {
-      font-size: 14px;
+      /* 뷰포트에 따라 유동적으로: 최소 12px, 최대 15px 권장 */
+      font-size: clamp(12px, 3.8vw, 15px);
+      line-height: 1.6;
+      opacity: 0.9;
     }
+
     .projectlist .event-row {
       flex-direction: column;
       align-items: flex-start;
@@ -445,19 +465,41 @@
       border-radius: 12px;
     }
     .projectlist .project-card__meta {
+      border: none;
+      background: transparent;
       height: auto;
-      font-size: 14px;
-      margin-top: 6px;
+      margin-top: 8px;
+      padding: 0;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      justify-content: flex-start;
     }
-    .projectlist .project-card__name,
+
+    .projectlist .project-card__name {
+      padding: 0;
+      color: #fff;
+      font-weight: 800;
+      font-size: clamp(18px, 4.8vw, 22px);
+      line-height: 1.25;
+    }
+
+/* 기수는 같은 줄, 살짝 덜 굵게 */
     .projectlist .project-card__gen {
-      font-size: 14px;
-      padding: 4px 6px;
+      padding: 0;
+      color: #fff;
+      font-weight: 700;
+      font-size: clamp(14px, 3.8vw, 16px);
+      opacity: 0.95;
     }
     .projectlist .project-card__description {
-      font-size: 14px;
-      line-height: 20px;
-      margin-top: 6px;
+      margin-top: 8px;
+      font-size: clamp(13px, 3.6vw, 15px);
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;   /* 2줄로 제한 */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
   }
   
