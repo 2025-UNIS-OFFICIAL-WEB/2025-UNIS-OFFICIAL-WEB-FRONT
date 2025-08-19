@@ -1,12 +1,14 @@
 // src/api/projects.js
-
 const PROD = import.meta.env.PROD;
-const API_BASE = PROD ? "" : (import.meta?.env?.VITE_API_BASE_URL || "");
-const API_PATH = PROD ? "/api/proxy" : (import.meta?.env?.VITE_API_BASE_PATH || "/api");
+
+// 개발(프록시)에서는 baseURL 비움, 배포(직접호출)에서만 채움
+const API_BASE = PROD ? (import.meta?.env?.VITE_API_BASE_URL || "") : "";
+const API_PATH = import.meta?.env?.VITE_API_BASE_PATH || "/api";
+
 const PLACEHOLDER = "/placeholder-project.png";
 
 function joinURL(base, path) {
-  if (!base) return path; // 프록시: "/api/..." 그대로
+  if (!base) return path; // 프록시 모드: /api/.. 그대로
   const b = base.endsWith("/") ? base.slice(0, -1) : base;
   const p = path.startsWith("/") ? path : `/${path}`;
   return `${b}${p}`;
@@ -19,24 +21,26 @@ async function fetchJSON(path, { timeout = 12000, ...opts } = {}) {
 
   try {
     const res = await fetch(url, {
-      ...(import.meta.env.VITE_API_WITH_CREDENTIALS === "true" ? { credentials: "include" } : {}),
+      ...(import.meta.env.VITE_API_WITH_CREDENTIALS === "true"
+        ? { credentials: "include" }
+        : {}),
       headers: { Accept: "application/json", ...(opts.headers || {}) },
       signal: controller.signal,
       ...opts,
     });
-
     const text = await res.text();
     let json = {};
     try { json = text ? JSON.parse(text) : {}; } catch {}
 
     if (!res.ok) {
       const err = new Error(json?.message || `HTTP ${res.status} @ ${url}`);
-      err.status = res.status;
-      err.url = url;
+      err.status = res.status; err.url = url; err.body = json;
       throw err;
     }
     return json;
-  } finally { clearTimeout(t); }
+  } finally {
+    clearTimeout(t);
+  }
 }
 
 const s = (v, d = "") => (typeof v === "string" ? v : d);
@@ -44,9 +48,7 @@ function safeUrl(u = "") {
   if (typeof u !== "string" || !u.trim()) return "";
   try { const url = new URL(u); return /^https?:$/.test(url.protocol) ? u : ""; } catch { return ""; }
 }
-function djb2(str) { let h = 5381; for (let i=0;i<str.length;i++) h=((h<<5)+h)+str.charCodeAt(i); return Math.abs(h); }
 
-// ── gen 파싱 도우미 ──────────────────────────────────────────────
 function parseGenStrict(txt) {
   if (txt == null) return undefined;
   const m = String(txt).match(/(\d+)\s*기\b/i);
@@ -62,77 +64,101 @@ function parseGenLoose(txt) {
   return Number.isFinite(n) ? n : undefined;
 }
 function extractGenFromRecord(d) {
-  // 1순위: 명시 필드
   let g =
     parseGenStrict(d?.generation) ??
     parseGenStrict(d?.projectGeneration) ??
     parseGenStrict(d?.gen) ??
     parseGenStrict(d?.generationNumber);
-
-  // 2순위: 텍스트에서 “N기”
-  g ??= parseGenStrict(d?.serviceName) ?? parseGenStrict(d?.shortDescription) ?? parseGenStrict(d?.description);
-
-  // 3순위: 느슨 파싱(제목에서 숫자만)
+  g ??= parseGenStrict(d?.serviceName) ??
+        parseGenStrict(d?.shortDescription) ??
+        parseGenStrict(d?.description);
   g ??= parseGenLoose(d?.serviceName);
-
   return g;
 }
+
 function pickRecordById(json, idStr) {
   const d = json?.data;
-  if (d && !Array.isArray(d) && typeof d === "object") return d;            // 단건
-  if (Array.isArray(d)) return d.find(x => String(x?.projectId) === idStr) || d[0] || {}; // 리스트일 때
+  if (d && !Array.isArray(d) && typeof d === "object") return d;
+  if (Array.isArray(d)) return d.find(x => String(x?.projectId) === idStr) || d[0] || {};
   return {};
 }
 
-// ── 목록: GET {API_PATH}/projects ───────────────────────────────
-export async function fetchProjects() {
-  const json = await fetchJSON(`${API_PATH}/projects`);
-  const arr = Array.isArray(json?.data) ? json.data : [];
+/* ──────────────────────────────────────────────
+   엔드포인트 폴백 목록(오른쪽으로 갈수록 보수적)
+   1) /api/projects
+   2) /api/admin/projects
+   3) /api/v1/projects
+────────────────────────────────────────────── */
+const LIST_ENDPOINTS = [
+  `${API_PATH}/projects`,
+  `${API_PATH}/admin/projects`,
+  `${API_PATH.replace(/\/api$/, "/api/v1")}/projects`,
+];
 
-  return arr.map((d) => {
-    const title = s(d?.serviceName);
-    const gen = extractGenFromRecord(d); // 목록에서 최대한 채움
-
-    return {
-      id: d?.projectId,
-      title,
-      gen,
-      intro: s(d?.shortDescription),
-      thumbnail: s(d?.imageUrl) || PLACEHOLDER,
-      isAlumni: Boolean(d?.isAlumni),
-      isOfficial: Boolean(d?.isOfficial),
-    };
-  });
+async function fetchFirstOkJson(paths) {
+  let lastErr;
+  for (const p of paths) {
+    try {
+      const json = await fetchJSON(p);
+      return { json, used: p };
+    } catch (e) {
+      lastErr = e;
+      // 404/405/500 모두 다음 후보로 시도
+      console.warn(`[projects] fail @ ${e.url || p}:`, e.message);
+    }
+  }
+  throw lastErr;
 }
 
-// ── 상세: 우선 경로형 → 폴백 쿼리형 ───────────────────────────────
+// ── 목록
+export async function fetchProjects() {
+  const { json, used } = await fetchFirstOkJson(LIST_ENDPOINTS);
+  console.log("[projects] endpoint used:", used);
+
+  const arr = Array.isArray(json?.data) ? json.data : [];
+  return arr.map((d) => ({
+    id: d?.projectId,
+    title: s(d?.serviceName),
+    gen: extractGenFromRecord(d),
+    intro: s(d?.shortDescription),
+    thumbnail: s(d?.imageUrl) || PLACEHOLDER,
+    isAlumni: Boolean(d?.isAlumni),
+    isOfficial: Boolean(d?.isOfficial),
+  }));
+}
+
+// ── 상세
 export async function fetchProjectDetail(id) {
   const idStr = String(id ?? "").trim();
   if (!/^\d+$/.test(idStr)) throw new Error(`Invalid project id: "${id}"`);
 
-  // 1) 경로형: /projects/:id  (백엔드가 여기서 generation을 내려주는 게 정상)
-  try {
-    const json1 = await fetchJSON(`${API_PATH}/projects/${encodeURIComponent(idStr)}`);
-    const d1 = pickRecordById(json1, idStr);
-    const title1 = s(d1?.serviceName);
-    const gen1 = extractGenFromRecord(d1);
-    if (gen1 != null || Object.keys(d1).length) {
-      return normalizeDetailRecord(d1, idStr, title1, gen1);
-    }
-  } catch (e) {
-    // 404면 폴백 진행, 그 외 에러는 다시 throw
-    if (Number(e?.status) && Number(e.status) !== 404) throw e;
-  }
+  // 경로형 후보들
+  const detailCandidates = [
+    `${API_PATH}/projects/${encodeURIComponent(idStr)}`,
+    `${API_PATH}/admin/projects/${encodeURIComponent(idStr)}`,
+    `${API_PATH.replace(/\/api$/, "/api/v1")}/projects/${encodeURIComponent(idStr)}`,
+  ];
 
-  // 2) 폴백: 쿼리형 /projects?projectId=:id  (혹시 리스트가 오면 id로 선택)
-  const json2 = await fetchJSON(`${API_PATH}/projects?projectId=${encodeURIComponent(idStr)}`);
-  const d2 = pickRecordById(json2, idStr);
-  const title2 = s(d2?.serviceName);
-  const gen2 = extractGenFromRecord(d2);
-  return normalizeDetailRecord(d2, idStr, title2, gen2);
+  try {
+    const { json } = await fetchFirstOkJson(detailCandidates);
+    const d = pickRecordById(json, idStr);
+    return normalizeDetailRecord(d, idStr);
+  } catch (e) {
+    // 폴백: 쿼리형
+    const queryCandidates = [
+      `${API_PATH}/projects?projectId=${encodeURIComponent(idStr)}`,
+      `${API_PATH}/admin/projects?projectId=${encodeURIComponent(idStr)}`,
+      `${API_PATH.replace(/\/api$/, "/api/v1")}/projects?projectId=${encodeURIComponent(idStr)}`,
+    ];
+    const { json } = await fetchFirstOkJson(queryCandidates);
+    const d = pickRecordById(json, idStr);
+    return normalizeDetailRecord(d, idStr);
+  }
 }
 
-function normalizeDetailRecord(d, idStr, title, gen) {
+function normalizeDetailRecord(d, idStr) {
+  const title = s(d?.serviceName);
+  const gen = extractGenFromRecord(d);
   return {
     id: Number(idStr),
     title,
@@ -151,7 +177,7 @@ function normalizeDetailRecord(d, idStr, title, gen) {
   };
 }
 
-// ── 캐시 & 보강 ────────────────────────────────────────────────
+// ── 캐시 & 보강 (그대로)
 const _detailCache = new Map();
 export async function getProjectDetailCached(id) {
   if (_detailCache.has(id)) return _detailCache.get(id);
