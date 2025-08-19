@@ -7,7 +7,7 @@ import githublogo from "../../assets/github.png";
 import instalogo from "../../assets/instagram.png";
 import linkicon from "../../assets/link.png";
 // ✅ 상세 전용 API로 변경
-import { fetchProjectDetail } from "../../api/project";
+import { fetchProjectDetail } from "../../api/projects";
 
 export default function ProjectDetail() {
   const { id } = useParams();
