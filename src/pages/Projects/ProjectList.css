@@ -1,55 +1,55 @@
-.projectlist .page-container { padding-left: 134px; padding-top: 235px;}
+.Projectlist .page-container { padding-left: 134px; padding-top: 235px;}
 
 /* ========== Intro ========== */
-.projectlist .project-intro { margin-bottom: 131px; }
-.projectlist .project-intro__title{
+.Projectlist .project-intro { margin-bottom: 131px; }
+.Projectlist .project-intro__title{
   font-family: Pretendard; font-size: 60px; font-weight: 700;
   background: linear-gradient(to right, #ffffff 0%, #999999 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
 
 /* 갤러리 */
-.projectlist .project-gallery__images{
+.Projectlist .project-gallery__images{
   display: flex; flex-wrap: wrap; gap: 26px; padding-bottom: 47px;
 }
-.projectlist .project-gallery__images img{
+.Projectlist .project-gallery__images img{
   width: 96px; height: 96px; object-fit: cover; transition: transform .2s ease;
 }
 
 /* ===== Events ===== */
-.projectlist .highlighted-events { display: block; margin-bottom: 55px; }
-.projectlist .event-row { display: flex; align-items: center; gap: 40px; }
-.projectlist .event-row:last-child { margin-bottom: 0; }
+.Projectlist .highlighted-events { display: block; margin-bottom: 55px; }
+.Projectlist .event-row { display: flex; align-items: center; gap: 40px; }
+.Projectlist .event-row:last-child { margin-bottom: 0; }
 
-.projectlist .event-badge-with-line{
+.Projectlist .event-badge-with-line{
   display: flex; align-items: center; gap: 0; position: relative; min-width: 375px;
 }
-.projectlist .event-badge{
+.Projectlist .event-badge{
   display: grid; place-items: center; width: 318px; height: 57px; line-height: 1;
   background-color: #434B55; color: #FFF; font-family: Pretendard; font-size: 29px;
   font-weight: 600; border-radius: 39px; letter-spacing: -0.48px; flex-shrink: 0;
   z-index: 1; white-space: nowrap; position: relative;
   border: 1px solid rgba(255,255,255,.70);
 }
-.projectlist .event-line{ width:95px; flex-grow:1; height:2px; background:#7d7d7d; position:relative; }
-.projectlist .event-dot{ position:absolute; right:0; top:50%; transform:translateY(-50%);
+.Projectlist .event-line{ width:95px; flex-grow:1; height:2px; background:#7d7d7d; position:relative; }
+.Projectlist .event-dot{ position:absolute; right:0; top:50%; transform:translateY(-50%);
   width:13px; height:13px; background:#7d7d7d; border-radius:50%; }
-.projectlist .event-description{
+.Projectlist .event-description{
   color:#FFF; font-family:Pretendard, sans-serif; font-size:28px; font-weight:300;
 }
 
 /* ===== Cards (기본값) ===== */
-.projectlist .project-cards__row{
+.Projectlist .project-cards__row{
   display:grid; grid-template-columns:repeat(3, 388px); gap:73px; justify-content:start;
   margin-top: 40px;                /* 뱃지와 간격 */
   margin-bottom: 140px;
 }
-.projectlist .project-card{
+.Projectlist .project-card{
   width:388px; display:flex; flex-direction:column; align-items:stretch; text-align:left;
 }
 
 /* 💡 이미지: ‘고정 height’ → ‘aspect-ratio’ 로 비율 고정 */
-.projectlist :where(.project-card__image){
+.Projectlist :where(.project-card__image){
   width: 100% !important;
   aspect-ratio: 388 / 252;   /* ≒1.539 */
   height: auto !important;   /* 높이는 비율로 자동 계산 */
@@ -59,22 +59,22 @@
   margin-bottom: 16px;
 }
 
-.projectlist .project-card__meta{
+.Projectlist .project-card__meta{
   width:100%; height:35px; display:flex; align-items:center; justify-content:space-between;
   border:1px solid #CCC; border-radius:8px; background:transparent; backdrop-filter:blur(2px);
   margin-top:8px;
 }
-.projectlist .project-card__name,
-.projectlist .project-card__gen{
+.Projectlist .project-card__name,
+.Projectlist .project-card__gen{
   padding:8px 12px; color:#FFF; font-family:Pretendard; font-size:21px; font-weight:700; line-height:normal;
 }
-.projectlist .project-card__description{
+.Projectlist .project-card__description{
   max-width:100%; margin-top:10px; color:#FFF; font-family:Pretendard; font-size:18px; font-weight:500; line-height:29px;
 }
 
 /* ✅ 전역 스타일 충돌 방지: ProjectList 네임스페이스에서 강제 */
-.projectlist :where(.project-cards__row){ display:grid !important; }
-.projectlist :where(.project-card){ width:388px !important; }
+.Projectlist :where(.project-cards__row){ display:grid !important; }
+.Projectlist :where(.project-card){ width:388px !important; }
 
 /* 1441px ~ 1920px : 비율 스케일링 */
 @media (min-width: 1441px) and (max-width: 1920px) {
@@ -84,36 +84,36 @@
   }
 
   /* 페이지 패딩 */
-  .projectlist .page-container {
+  .Projectlist .page-container {
     padding-left: calc(134px * var(--r1440));
     padding-top:  calc(235px * var(--r1440));
   }
 
   /* Intro */
-  .projectlist .project-intro { 
+  .Projectlist .project-intro { 
     margin-bottom: calc(131px * var(--r1440)); 
   }
-  .projectlist .project-intro__title {
+  .Projectlist .project-intro__title {
     font-size: calc(60px * var(--r1440));
   }
 
   /* 작은 로고 갤러리 */
-  .projectlist .project-gallery__images {
+  .Projectlist .project-gallery__images {
     gap: calc(26px * var(--r1440));
     padding-bottom: calc(47px * var(--r1440));
   }
-  .projectlist .project-gallery__images img {
+  .Projectlist .project-gallery__images img {
     width:  calc(96px * var(--r1440));
     height: calc(96px * var(--r1440));
   }
 
   /* 이벤트(뱃지/라인/설명) */
-  .projectlist .highlighted-events { 
+  .Projectlist .highlighted-events { 
     margin-bottom: calc(55px * var(--r1440)); 
   }
-  .projectlist .event-row { gap: calc(40px * var(--r1440)); }
-  .projectlist .event-badge-with-line { min-width: calc(375px * var(--r1440)); }
-  .projectlist .event-badge {
+  .Projectlist .event-row { gap: calc(40px * var(--r1440)); }
+  .Projectlist .event-badge-with-line { min-width: calc(375px * var(--r1440)); }
+  .Projectlist .event-badge {
     width:  calc(318px * var(--r1440));
     height: calc(57px * var(--r1440));
     font-size: calc(29px * var(--r1440));
@@ -121,12 +121,12 @@
     letter-spacing: calc(-0.48px * var(--r1440));
     border-width: calc(1px * var(--r1440));
   }
-  .projectlist .event-line { width: calc(95px * var(--r1440)); height: calc(2px * var(--r1440)); }
-  .projectlist .event-dot  { width: calc(13px * var(--r1440)); height: calc(13px * var(--r1440)); }
-  .projectlist .event-description { font-size: calc(28px * var(--r1440)); }
+  .Projectlist .event-line { width: calc(95px * var(--r1440)); height: calc(2px * var(--r1440)); }
+  .Projectlist .event-dot  { width: calc(13px * var(--r1440)); height: calc(13px * var(--r1440)); }
+  .Projectlist .event-description { font-size: calc(28px * var(--r1440)); }
 
   /* 카드 리스트 */
-  .projectlist .project-cards__row {
+  .Projectlist .project-cards__row {
     grid-template-columns: repeat(3, calc(388px * var(--r1440)));
     gap: calc(73px * var(--r1440));
     margin-top:    calc(40px * var(--r1440));
@@ -134,22 +134,22 @@
   }
 
   /* ✅ 이 구간에서도 충돌 방지 (그리드/폭 강제) */
-  .projectlist :where(.project-cards__row){ display:grid !important; }
-  .projectlist :where(.project-card){ width: calc(388px * var(--r1440)) !important; }
+  .Projectlist :where(.project-cards__row){ display:grid !important; }
+  .Projectlist :where(.project-card){ width: calc(388px * var(--r1440)) !important; }
 
   /* 텍스트/메타 스케일 */
-  .projectlist .project-card__meta {
+  .Projectlist .project-card__meta {
     height: calc(35px * var(--r1440));
     border-width: calc(1px * var(--r1440));
     border-radius: calc(8px * var(--r1440));
     margin-top: calc(8px * var(--r1440));
   }
-  .projectlist .project-card__name,
-  .projectlist .project-card__gen {
+  .Projectlist .project-card__name,
+  .Projectlist .project-card__gen {
     padding: calc(8px * var(--r1440)) calc(12px * var(--r1440));
     font-size: calc(21px * var(--r1440));
   }
-  .projectlist .project-card__description {
+  .Projectlist .project-card__description {
     margin-top: calc(10px * var(--r1440));
     font-size: calc(18px * var(--r1440));
     line-height: calc(29px * var(--r1440));
