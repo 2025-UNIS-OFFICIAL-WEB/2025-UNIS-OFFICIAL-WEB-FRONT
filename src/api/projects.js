@@ -1,19 +1,19 @@
 // src/api/projects.js
 // ------------------------------------------------------------------
-// 환경: dev(로컬) = 프록시 사용 → API_BASE = ""
-//      prod(배포) = 직접 호출(권장) → API_BASE = VITE_API_BASE_URL
-//        * 만약 배포에서 Vercel 리라이트(/api/proxy)를 쓰면
-//          API_BASE는 ""(프록시), API_PATH는 "/api/proxy"로 설정
+// 환경:
+//  - dev(로컬): 프록시 사용 → API_BASE = "" , API_PATH = "/api" (vite proxy)
+//  - prod(배포): 직접 호출   → API_BASE = VITE_API_BASE_URL (예: https://api-unis.com)
+//    * 배포에서 프록시를 쓸 게 아니라면 API_PATH는 빈 값("")로 두는 걸 권장
 // ------------------------------------------------------------------
 const PROD = import.meta.env.PROD;
-const API_BASE = PROD ? (import.meta?.env?.VITE_API_BASE_URL || "") : ""; // prod: 직접호출, dev: 프록시
-const API_PATH = import.meta?.env?.VITE_API_BASE_PATH || "/api";
+const API_BASE = PROD ? (import.meta?.env?.VITE_API_BASE_URL || "") : "";
+const API_PATH = (import.meta?.env?.VITE_API_BASE_PATH ?? "/api").trim();
 
 const PLACEHOLDER = "/placeholder-project.png";
 
 // ---------- 공통 유틸 ----------
 function joinURL(base, path) {
-  if (!base) return path; // 프록시 모드: /api/... 그대로
+  if (!base) return path; // 프록시 모드: "/api/..." 그대로
   const b = base.endsWith("/") ? base.slice(0, -1) : base;
   const p = path.startsWith("/") ? path : `/${path}`;
   return `${b}${p}`;
@@ -23,6 +23,7 @@ async function fetchJSON(path, { timeout = 12000, ...opts } = {}) {
   const controller = new AbortController();
   const t = setTimeout(() => controller.abort(), timeout);
   const url = joinURL(API_BASE, path);
+
   try {
     const res = await fetch(url, {
       ...(import.meta.env.VITE_API_WITH_CREDENTIALS === "true"
@@ -43,7 +44,9 @@ async function fetchJSON(path, { timeout = 12000, ...opts } = {}) {
       throw err;
     }
     return json;
-  } finally { clearTimeout(t); }
+  } finally {
+    clearTimeout(t);
+  }
 }
 
 const s = (v, d = "") => (typeof v === "string" ? v : d);
@@ -53,55 +56,18 @@ function safeUrl(u = "") {
   catch { return ""; }
 }
 
-// ✅ 엄격: id 매칭 실패 시 null 반환(첫 요소 반환 금지)
-function pickRecordById(json, idStr) {
-  const d = json?.data;
-  if (d && !Array.isArray(d) && typeof d === "object") return d; // 단건
-  if (Array.isArray(d)) {
-    const hit = d.find(x => String(x?.projectId) === idStr);
-    return hit || null;
-  }
-  return null;
-}
-
-// v1 경로 보정: /api → /api/v1, /api/proxy → /api/proxy/v1
-function withV1(basePath) {
-  return basePath.endsWith("/api")
-    ? basePath.replace(/\/api$/, "/api/v1")
-    : `${basePath}/v1`;
-}
-const API_V1_PATH = withV1(API_PATH);
-
-// 여러 후보를 순차 시도해서 첫 성공을 반환
-async function fetchFirstOkJson(paths) {
-  let lastErr;
-  for (const p of paths) {
-    try {
-      const json = await fetchJSON(p);
-      return { json, used: p };
-    } catch (e) {
-      lastErr = e;
-      console.warn(`[api] fail @ ${e.url || p}:`, e.message);
-    }
-  }
-  throw lastErr;
-}
-
 // ---------- 목록 ----------
-const LIST_ENDPOINTS = [
-  `${API_PATH}/projects`,
-  `${API_V1_PATH}/projects`,
-];
-
 export async function fetchProjects() {
-  const { json, used } = await fetchFirstOkJson(LIST_ENDPOINTS);
-  console.log("[projects:list] endpoint used:", used);
+  // 경로형 목록만 사용
+  const path = `${API_PATH}/projects`;
+  const json = await fetchJSON(path);
+  console.log("[projects:list] url =", joinURL(API_BASE, path));
 
   const arr = Array.isArray(json?.data) ? json.data : [];
   return arr.map((d) => ({
     id: d?.projectId,
     title: s(d?.serviceName),
-    gen: Number.isFinite(d?.generation) ? d.generation : undefined,  // 서버 값 그대로
+    gen: Number.isFinite(d?.generation) ? d.generation : undefined,
     intro: s(d?.shortDescription),
     thumbnail: s(d?.imageUrl) || PLACEHOLDER,
     isAlumni: Boolean(d?.isAlumni),
@@ -109,52 +75,30 @@ export async function fetchProjects() {
   }));
 }
 
-// ---------- 상세 ----------
+// ---------- 상세 (경로형만! 쿼리형 금지) ----------
 export async function fetchProjectDetail(id) {
   const idStr = String(id ?? "").trim();
   if (!/^\d+$/.test(idStr)) throw new Error(`Invalid project id: "${id}"`);
 
-  // 1) 쿼리형 우선
-  const queryFirst = [
-    `${API_PATH}/projects?projectId=${encodeURIComponent(idStr)}`,
-    `${API_V1_PATH}/projects?projectId=${encodeURIComponent(idStr)}`,
-  ];
-  // 2) 경로형 폴백
-  const pathFallback = [
-    `${API_PATH}/projects/${encodeURIComponent(idStr)}`,
-    `${API_V1_PATH}/projects/${encodeURIComponent(idStr)}`,
-  ];
+  const path = `${API_PATH}/projects/${encodeURIComponent(idStr)}`;
+  const json = await fetchJSON(path);
+  console.log("[projects:detail] url =", joinURL(API_BASE, path));
 
-  try {
-    const { json, used } = await fetchFirstOkJson(queryFirst);
-    console.log("[projects:detail] endpoint used:", used);
-    const d = pickRecordById(json, idStr);
-
-    // ❗️잘못된 200(목록 반환 or id 미존재)은 실패로 간주 → 경로형 폴백 시도
-    if (!d) throw Object.assign(new Error("List returned or id not found"), { code: "LIST_RETURNED" });
-
-    return normalizeDetail(d, idStr);
-  } catch {
-    const { json, used } = await fetchFirstOkJson(pathFallback);
-    console.log("[projects:detail-fallback] endpoint used:", used);
-    const d = pickRecordById(json, idStr);
-    if (!d) {
-      const err = new Error("Detail not found");
-      err.status = 404;
-      throw err; // 컴포넌트에서 NOT_FOUND 처리
-    }
-    return normalizeDetail(d, idStr);
+  // 정상: data는 객체여야 함. (배열이거나 비객체면 잘못된 200으로 간주)
+  const d = json?.data;
+  if (!d || Array.isArray(d) || typeof d !== "object") {
+    const err = new Error("Detail not found or malformed response");
+    err.status = 404;
+    throw err;
   }
-}
 
-function normalizeDetail(d, idStr) {
   return {
     id: Number(idStr),
     title: s(d?.serviceName),
     gen: Number.isFinite(d?.generation) ? d.generation : undefined,
     intro: s(d?.shortDescription),
-    detail: s(d?.description) || s(d?.shortDescription) || "", // ✅ 폴백
-    coverImage: s(d?.imageUrl) || PLACEHOLDER, // 컴포넌트에서 고정 이미지로 덮어써도 OK
+    detail: s(d?.description) || s(d?.shortDescription) || "",
+    coverImage: s(d?.imageUrl) || PLACEHOLDER,
     links: {
       github: safeUrl(d?.githubUrl),
       instagram: safeUrl(d?.instagramUrl),
@@ -166,7 +110,10 @@ function normalizeDetail(d, idStr) {
   };
 }
 
-// ---------- 캐시 & 보강(이제 보강 불필요) ----------
+// 서버가 generation 제공하므로 보강 불필요
+export async function enrichProjectsWithGen(list) { return list; }
+
+// (옵션) 내부 캐시가 필요하면 유지
 const _detailCache = new Map();
 export async function getProjectDetailCached(id) {
   if (_detailCache.has(id)) return _detailCache.get(id);
@@ -174,6 +121,3 @@ export async function getProjectDetailCached(id) {
   _detailCache.set(id, d);
   return d;
 }
-
-// 서버가 generation 제공하므로 no-op
-export async function enrichProjectsWithGen(list) { return list; }
