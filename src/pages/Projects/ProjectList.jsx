@@ -223,7 +223,7 @@ export default function ProjectList() {
         </section>
 
         {/* 🔹 하드코딩된 상단 6개 (링크 없음) */}
-        <Section title="undefined" list={HARDCODED_STARTUPS} linked={false} />
+        <Section title={undefined} list={HARDCODED_STARTUPS} linked={false} />
 
         {/* 🔹 아래 두 섹션만 API 연동 */}
         {club.length > 0 && <Section title="학회 프로젝트" list={club} linked={true} />}
