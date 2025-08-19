@@ -90,7 +90,6 @@ async function fetchFirstOkJson(paths) {
 */
 const LIST_ENDPOINTS = [
   `${API_PATH}/projects`,
-  `${API_PATH}/admin/projects`,
   `${API_PATH.replace(/\/api$/, "/api/v1")}/projects`,
 ];
 
@@ -129,12 +128,12 @@ export async function fetchProjectDetail(id) {
   // 1) 경로형 → 실패 시 2) 쿼리형
   const detailCandidates = [
     `${API_PATH}/projects/${encodeURIComponent(idStr)}`,
-    `${API_PATH}/admin/projects/${encodeURIComponent(idStr)}`,
+    `${API_PATH}/projects/${encodeURIComponent(idStr)}`,
     `${API_PATH.replace(/\/api$/, "/api/v1")}/projects/${encodeURIComponent(idStr)}`,
   ];
   const queryCandidates = [
     `${API_PATH}/projects?projectId=${encodeURIComponent(idStr)}`,
-    `${API_PATH}/admin/projects?projectId=${encodeURIComponent(idStr)}`,
+    `${API_PATH}/projects?projectId=${encodeURIComponent(idStr)}`,
     `${API_PATH.replace(/\/api$/, "/api/v1")}/projects?projectId=${encodeURIComponent(idStr)}`,
   ];
 
