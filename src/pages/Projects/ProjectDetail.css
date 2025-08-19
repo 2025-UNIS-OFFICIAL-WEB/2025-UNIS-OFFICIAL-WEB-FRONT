@@ -255,5 +255,20 @@
     /* 갤러리 */
     .pd-photo { width: 100%; margin: 28px 0 12px; padding: 0; }
     .pd-photo img { width: 100%; border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
+
+      /* 배지 스타일(.pd-title) 완전 제거: 모바일 제목은 텍스트만 */
+    .project-detail .pd-title.pd-title--mobile {
+      display: inline !important;
+      min-width: 0 !important;
+      height: auto !important;
+      padding: 0 !important;
+      background: transparent !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      backdrop-filter: none !important;
+      text-align: left !important;
   }
+}
+
   
