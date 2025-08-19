@@ -67,4 +67,85 @@
   margin-bottom: 140px;
 }
 
----> 이거 가지고 반응형 구현할건데 비율 유지하면서 자연스럽게 작아지도록 해줘. 먼저 1441~1920 반응형 구현해줘
+/* ===========================
+   1441px ~ 1920px 대응 (3열 유지)
+   =========================== */
+   @media (min-width: 1441px) and (max-width: 1920px) {
+    /* 페이지 좌우 여백 살짝 줄이기 */
+    .projectlist .page-container {
+      padding-left: 96px;     /* 134 -> 96 */
+      padding-right: 24px;    /* 안전 여백 */
+    }
+  
+    /* 인트로 타이틀: 너무 크지 않게 살짝 축소 (반응형 폰트) */
+    .projectlist .project-intro__title {
+      font-size: clamp(44px, 3.2vw, 56px);  /* 60px → 범위화 */
+    }
+  
+    /* 상단 작은 로고 갤러리 아이콘 살짝 축소 */
+    .projectlist .project-gallery__images {
+      gap: 22px;              /* 26 -> 22 */
+      padding-bottom: 40px;   /* 47 -> 40 */
+    }
+    .projectlist .project-gallery__images img {
+      width: 84px;            /* 96 -> 84 */
+      height: 84px;
+    }
+  
+    /* 이벤트 배지/라인: 폭/높이/폰트 살짝 축소 */
+    .projectlist .event-badge-with-line {
+      min-width: 320px;       /* 375 -> 320 */
+    }
+    .projectlist .event-badge {
+      width: 280px;           /* 318 -> 280 */
+      height: 50px;           /* 57 -> 50 */
+      font-size: 24px;        /* 29 -> 24 */
+      border-radius: 34px;    /* 39 -> 34 */
+    }
+    .projectlist .event-line {
+      height: 2px;
+    }
+    .projectlist .event-dot {
+      width: 11px;            /* 13 -> 11 */
+      height: 11px;
+    }
+    .projectlist .event-description {
+      font-size: 24px;        /* 28 -> 24 */
+    }
+    .projectlist .event-row {
+      gap: 28px;              /* 40 -> 28 */
+    }
+  
+    /* ===== 카드 그리드: 3열 고정 유지하되 카드/갭만 살짝 축소 ===== */
+    .projectlist .project-cards__row {
+      grid-template-columns: repeat(3, 360px);  /* 388 -> 360 (3열 유지) */
+      gap: 60px;                                 /* 73 -> 60 */
+      margin-top: 36px;                          /* 40 -> 36 */
+      margin-bottom: 120px;                      /* 140 -> 120 */
+    }
+  
+    .projectlist .project-card {
+      width: 360px;           /* 388 -> 360 */
+    }
+    .projectlist .project-card__image {
+      height: 232px;          /* 252 -> 232 */
+      border-radius: 20px;    /* 23 -> 20 */
+      margin-bottom: 14px;    /* 16 -> 14 */
+    }
+    .projectlist .project-card__meta {
+      height: 32px;           /* 35 -> 32 */
+      border-radius: 7px;     /* 8 -> 7 */
+      margin-top: 6px;        /* 8 -> 6 */
+    }
+    .projectlist .project-card__name,
+    .projectlist .project-card__gen {
+      font-size: 20px;        /* 21 -> 20 */
+      padding: 7px 10px;      /* 8 12 -> 7 10 */
+    }
+    .projectlist .project-card__description {
+      font-size: 17px;        /* 18 -> 17 */
+      line-height: 26px;      /* 29 -> 26 */
+      margin-top: 8px;        /* 10 -> 8 */
+    }
+  }
+  
