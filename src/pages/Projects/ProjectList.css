@@ -446,6 +446,8 @@
       font-size: clamp(9px, 3.8vw, 18px);
       line-height: 1.6;
       opacity: 0.9;
+      margin-top: 0px; margin-bottop: 0px;
+
     }
 
     .projectlist .event-row {
