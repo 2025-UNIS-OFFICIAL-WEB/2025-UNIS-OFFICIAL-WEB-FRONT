@@ -155,7 +155,7 @@ export default function ProjectList() {
         {/* 상단 문구 */}
         <section className="project-intro">
           <h2 className="project-intro__title text-gradient">
-            세상을 바꾸는 시작, UNIS입니다
+            세상을 바꾸는 시작, <wbr />UNIS입니다
           </h2>
         </section>
 
