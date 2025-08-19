@@ -23,6 +23,7 @@
   place-items: center;
   overflow: hidden;
   margin-bottom: 0;
+  margin-top: 250px;
 }
 
 .recruit .recruit-hero + .section {
@@ -239,12 +240,102 @@
   margin-bottom: 96px;
 }
 
-@media (max-width: 1920px) and (min-width: 1441px) {
-  .recruit {
-    --rs: calc(100vw / 1920);
+@media (min-width: 1441px) and (max-width: 1920px) {
+  .recruit { --s: calc((100vw - 1440px) / 480); 
+  }
+
+  /* 레이아웃 폭/여백 */
+  .recruit .container { width: min(1680px, 92%); }
+
+  /* Hero(참고: 기본값 유지, 보정만) */
+  .recruit .recruit-hero { min-height: calc(58vh + (62 - 58) * var(--s)); 
+  .recruit .recruit-hero}
+  .recruit .hero-art-img { transform: translate(-50%, -60%); opacity: calc(.78 + (.80 - .78) * var(--s)); }
+  .recruit .eyebrow { font-size: calc(48px + (60 - 48) * var(--s)); }
+  .recruit .recruit-hero h1 { margin-bottom: calc(72px + (90 - 72) * var(--s)); }
+  .recruit .recruit-hero .muted { font-size: calc(30px + (36 - 30) * var(--s)); }
+
+  .recruit .btn-primary {
+    min-width: calc(260px + (299 - 260) * var(--s));
+    height: calc(56px + (64 - 56) * var(--s));
+    font-size: calc(28px + (35 - 28) * var(--s));
+    padding: 0 calc(24px + (30 - 24) * var(--s));
+  }
+
+  /* ===== 모집 대상: 3카드 ===== */
+  .recruit .three-cards {
+    grid-template-columns: repeat(3, 1fr);   /* ✅ 1fr로 꽉 채움 */
+    gap: calc(64px + (115 - 64) * var(--s));
+  }
+  .recruit .card {
+    width: 100%;        /* ✅ 트랙에 맞춰 자동 확장 */
+    max-width: none;    /* ✅ max-width 제거 */
+    min-height: calc(280px + (343 - 280) * var(--s));
+    height: auto;
+    border-radius: calc(30px + (35 - 30) * var(--s));
+    font-size: calc(28px + (36 - 28) * var(--s));
+    line-height: 1.8;
+    padding: 0 calc(20px + (24 - 20) * var(--s));
+  }
+
+  .recruit .center-pill{
+    width: calc(640px + (756 - 640) * var(--s));
+    height: calc(72px + (86 - 72) * var(--s));
+    font-size: calc(36px + (45 - 36) * var(--s));
+    border-width: 2px; /* 시각 균형 */
+  }
+  .recruit .vline-top,
+  .recruit .vline-bottom { height: calc(120px + (145 - 120) * var(--s)); }
+  .recruit .vline-dot { width: calc(12px + (14 - 12) * var(--s)); height: calc(12px + (14 - 12) * var(--s)); }
+
+  /* ===== 모집 직군: 4카드 ===== */
+  .recruit .role-grid {
+    grid-template-columns: repeat(4, 1fr);   /* ✅ 균등 분할 */
+    gap: calc(48px + (62 - 48) * var(--s));
+    margin-top: calc(80px + (95 - 80) * var(--s));
+    margin-bottom: calc(260px + (321 - 260) * var(--s));
+  }
+  .recruit .role-card {
+    width: 100%;        /* ✅ 트랙 꽉 채움 */
+    max-width: none;    /* ✅ max-width 제거 */
+    min-height: calc(280px + (310 - 280) * var(--s));
+    height: auto;
+    border-radius: calc(30px + (35 - 30) * var(--s));
+    font-size: calc(28px + (36 - 28) * var(--s));
+    justify-content: flex-start;
+    align-items: center;
+    padding: calc(16px + (20 - 16) * var(--s))  /* top */
+             calc(18px + (22 - 18) * var(--s))  /* left/right */
+             calc(10px + (14 - 10) * var(--s)); /* bottom: 더 줄임 */
+  }
+  .recruit .role-card h4 { font-size: calc(32px + (38 - 32) * var(--s)); margin-top: calc(18px + (24 - 18) * var(--s)); }
+  .recruit .role-card p  { font-size: calc(22px + (26 - 22) * var(--s)); }
+
+  /* ===== 모집 일정 ===== */
+  .recruit .schedule-desc.main-line {
+    font-size: calc(38px + (45 - 38) * var(--s));
+    margin-top: calc(72px + (91 - 72) * var(--s));
+  }
+  .recruit .schedule-desc.sub-line {
+    font-size: calc(24px + (28 - 24) * var(--s));
+    margin-bottom: calc(72px + (92 - 72) * var(--s));
+  }
+  .recruit .btn-primary.schedule-btn {
+    width: calc(400px + (463 - 400) * var(--s));
+    height: calc(88px + (99 - 88) * var(--s));
+    font-size: calc(38px + (45 - 38) * var(--s));
+    border-radius: calc(46px + (49.5 - 46) * var(--s));
+    margin-bottom: calc(80px + (96 - 80) * var(--s));
   }
 }
+
 @media (max-width: 1440px) {
+  /* Hero 섹션 상단 간격 */
+  .recruit .recruit-hero {
+    margin-top: clamp(80px, 12vw, 200px);
+    /* 768px → 92px, 1024px → 123px, 1440px → 200px 정도로 변함 */
+  }
+
   /* 레이아웃 폭/여백 */
   .recruit .container { width: min(1080px, 94%); }
 
@@ -284,9 +375,7 @@
   .recruit .vline-dot { width: 12px; height: 12px; }
 
   /* ── 모집 대상 : 3카드 ─────────────── */
-  .recruit .three-cards {
-    gap: 64px;
-  }
+  .recruit .three-cards { gap: 64px; }
   .recruit .card {
     width: 360px;
     height: 280px;
