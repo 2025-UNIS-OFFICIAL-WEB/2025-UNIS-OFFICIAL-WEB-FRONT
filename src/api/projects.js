@@ -62,6 +62,14 @@ function pickRecordById(json, idStr) {
   return {};
 }
 
+// v1 경로 보정: /api → /api/v1, /api/proxy → /api/proxy/v1
+function withV1(basePath) {
+  return basePath.endsWith("/api")
+    ? basePath.replace(/\/api$/, "/api/v1")
+    : `${basePath}/v1`;
+}
+const API_V1_PATH = withV1(API_PATH);
+
 // 여러 후보를 순차 시도해서 첫 성공을 반환
 async function fetchFirstOkJson(paths) {
   let lastErr;
@@ -90,7 +98,7 @@ async function fetchFirstOkJson(paths) {
 */
 const LIST_ENDPOINTS = [
   `${API_PATH}/projects`,
-  `${API_PATH.replace(/\/api$/, "/api/v1")}/projects`,
+  `${API_V1_PATH}/projects`,
 ];
 
 export async function fetchProjects() {
@@ -125,25 +133,23 @@ export async function fetchProjectDetail(id) {
   const idStr = String(id ?? "").trim();
   if (!/^\d+$/.test(idStr)) throw new Error(`Invalid project id: "${id}"`);
 
-  // 1) 경로형 → 실패 시 2) 쿼리형
-  const detailCandidates = [
-    `${API_PATH}/projects/${encodeURIComponent(idStr)}`,
-    `${API_PATH}/projects/${encodeURIComponent(idStr)}`,
-    `${API_PATH.replace(/\/api$/, "/api/v1")}/projects/${encodeURIComponent(idStr)}`,
+  // 🔁 배포 프록시가 경로형을 안 받을 수 있으므로: 1) 쿼리형 우선 → 2) 경로형 폴백
+  const queryFirst = [
+    `${API_PATH}/projects?projectId=${encodeURIComponent(idStr)}`,
+    `${API_V1_PATH}/projects?projectId=${encodeURIComponent(idStr)}`,
   ];
-  const queryCandidates = [
-    `${API_PATH}/projects?projectId=${encodeURIComponent(idStr)}`,
-    `${API_PATH}/projects?projectId=${encodeURIComponent(idStr)}`,
-    `${API_PATH.replace(/\/api$/, "/api/v1")}/projects?projectId=${encodeURIComponent(idStr)}`,
+  const pathFallback = [
+    `${API_PATH}/projects/${encodeURIComponent(idStr)}`,
+    `${API_V1_PATH}/projects/${encodeURIComponent(idStr)}`,
   ];
 
   try {
-    const { json, used } = await fetchFirstOkJson(detailCandidates);
+    const { json, used } = await fetchFirstOkJson(queryFirst);
     console.log("[projects:detail] endpoint used:", used);
     const d = pickRecordById(json, idStr);
     return normalizeDetail(d, idStr);
   } catch {
-    const { json, used } = await fetchFirstOkJson(queryCandidates);
+    const { json, used } = await fetchFirstOkJson(pathFallback);
     console.log("[projects:detail-fallback] endpoint used:", used);
     const d = pickRecordById(json, idStr);
     return normalizeDetail(d, idStr);

@@ -1,4 +1,3 @@
-// src/pages/Projects/ProjectDetail.jsx
 import React, { useEffect, useState } from "react";
 import { useLocation, useParams, Link } from "react-router-dom";
 import "./ProjectDetail.css";
