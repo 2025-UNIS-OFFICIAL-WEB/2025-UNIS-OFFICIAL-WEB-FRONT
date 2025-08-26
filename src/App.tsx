@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
+import { useEffect } from 'react'
 
 import Login from '@/pages/Login'
 import ProjectList from '@/pages/ProjectList'
@@ -16,11 +17,21 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
 }
 
 const App = () => {
+  useEffect(() => {
+    // 글로벌 에러 핸들링: JS 에러 발생 시 로그인으로 이동
+    window.onerror = () => {
+      window.location.href = '/'
+      return true
+    }
+
+    window.onunhandledrejection = () => {
+      window.location.href = '/'
+    }
+  }, [])
 
   return (
     <Routes>
       <Route path="/" element={<Login />} />
-
       <Route
         path="/projects"
         element={
@@ -53,8 +64,8 @@ const App = () => {
           </PrivateRoute>
         }
       />
-
-      <Route path="*" element={<Navigate to="/" />} />
+      {/* 잘못된 경로 접근 시에도 로그인 페이지로 이동 */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
 }
