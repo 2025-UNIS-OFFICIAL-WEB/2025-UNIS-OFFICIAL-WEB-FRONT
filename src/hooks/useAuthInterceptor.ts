@@ -4,59 +4,49 @@ import { getAccessToken, getRefreshToken, setTokens, clearTokens } from '@/lib/t
 import { refreshAccessToken } from '@/api/auth'
 
 let isRefreshing = false
-let queue: {
-  resolve: (token: string) => void
-  reject: (err: unknown) => void
-}[] = []
+let queue: { resolve: (token: string) => void; reject: (err: unknown) => void }[] = []
 
 const pushQueue = (resolve: (t: string) => void, reject: (e: unknown) => void) => {
   queue.push({ resolve, reject })
 }
-
 const flushQueue = (error: unknown, token?: string) => {
-  queue.forEach(({ resolve, reject }) => {
-    if (error) reject(error)
-    else if (token) resolve(token)
-  })
+  queue.forEach(({ resolve, reject }) => (error ? reject(error) : token ? resolve(token) : null))
   queue = []
 }
 
 export const setupAuthInterceptor = (instance: AxiosInstance = axiosInstance) => {
-  // 요청: 액세스 토큰 붙이기
+  // 요청 인터셉터: 토큰 부착
   instance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
     const token = getAccessToken()
     if (token) {
       config.headers = config.headers ?? {}
       config.headers.Authorization = `Bearer ${token}`
-      // 디버깅 로그가 필요하면 주석 해제
-      // console.log('🔑 [REQUEST] Adding token:', token.slice(0, 12), '…', config.url)
     }
     return config
   })
 
-  // 응답: 401 처리(리프레시 → 원요청 재시도)
+  // 응답 인터셉터: 401 처리
   instance.interceptors.response.use(
     (res) => res,
     async (error: AxiosError) => {
       const original = error.config as (InternalAxiosRequestConfig & { _retry?: boolean }) | undefined
       const status = error.response?.status
 
-      // 원요청이 없거나 401이 아니면 통과
       if (!original || status !== 401) throw error
 
-      // 리프레시 엔드포인트 자체의 401이면 바로 로그아웃
+      // refresh 호출 자체가 401이면 바로 로그아웃
       if (original.url?.includes('/admin/user/refresh')) {
         clearTokens()
         throw error
       }
 
-      // 이미 한 번 재시도했다면 더 이상 반복 금지
       if (original._retry) {
+        // 이미 한 번 재시도했는데 또 401 → 토큰 무효. 정리.
         clearTokens()
         throw error
       }
 
-      // 동시 401 방지: 큐에 적재
+      // 동시 갱신 방지
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           pushQueue(
@@ -70,9 +60,9 @@ export const setupAuthInterceptor = (instance: AxiosInstance = axiosInstance) =>
         })
       }
 
-      // 리프레시 시도
       original._retry = true
       isRefreshing = true
+
       try {
         const rtk = getRefreshToken()
         if (!rtk) {
@@ -80,14 +70,12 @@ export const setupAuthInterceptor = (instance: AxiosInstance = axiosInstance) =>
           throw error
         }
 
-        // refresh는 전역 인스턴스(인터셉터 미적용 axios)로 호출
+        // ♻️ 토큰 재발급 (헤더/바디 모두 지원)
         const { accessToken, refreshToken } = await refreshAccessToken(rtk)
         setTokens(accessToken, refreshToken)
 
-        // 큐 비우기
         flushQueue(null, accessToken)
 
-        // 원요청 재시도
         original.headers = original.headers ?? {}
         original.headers.Authorization = `Bearer ${accessToken}`
         return instance(original)

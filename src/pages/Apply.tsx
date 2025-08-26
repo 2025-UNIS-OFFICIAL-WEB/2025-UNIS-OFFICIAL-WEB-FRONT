@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Loader2, Save } from 'lucide-react'
@@ -16,7 +15,6 @@ import { clearTokens } from '@/lib/token'
 const Apply = () => {
   const navigate = useNavigate()
 
-  // 초기값은 “새로 입력”을 가정
   const [isAvailable, setIsAvailable] = useState<boolean>(true)
   const [applyUrl, setApplyUrl] = useState<string>('')
 
@@ -31,7 +29,6 @@ const Apply = () => {
         alert(res.message ?? '저장에 실패했습니다.')
       }
     } catch (err: any) {
-      // 인증 오류는 즉시 로그아웃 처리
       if (err?.response?.status === 401) {
         clearTokens()
         navigate('/')
@@ -76,10 +73,11 @@ const Apply = () => {
               </div>
             </RadioGroup>
 
-            {/* 상태 알림 */}
             <Alert className={isAvailable ? 'border-green-200 bg-green-50' : 'border-orange-200 bg-orange-50'}>
               <AlertDescription className={isAvailable ? 'text-green-800' : 'text-orange-800'}>
-                {isAvailable ? '✅ 현재 지원 접수가 활성화되어 있습니다.' : '⚠️ 현재 지원 접수가 비활성화되어 있습니다.'}
+                {isAvailable
+                  ? '✅ 현재 지원 접수가 활성화되어 있습니다.'
+                  : '⚠️ 현재 지원 접수가 비활성화되어 있습니다.'}
               </AlertDescription>
             </Alert>
           </div>
@@ -93,7 +91,9 @@ const Apply = () => {
                 지원하기 링크
               </Label>
               <p className="text-xs text-muted-foreground mt-1">
-                지원자들이 접근할 수 있는 지원 링크를 입력해주세요.
+                {isAvailable
+                  ? '지원자들이 접근할 수 있는 지원 링크를 입력해주세요.'
+                  : '지원이 불가능한 상태에서는 링크 입력이 필요하지 않습니다.'}
               </p>
             </div>
 
@@ -105,6 +105,8 @@ const Apply = () => {
                 onChange={(e) => setApplyUrl(e.target.value)}
                 placeholder="https://forms.google.com/... 또는 다른 지원 링크"
                 className="w-full"
+                disabled={!isAvailable}
+                required={isAvailable}
               />
             </div>
           </div>
@@ -115,7 +117,7 @@ const Apply = () => {
           <div className="flex justify-end pt-2">
             <Button
               onClick={handleSubmit}
-              disabled={updateLoading || !applyUrl.trim()}
+              disabled={updateLoading || (isAvailable && !applyUrl.trim())}
               size="lg"
               className="min-w-[120px]"
             >
@@ -133,20 +135,6 @@ const Apply = () => {
             </Button>
           </div>
         </div>
-
-        {/* 도움말 카드 */}
-        <Card className="border-dashed max-w-3xl">
-          <CardContent className="pt-6">
-            <div className="space-y-2">
-              <h4 className="text-sm font-medium">💡 사용 가이드</h4>
-              <ul className="text-xs text-muted-foreground space-y-1">
-                <li>• 지원 가능 여부를 "불가능"으로 설정하면 웹사이트에서 지원 버튼이 비활성화됩니다.</li>
-                <li>• 지원하기 링크는 Google Forms, Notion, 또는 다른 지원 접수 페이지의 URL을 입력해주세요.</li>
-                <li>• 설정 변경 후 반드시 "설정 저장" 버튼을 클릭해주세요.</li>
-              </ul>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </Layout>
   )

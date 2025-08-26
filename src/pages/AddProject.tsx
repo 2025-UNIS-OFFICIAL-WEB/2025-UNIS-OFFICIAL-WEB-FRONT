@@ -24,13 +24,13 @@ const AddProject = () => {
     isAlumni: false,
     isOfficial: false,
   })
+
   const [image, setImage] = useState<File | null>(null)
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value, type } = e.target
-    
     if (type === 'checkbox') {
       const { checked } = e.target as HTMLInputElement
       setFormData({ ...formData, [name]: checked })
@@ -65,7 +65,6 @@ const AddProject = () => {
         generation: generationNumber,
         shortDescription: formData.shortDescription.trim(),
         description: formData.description.trim(),
-        // 빈 문자열이 아닌 경우에만 포함
         ...(formData.githubUrl.trim() && { githubUrl: formData.githubUrl.trim() }),
         ...(formData.instagramUrl.trim() && { instagramUrl: formData.instagramUrl.trim() }),
         ...(formData.etcUrl.trim() && { etcUrl: formData.etcUrl.trim() }),
@@ -75,7 +74,7 @@ const AddProject = () => {
       }
 
       const response = await callAddProject(requestData)
-      
+
       if (response.status === 201) {
         alert('프로젝트 추가 성공')
         navigate('/projects')
@@ -84,7 +83,7 @@ const AddProject = () => {
       }
     } catch (err: any) {
       console.error('프로젝트 추가 오류:', err)
-      
+
       if (err?.response?.status === 401) {
         alert('로그인이 만료되었습니다. 다시 로그인해주세요.')
         localStorage.removeItem('accessToken')
@@ -241,9 +240,9 @@ const AddProject = () => {
           </div>
 
           <div className="flex justify-end space-x-2">
-            <Button 
-              type="button" 
-              variant="outline" 
+            <Button
+              type="button"
+              variant="outline"
               onClick={() => navigate('/projects')}
               disabled={loading}
             >

@@ -59,9 +59,8 @@ export const getProjectById = async (projectId: string): Promise<Project> => {
 
 export const addProject = async (data: PostProjectRequest): Promise<ApiResponse<any>> => {
   try {
-    console.log('[ADD_PROJECT] Starting project creation...')
-
     const formData = new FormData()
+
     const jsonPart = {
       serviceName: data.serviceName,
       shortDescription: data.shortDescription,
@@ -74,7 +73,6 @@ export const addProject = async (data: PostProjectRequest): Promise<ApiResponse<
       isOfficial: data.isOfficial
     }
 
-    // 서버가 `@RequestPart("data")`로 받으므로 반드시 wrapping 필요
     const jsonBlob = new Blob([JSON.stringify(jsonPart)], {
       type: 'application/json'
     })
@@ -82,22 +80,7 @@ export const addProject = async (data: PostProjectRequest): Promise<ApiResponse<
     formData.append('data', jsonBlob)
     formData.append('image', data.image)
 
-    console.log('📋 [ADD_PROJECT] FormData entries:')
-    for (const [key, value] of formData.entries()) {
-      if (value instanceof Blob) {
-        console.log(`${key}: Blob/File (${value.type}, ${value.size} bytes)`)
-      } else {
-        console.log(`${key}: ${value}`)
-      }
-    }
-
     const response = await axiosInstance.post('/admin/projects/add', formData)
-
-    console.log('✅ [ADD_PROJECT] Success:', {
-      status: response.status,
-      projectId: response.data.data?.projectId
-    })
-
     return response.data
   } catch (error: any) {
     console.error('❌ [ADD_PROJECT] Failed:', {
@@ -105,7 +88,6 @@ export const addProject = async (data: PostProjectRequest): Promise<ApiResponse<
       message: error.response?.data?.message,
       url: error.config?.url
     })
-
     if (error.response?.status === 401) {
       throw new Error('인증이 필요합니다.')
     }
@@ -116,38 +98,32 @@ export const addProject = async (data: PostProjectRequest): Promise<ApiResponse<
 
 /* 프로젝트 수정 */
 export const updateProject = async (
-  data: PutProjectRequest & { imageUrl: string | null }
+  data: PutProjectRequest
 ): Promise<void> => {
   const formData = new FormData()
 
-  // 1. JSON 객체 준비 (image 여부에 따라 imageUrl 조정)
-  const requestData = {
+  const jsonPart = {
     serviceName: data.serviceName,
-    generation: data.generation,
     shortDescription: data.shortDescription,
     description: data.description,
     githubUrl: data.githubUrl || '',
     instagramUrl: data.instagramUrl || '',
     etcUrl: data.etcUrl || '',
+    generation: data.generation,
     isAlumni: data.isAlumni,
-    isOfficial: data.isOfficial,
-    imageUrl: data.image ? null : data.imageUrl
+    isOfficial: data.isOfficial
   }
 
-  // 2. JSON을 File 형태로 FormData에 추가
-  const jsonFile = new File(
-    [JSON.stringify(requestData)],
-    'data.json',
-    { type: 'application/json' }
-  )
-  formData.append('data', jsonFile)
+  const jsonBlob = new Blob([JSON.stringify(jsonPart)], {
+    type: 'application/json'
+  })
 
-  // 3. 이미지가 바뀌었을 경우에만 파일로 추가
+  formData.append('data', jsonBlob)
+
   if (data.image) {
     formData.append('image', data.image)
   }
 
-  // 4. 서버 요청 (Content-Type 자동)
   await axiosInstance.put<ApiResponse<null>>(
     `/admin/projects/${data.projectId}/update`,
     formData

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { login } from '@/api/auth'
+import { setTokens } from '@/lib/token' // ✅ 추가
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -19,12 +20,10 @@ const Login = () => {
     try {
       const { accessToken, refreshToken } = await login({ password })
 
-      localStorage.setItem('accessToken', accessToken)
-      localStorage.setItem('refreshToken', refreshToken)
+      // ✅ 수정된 부분: 공통 유틸 사용
+      setTokens(accessToken, refreshToken)
 
-      setTimeout(() => {
-        navigate('/apply')
-      }, 100)
+      navigate('/apply') // ✅ setTimeout 제거
     } catch (err: any) {
       alert('로그인 실패: ' + (err.response?.data?.message || err.message))
     } finally {
@@ -93,7 +92,6 @@ const Login = () => {
             </form>
           </CardContent>
         </Card>
-        
       </div>
     </div>
   )
