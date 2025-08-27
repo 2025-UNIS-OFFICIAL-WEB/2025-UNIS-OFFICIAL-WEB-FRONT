@@ -589,6 +589,11 @@ html, body, #root { height: 100%; }
     font-size: clamp(8px, 3vw, 13px);    /* 소개문 글씨 더 작게 */
     line-height: 1.4;
   }
+
+  .home-intro {
+    padding-bottom: calc(var(--cap-line-h) + 100px); /* 숫자로 미세조정 */
+  }
+
   .home-intro__logo {
     width: 40px;
     height: 40px;
@@ -651,11 +656,36 @@ html, body, #root { height: 100%; }
   }
 
   /* ===== Closing ===== */
+
+  .home-closing {
+    padding-top: 0;              /* 섹션 자체 패딩 제거 */
+  }
   .home-closing h2 {
+    margin-top: 60px;            /* ← 기본 300px 덮어쓰기 */
+    margin-bottom: 12px;         /* h2와 p 사이 적당히 */
     font-size: clamp(18px, 6vw, 28px);
     line-height: 1.4;
+    color: transparent;          /* 768 이하에서 쓰던 ::before 텍스트 방식 유지 */
+    position: relative;
   }
   .home-closing h2::before {
-    font-size: inherit;   /* 상속해서 같이 작아짐 */
+    content: "당신의 반짝이는 열정은 세상을\A바꿀 빛이 됩니다.";
+    white-space: pre-line;
+    position: absolute; 
+    top: 0; left: 50%; transform: translateX(-50%);
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: inherit;          /* h2 축소에 연동 */
+    line-height: inherit;
   }
+
+  .home-closing p {
+    margin-top: 6px;
+    margin-bottom: 60px;         /* 바닥 여백도 소폭 축소 */
+    font-size: clamp(12px, 4vw, 18px);
+    line-height: 1.4;
+  }
+
 }
+
