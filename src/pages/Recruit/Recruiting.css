@@ -688,20 +688,26 @@
 
   /* ── 모집 대상 : 1열 스택 ───────── */
   .recruit .three-cards {
-    grid-template-columns: 1fr;      /* ✅ 세로 한 줄 */
-    gap: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
   }
-  .recruit .three-cards .card,
-  .recruit .card {                    /* 기존 고정 크기 무력화 */
+  .recruit .three-cards .card {
+    all: unset;              /* ✅ 카드 박스 효과 초기화 */
+    display: block;
+    text-align: center;
+    font-size: clamp(13px, 4vw, 15px);
+    font-weight: 500;
+    line-height: 1.6;
+    color: #fff;
     width: 100%;
-    height: auto;
-    aspect-ratio: 474 / 343;         /* 원본 비율 유지 */
-    border-radius: 22px;
-    border-width: 2px;
-    padding: 14px 16px;
-    font-size: clamp(14px, 4.2vw, 16px);
-    line-height: 1.65;
   }
+
+  /* br 제거하고 대신 highlight-line 앞뒤로 공백 넣기 */
+  .recruit .three-cards .card p br { display: none; }
+  .recruit .three-cards .card p .highlight-line::before { content: " "; }
+  .recruit .three-cards .card p .highlight-line::after { content: " "; }
 
   /* ── “정답은 UNIS입니다” ───────── */
   .recruit .answer { font-size: clamp(18px, 5vw, 22px); margin-bottom: 72px; }
