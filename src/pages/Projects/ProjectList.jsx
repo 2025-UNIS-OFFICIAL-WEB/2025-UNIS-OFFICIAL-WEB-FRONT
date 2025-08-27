@@ -187,7 +187,7 @@ export default function ProjectList() {
         </section>
 
         {/* 🔹 창업 중인 프로젝트: API 연동 (isAlumni만) — 링크 없음 */}
-        <Section title={undefined} list={startups} linked={false} />
+        <Section title={undefined} list={startups} linked={true} />
 
         {/* 🔹 학회 프로젝트: API 연동 (isOfficial) — 링크 있음 */}
         {club.length > 0 && <Section title="학회 프로젝트" list={club} linked={true} />}
