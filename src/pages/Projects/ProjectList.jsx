@@ -2,8 +2,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import "./ProjectList.css";
-import { fetchProjects } from "../../api/projects"; 
-// enrich 보강은 불필요해져서 제거
+import { fetchProjects } from "../../api/projects";
 
 // (작은 로고 갤러리용 에셋)
 import img1 from "../../assets/project-image-1.png";
@@ -12,25 +11,21 @@ import img3 from "../../assets/project-image-3.png";
 import img4 from "../../assets/project-image-4.png";
 import img5 from "../../assets/project-image-5.png";
 
-// (상단 하드코딩 6개 에셋)
-import savvy from "../../assets/savvy-thumbnail.png";
-import dalchaebi from "../../assets/dalchaebi-thumbnail.png";
-import uniconnect from "../../assets/uniconnect-thumbnail.png";
-import brazil from "../../assets/brazil-thumbnail.png";
-import moonda from "../../assets/moonda-thumbnail.png";
-import degul from "../../assets/degul-thumbnail.png";
+// (상단 하드코딩 6개 에셋) 👉 더 이상 사용 안 함: API 연동으로 대체
+// import savvy from "../../assets/savvy-thumbnail.png"; ...
 
-/* ─────────────────────────────────────────────────────────
-   하드코딩: 상단 "창업 중인 프로젝트" 6개 (링크 없음)
-────────────────────────────────────────────────────────── */
-const HARDCODED_STARTUPS = [
-  { id: "s1", title: "Savvy",     intro: "~", thumbnail: savvy,     gen: 1 },
-  { id: "s2", title: "달채비",     intro: "~", thumbnail: dalchaebi, gen: 1 },
-  { id: "s3", title: "유니커넥트", intro: "~", thumbnail: uniconnect, gen: 1 },
-  { id: "s4", title: "Brazil",    intro: "~", thumbnail: brazil,    gen: 9 },
-  { id: "s5", title: "문다",       intro: "~", thumbnail: moonda,    gen: 1 },
-  { id: "s6", title: "데굴데굴",   intro: "~", thumbnail: degul,     gen: 1 },
-];
+const PLACEHOLDER = "/placeholder-project.png";
+
+/** 백엔드 응답 스키마 정규화 */
+const normalize = (raw = {}) => ({
+  id: raw.id ?? raw.projectId ?? raw.pid ?? String(raw.id ?? ""),
+  title: raw.title ?? raw.serviceName ?? raw.name ?? "",
+  intro: raw.intro ?? raw.shortDescription ?? raw.description ?? "",
+  thumbnail: raw.thumbnail ?? raw.imageUrl ?? PLACEHOLDER,
+  gen: raw.gen ?? raw.generation ?? null,
+  isOfficial: raw.isOfficial ?? raw.is_official ?? false,
+  isAlumni: raw.isAlumni ?? raw.is_alumni ?? false,
+});
 
 export default function ProjectList() {
   const [items, setItems] = useState([]);
@@ -43,16 +38,19 @@ export default function ProjectList() {
         setLoading(true);
 
         // 1) 기본 목록 호출
-        const base = await fetchProjects();
+        const baseRaw = await fetchProjects();
 
-        // 2) 정렬: 기수 내림차순 → id 오름차순 (서버가 generation 제공)
+        // 2) 정규화
+        const base = (Array.isArray(baseRaw) ? baseRaw : []).map(normalize);
+
+        // 3) 정렬: 기수 내림차순 → id 오름차순
         base.sort((a, b) => {
           const ga = Number.isFinite(a.gen) ? a.gen : -Infinity;
           const gb = Number.isFinite(b.gen) ? b.gen : -Infinity;
-          if (ga !== gb) return gb - ga;           // gen desc
+          if (ga !== gb) return gb - ga; // gen desc
           const ia = Number(a.id) || 0;
           const ib = Number(b.id) || 0;
-          return ia - ib;                           // id asc
+          return ia - ib; // id asc
         });
 
         setItems(base);
@@ -64,10 +62,14 @@ export default function ProjectList() {
     })();
   }, []);
 
-  // 🔸 API 연동은 아래 두 섹션만 사용
-  const club = useMemo(() => items.filter((p) => p.isOfficial), [items]);
+  // 🔹 API 연동: 섹션별 분류
+  const startups = useMemo(
+    () => items.filter((p) => p.isAlumni).slice(0, 6), // 창업 중인 프로젝트(최대 6개)
+    [items]
+  );
+  const club = useMemo(() => items.filter((p) => p.isOfficial), [items]); // 학회 프로젝트
   const members = useMemo(
-    () => items.filter((p) => !p.isAlumni && !p.isOfficial),
+    () => items.filter((p) => !p.isAlumni && !p.isOfficial), // 학회원 프로젝트
     [items]
   );
 
@@ -159,7 +161,7 @@ export default function ProjectList() {
           </h2>
         </section>
 
-        {/* 하이라이트 배지 + 설명 */}
+        {/* 하이라이트 배지 + 설명 (창업 중인 프로젝트) */}
         <section className="highlighted-events">
           <div className="event-row">
             <div className="event-badge-with-line">
@@ -184,10 +186,10 @@ export default function ProjectList() {
           </div>
         </section>
 
-        {/* 🔹 하드코딩된 상단 6개 (링크 없음) — 뱃지 없이 카드만 */}
-        <Section title={undefined} list={HARDCODED_STARTUPS} linked={false} />
+        {/* 🔹 창업 중인 프로젝트: API 연동 (isAlumni만) — 링크 없음 */}
+        <Section title={undefined} list={startups} linked={false} />
 
-        {/* 🔹 아래 두 섹션만 API 연동 */}
+        {/* 🔹 학회 프로젝트: API 연동 (isOfficial) — 링크 있음 */}
         {club.length > 0 && <Section title="학회 프로젝트" list={club} linked={true} />}
 
         {/* 학회원 프로젝트 타이틀 영역 (디자인 유지) */}
@@ -198,6 +200,8 @@ export default function ProjectList() {
             </div>
           </div>
         </section>
+
+        {/* 🔹 학회원 프로젝트: API 연동 (not alumni & not official) — 링크 있음 */}
         <Section title={undefined} list={members} linked={true} />
       </div>
     </div>
