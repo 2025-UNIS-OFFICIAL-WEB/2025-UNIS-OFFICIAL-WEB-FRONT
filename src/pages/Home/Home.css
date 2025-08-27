@@ -163,7 +163,7 @@ html, body, #root { height: 100%; }
   align-items: center;
   justify-content: center;
   gap: 40px;
-  margin-bottom: 65px;
+  margin-bottom: 40px;
 }
 .home-intro__logo {
   width: 113px;
@@ -187,10 +187,9 @@ html, body, #root { height: 100%; }
 .home-intro h2 {
   color: var(--white);
   font-family: Helvetica;
-  font-size: 50px;
+  font-size: 35px;
   font-style: normal;
   font-weight: 300;
-  line-height: normal;
 }
 
 /* 캡션(개별 규격) */
@@ -331,8 +330,8 @@ html, body, #root { height: 100%; }
 
 @media (max-width: 1280px) {
   :root { --intro-pt: 500px; }
-  /* .home-hero__text-group { transform: translateY(120px); } */
-  .home-hero__text-group p { font-size: 24px; }
+  .home-hero__text-group h1 { font-size: 56px; }
+  .home-hero__text-group p { font-size: 20px; margin-top: 12px; margin-bottom: 30px;}
   .home-program__inner { gap: 40px; }
   .program-media { width: clamp(320px, 40vw, 520px); }
   .home-intro__logo { margin: 0 200px; }
@@ -365,184 +364,298 @@ html, body, #root { height: 100%; }
 }
 
 @media (max-width: 768px) {
-  .home-intro::after { display: none !important; }      /* 이전에 만든 연결선 제거 */
-  .line-with-circle { display: none !important; } 
-
-  .home-hero__text-group {
-    margin-top: 300px;   /* 기존 500px → 모바일에서는 훨씬 줄임 */
+  /* ===== Vars for fluid scaling (375~768) ===== */
+  :root {
+    --intro-pt: clamp(180px, 40vw, 300px);         /* 인트로 상단 여백 */
+    --btn-line-h: clamp(100px, 20vw, 150px);       /* 버튼 아래 세로선 길이 */
+    --cap-line-h: clamp(100px, 20vw, 150px);       /* 캡션 아래 세로선 길이 */
   }
 
-  .home-hero__text-group h1 { font-size: 45px; }
+  /* ===== Hero / Intro ===== */
+  .home-intro::after { display: none; }
+  .line-with-circle { display: none; }
+
+  .home-hero__text-group {
+    margin-top: clamp(240px, 52vw, 400px);
+  }
+  .home-hero__text-group h1 {
+    font-size: clamp(26px, 6vw, 45px);
+  }
   .home-hero__text-group p {
     position: relative;
-    font-size: 0;                 /* 원문 텍스트 시각적으로 숨김 */
-    line-height: 0;               /* 여백 제거 */
-    margin: 20px 0 20px;          /* 기존 여백 유지용 */
+    font-size: 0;            /* 원문 숨김 */
+    line-height: 0;
+    margin: 20px 0;
     white-space: normal;
     word-break: keep-all;
   }
   .home-hero__text-group p::before {
     content: "이화여대 유일의 중앙 실전IT창업학회 유니스는\A더 나은 세상을 위한 실행력 있는 혁신 창업가를 양성합니다.";
     display: block;
-    white-space: pre-line;        
-    font-size: 16px;
+    white-space: pre-line;
+    font-size: clamp(12px, 3.5vw, 16px);
     line-height: 1.45;
     color: var(--white);
     text-align: center;
   }
 
   .learn-more-btn {
-    position: relative;          /* 의사요소 기준점 */
-    width: 170px;
-    height: 36px;
-    font-size: 16px;
+    position: relative;
+    width: clamp(150px, 30vw, 200px);
+    height: clamp(36px, 6vw, 45px);
+    font-size: clamp(14px, 3vw, 20px);
     display: flex; align-items: center; justify-content: center;
+    margin-top: 10px;
   }
-  .learn-more-btn::after {       /* 세로 라인 */
+  .learn-more-btn::after {
     content: "";
-    position: absolute;
-    left: 50%; transform: translateX(-50%);
-    top: 100%;                   /* 버튼 바로 아래에서 시작 */
-    width: 1px; height: 150px;
+    position: absolute; left: 50%; transform: translateX(-50%);
+    top: 100%;
+    width: 1px; height: var(--btn-line-h);
     background: linear-gradient(to top, rgba(255,255,255,.8), rgba(255,255,255,0.1));
   }
-  .learn-more-btn::before {      /* 끝 점(원) */
+  .learn-more-btn::before {
     content: "";
-    position: absolute;
-    left: 50%; transform: translate(-50%, 0);
-    top: calc(100% + 144px + 6px); /* 라인 끝에서 6px 아래에 점 */
+    position: absolute; left: 50%; transform: translateX(-50%);
+    top: calc(100% + var(--btn-line-h) + 6px);
     width: 6px; height: 6px; border-radius: 50%;
     background: rgba(255,255,255,.85);
   }
 
-  /* 3) "독보적인 아이디어~" 캡션 바로 밑 세로선 정확 위치 */
   .home-intro__caption {
-    position: relative;          /* 의사요소 기준점 */
-    width: 70%; height: 100%;;
-    padding: 10px 10px;
+    position: relative;
+    width: 100%;
+    padding: 0px 0px;
     margin-top: 16px;
-    font-size: 14px;
+    font-size: clamp(10px, 3.5vw, 1px);
     white-space: normal;
     text-align: center;
+    background: none; box-shadow: none; backdrop-filter: none; color: #fff;
   }
-  .home-intro__caption::after {  /* 세로 라인 */
-    content: "";
-    position: absolute;
-    left: 50%; transform: translateX(-50%);
-    top: 100%;                   /* 캡션 바로 아래에서 시작 */
-    width: 1px; height: 150px;
+  .home-intro__caption::after {
+    content: ""; position: absolute; left: 50%; transform: translateX(-50%);
+    top: 100%; width: 1px; height: var(--cap-line-h);
     background: linear-gradient(to top, rgba(255,255,255,.8), rgba(255,255,255,0.1));
   }
-  .home-intro__caption::before { /* 끝 점(원) */
-    content: "";
-    position: absolute;
-    left: 50%; transform: translateX(-50%);
-    top: calc(100% + 144px + 6px);
+  .home-intro__caption::before {
+    content: ""; position: absolute; left: 50%; transform: translateX(-50%);
+    top: calc(100% + var(--cap-line-h) + 6px);
     width: 6px; height: 6px; border-radius: 50%;
     background: rgba(255,255,255,.85);
   }
 
-  .home > .home-program:nth-of-type(1) .home-program__inner {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 20px !important;
-    grid-auto-flow: row !important;
+  /* ===== Program layout ===== */
+  .home-program__inner {
+    display: grid; grid-template-columns: 1fr; grid-auto-flow: row;
+    gap: 20px; align-items: start; justify-items: center;
+  }
+  .home-program .program-left { display: contents; order: unset; margin: 0; }
+
+  /* 순서: 제목 → 이미지 → 블록들 */
+  .home-program .program-left > h3 { order: 1; }
+  .home-program .program-media     { order: 2; }
+  .home-program .program-left .program-block { order: 3; }
+
+  /* 제목: Pill 테두리 */
+  .home-program .program-left > h3 {
+    display: inline-flex; align-items: center; justify-content: center;
+    height: clamp(45px, 7vw, 56px);
+    padding: 0 clamp(30px, 7vw, 60px);
+    margin: 0 0 12px;
+    border-radius: 999px; border: 1px solid rgba(255,255,255,0.85);
+    background: transparent; box-shadow: none; color: #fff;
+    text-align: center; font-size: clamp(18px, 4.5vw, 25px); font-weight: 800; line-height: 1.3;
   }
 
-  /* 2) 기존의 order 영향 제거 + 자식들을 그리드로 직접 올리기 */
-  .home > .home-program:nth-of-type(1) .program-left {
-    /* 기존에 있던 order/마진을 무력화 */
-    order: unset !important;
-    margin: 0 !important;
-
-    /* 핵심: 내부 h3와 .program-block들을 그리드 자식으로 승급 */
-    display: contents !important;
+  /* 이미지: 폭 90% + 최대폭 유동 */
+  .home-program .program-media {
+    justify-self: center;
+    width: 90%;
+    max-width: clamp(240px, 80vw, 600px);
+    aspect-ratio: 16 / 10;
+    border-radius: clamp(12px, 3vw, 18px);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    overflow: hidden;
+    margin: 8px 0 30px;
   }
+  .home-program .program-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-  /* 3) 순서 고정: h3 → media → blocks */
-  .home > .home-program:nth-of-type(1) .program-left > h3 { order: 1 !important; }
-  .home > .home-program:nth-of-type(1) .program-media     { order: 2 !important; }
-  .home > .home-program:nth-of-type(1) .program-left .program-block { order: 3 !important; }
-
-  /* 4) h3를 칩(pill)로 — 하얀 테두리 */
-  .home > .home-program:nth-of-type(1) .program-left > h3 {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    margin: 0 auto 12px !important;
-    padding: 0 18px !important;
-    height: 38px !important;
-    border-radius: 999px !important;
-    border: 1px solid rgba(255,255,255,0.85) !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    width: max-content !important;
-    text-align: center !important;
+  /* 블록: 칩(텍스트만, 줄바꿈) */
+  .home-program .program-left .program-block { 
+    text-align: center; 
+    margin: 10px 0; 
   }
 
-  /* 5) 이미지 카드 */
-  .home > .home-program:nth-of-type(1) .program-media {
-    width: 100% !important;
-    max-width: 560px !important;
-    aspect-ratio: 16/10 !important;
-    border-radius: 18px !important;
-    border: 1px solid rgba(255,255,255,0.12) !important;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.35) !important;
-    overflow: hidden !important;
-    margin: 16px auto 20px !important;
-    justify-self: center !important;
-  }
-  .home > .home-program:nth-of-type(1) .program-media img {
-    width: 100%; height: 100%; object-fit: cover; display: block;
+  .home-program .program-left .program-block > .chip {
+    border: 0; background: none; box-shadow: none; backdrop-filter: none;
+    padding: 6px 0;                     /* ✅ 위아래 여백 확보 */
+    min-height: clamp(28px, 6vw, 40px); /* ✅ 최소 높이 보장 */
+    display: block;                     /* 줄바꿈 */
+    color: #fff; 
+    font-size: clamp(16px, 4vw, 25px); 
+    font-weight: 800; 
+    line-height: 1.4;                   /* ✅ 텍스트 숨 안 죽도록 */
+    margin-bottom: 10px;                /* 리스트와 간격 */
   }
 
-  /* 6) 두 블록: 칩을 ‘텍스트만’으로 보이게 (pill 제거) */
-  .home > .home-program:nth-of-type(1) .program-left .program-block > .chip {
-    border: 0 !important;
-    background: none !important;
-    box-shadow: none !important;
-    backdrop-filter: none !important;
-    padding: 0 !important;
-    height: auto !important;
-    display: inline !important;
-    color: var(--white) !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    margin-bottom: 8px !important;
+  /* ===== Program 리스트: 기본(프로그램 1) & 두번째 덮어쓰기 ===== */
+
+  /* 공통 리셋(프로그램 섹션 내부 리스트만) */
+  .home-program .program-left .dot-list {
+    margin: 15px 0 40px;
+    padding: 0;
+    list-style: none;
+  }
+  .home-program .program-left .dot-list li {
+    padding-left: 0;
+    position: static;
   }
 
-  /* 7) 도트 아이콘 전부 제거 + 중앙 정렬 */
-  .home > .home-program:nth-of-type(1) .program-left .dot-list {
-    margin: 6px 0 18px !important;
-    padding: 0 !important;
-    list-style: none !important;
-    text-align: center !important;
+  /* 기본: 가로 정렬 + 슬래시 구분 (프로그램 1에 적용) */
+  .home-program .program-left .dot-list {
+    display: inline-flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
   }
-  .home > .home-program:nth-of-type(1) .program-left .dot-list li {
-    padding-left: 0 !important;
-    font-size: 14px !important;
-    line-height: 22px !important;
+  .home-program .program-left .dot-list li {
+    display: inline;
+    font-size: clamp(12px, 3.5vw, 22px);
+    font-weight: 300;
+    line-height: clamp(18px, 5vw, 30px);
+    color: var(--text-dim);
   }
-  .home > .home-program:nth-of-type(1) .program-left .dot-list li::before {
-    display: none !important;
-    content: none !important;
+  .home-program .program-left .dot-list li::before { content: none; }
+  .home-program .program-left .dot-list li:not(:last-child)::after {
+    content: " /";
+    margin-left: 4px;
+    opacity: .9;
   }
 
-  /* 8) 첫 블록 리스트만 ‘/’로 한 줄 */
-  .home > .home-program:nth-of-type(1) .program-left .program-block:first-of-type .dot-list {
-    display: inline-flex !important;
-    gap: 6px !important;
-    flex-wrap: wrap !important;            /* 폭 좁을 때 자동 줄바꿈 */
-    justify-content: center !important;
+  /* 두 번째 프로그램 섹션만: 세로 정렬 + 슬래시 제거 */
+  .home-program + .home-program .program-left .dot-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+    text-align: center;
   }
-  .home > .home-program:nth-of-type(1) .program-left .program-block:first-of-type .dot-list li {
-    display: inline !important;
+  .home-program + .home-program .program-left .dot-list li {
+    display: block;
+    font-size: clamp(12px, 3.5vw, 22px);
+    font-weight: 300;
+    line-height: clamp(20px, 5.5vw, 32px);
+    color: var(--text-dim);
   }
-  .home > .home-program:nth-of-type(1) .program-left .program-block:first-of-type .dot-list li:not(:last-child)::after {
-    content: " /" !important;
-    margin-left: 4px !important;
-    opacity: .9 !important;
+  .home-program + .home-program .program-left .dot-list li::after { content: none; }
+
+  /* ===== Closing h2: 텍스트 교체 ===== */
+  .home-closing h2 {
+    position: relative;
+    font-size: clamp(24px, 6vw, 50px);
+    line-height: 1.5;
+    color: transparent;   /* 원문 숨김 */
+  }
+  .home-closing h2::before {
+    content: "당신의 반짝이는 열정은 세상을\A바꿀 빛이 됩니다.";
+    white-space: pre-line;
+    color: #fff;
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --intro-pt: clamp(50px, 20vw, 80px);   /* 인트로 상단 여백 더 축소 */
+    --btn-line-h: clamp(100px, 22vw, 150px);  /* 버튼 아래 세로선 짧게 */
+    --cap-line-h: clamp(100px, 2vw, 150px);  /* 캡션 아래 세로선 짧게 */
+  }
+
+  /* ===== Hero / Intro ===== */
+  .home-hero__text-group {
+    margin-top: clamp(180px, 50vw, 280px);  /* 위쪽 여백 더 줄임 */
+  }
+  .home-hero__text-group h1 {
+    font-size: clamp(18px, 6vw, 32px);      /* 메인 타이틀 축소 */
+  }
+  .home-hero__text-group p::before {
+    font-size: clamp(8px, 3vw, 13px);    /* 소개문 글씨 더 작게 */
+    line-height: 1.4;
+  }
+  .home-intro__logo {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto;   /* 좌우 마진도 정리 */
+  }
+  .learn-more-btn {
+    width: clamp(120px, 36vw, 160px);
+    height: clamp(32px, 7vw, 40px);
+    font-size: clamp(12px, 3.5vw, 16px);
+  }
+  .learn-more-btn::before {
+    top: calc(100% + var(--btn-line-h)); /* 점도 더 가까이 */
+    width: 5px; height: 5px;
+  }
+
+  .home-intro h2 {
+    font-size: clamp(15px, 5vw, 20px); 
+    margin-top: 6px;  
+  }
+
+  .home-intro__caption {
+    font-size: clamp(9px, 3vw, 12px);   /* "독보적인 아이디어…" 더 작게 */
+    padding: 0 6px;                        /* 좌우 여백 줄임 */
+    margin-top: 10px;
+  }
+  .home-intro__caption::before {
+    top: calc(100% + var(--cap-line-h));
+    width: 5px; height: 5px;
+  }
+
+  /* ===== Program ===== */
+  .home-program .program-left > h3 {
+    height: clamp(34px, 6vw, 44px);
+    padding: 0 clamp(18px, 5vw, 40px);
+    font-size: clamp(14px, 4vw, 20px);
+  }
+
+  .home-program .program-media {
+    width: 92%;
+    max-width: 320px;
+    border-radius: 12px;
+    margin: 6px 0 20px;
+  }
+
+  .home-program .program-left .program-block > .chip {
+    font-size: clamp(13px, 4vw, 18px);
+    padding: 4px 0;
+    min-height: 26px;
+    margin-bottom: 6px;
+  }
+
+  .home-program .program-left .dot-list li {
+    font-size: clamp(11px, 3.5vw, 16px);
+    line-height: clamp(16px, 4.5vw, 24px);
+  }
+
+  /* 두 번째 섹션 리스트도 더 간격 줄임 */
+  .home-program + .home-program .program-left .dot-list {
+    gap: 4px;
+  }
+
+  /* ===== Closing ===== */
+  .home-closing h2 {
+    font-size: clamp(18px, 6vw, 28px);
+    line-height: 1.4;
+  }
+  .home-closing h2::before {
+    font-size: inherit;   /* 상속해서 같이 작아짐 */
   }
 }

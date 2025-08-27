@@ -12,7 +12,12 @@
   max-width: 1920px;
   margin: 0 auto;
   box-sizing: border-box;
-  background: transparent;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.85) 0%,   /* 맨 위 진한 검정 */
+    rgba(0, 0, 0, 0.55) 20%,  /* 살짝 투명해짐 */
+    rgba(0, 0, 0, 0.00) 100%  /* 완전히 투명 */
+  );
 }
 
 .unis-logo-link {
@@ -112,7 +117,28 @@
 }
 .nav-mobile a:hover{ color:#fff; background: rgba(255,255,255,.08); }
 
-/* ====== 반응형: 모바일에서만 레이아웃 변경 ====== */
+@media (max-width: 1280px){
+  .unis-logo-icon {
+    width: 18px;
+    height: 18px;
+    display: block;
+  }
+
+  .unis-header__nav a {
+    font-family: Pretendard;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    color: #FFF;
+    text-decoration: none;
+  }
+
+  .unis-logo-text{
+    font-size: 18px; letter-spacing: .35em; line-height: 1; 
+  }
+}
+
 @media (max-width: 1024px){
   /* 헤더를 3칸 그리드로 바꿔 중앙 UNIS 확보 */
   .unis-header{
