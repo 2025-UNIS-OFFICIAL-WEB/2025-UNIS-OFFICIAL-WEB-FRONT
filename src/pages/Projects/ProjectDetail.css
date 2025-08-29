@@ -1,10 +1,13 @@
 /* ===== 페이지 공통 ===== */
 .project-detail {
+  /* 공통 변수 */
+  --side-pad: 40px;            /* 1025~1440 기본 좌우 패딩 */
+  --hero-max-w: 1554px;        /* 히어로 최대 너비 */
   color: #ffffff;
   min-height: 100vh;
   font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
   line-height: 1.65;
-  background: #000; /* 레터박스 배경 */
+  background: #000;            /* 레터박스 배경 */
   position: relative;
 }
 
@@ -13,18 +16,18 @@
 /* ===== Hero (이미지 자르지 않음) ===== */
 .pd-hero {
   position: relative;
-  z-index: 0;                         /* 본문보다 아래 레이어 */
-  width: min(1554px, calc(100% - 80px)); /* 좌우 40px 여백 */
+  z-index: 0;                                      /* 본문보다 아래 레이어 */
+  width: min(var(--hero-max-w), calc(100% - (var(--side-pad) * 2)));
   margin: 0 auto;
-  aspect-ratio: 117 / 76;             /* ✅ 고정 비율 */
+  aspect-ratio: 117 / 76;                          /* ✅ 고정 비율 */
   background-image: var(--hero-bg);
   background-position: center;
   background-repeat: no-repeat;
-  background-size: contain !important; /* ✅ 절대 자르지 않음 */
+  background-size: contain !important;             /* ✅ 절대 자르지 않음 */
   overflow: visible;
 }
 
-/* 부드러운 그라데이션(필요 시 유지) */
+/* 부드러운 그라데이션(필요 시) */
 .pd-hero__overlay {
   position: absolute;
   inset: 0;
@@ -43,12 +46,12 @@
 .pd-hero__center {
   position: absolute;
   left: 50%;
-  bottom: 14%;                 /* ✅ 너무 아래로 내려가 겹치던 문제 해결 */
+  bottom: 14%;                                    /* 필요하면 16~18%로 미세조정 */
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 2;                  /* overlay 위 */
+  z-index: 2;                                     /* overlay 위 */
 }
 
 /* 작은 기수 배지 */
@@ -69,7 +72,7 @@
   border-radius: 8px;
 }
 
-/* 가운데 큰 제목 배지 */
+/* 가운데 큰 제목 배지 (반응형 폰트) */
 .pd-title {
   display: inline-flex;
   align-items: center;
@@ -78,7 +81,7 @@
   height: 81px;
   margin: 0;
   color: #FFFFFF;
-  font-size: 50px;
+  font-size: clamp(22px, 3vw, 50px);              /* ✅ 1920=50px, 아래로 부드럽게 감소 */
   font-weight: 700;
   line-height: 1;
   border-radius: 51px;
@@ -106,11 +109,11 @@
 /* ===== 본문 ===== */
 .pd-content {
   position: relative;
-  z-index: 1;                   /* 히어로보다 위 레이어지만, 박스는 히어로 아래에 배치됨 */
+  z-index: 1;                                      /* 히어로 위 레이어, 하지만 아래에서 시작 */
   margin: 0 auto;
   max-width: 1638px;
 
-  /* ✅ 히어로와의 간격: padding으로 처리(겹침/콜랩스 방지) */
+  /* ✅ 히어로와의 간격: padding으로 처리(겹침 방지) */
   padding-top: 48px;
 
   /* ✅ 1920 기준 30px, 화면 줄면 자연스럽게 축소 */
@@ -119,9 +122,9 @@
   font-weight: 500;
   text-align: center;
 
-  /* 공통 좌우 여백 */
-  padding-left: 40px;
-  padding-right: 40px;
+  /* 좌우 패딩은 변수로 통일 */
+  padding-left: var(--side-pad);
+  padding-right: var(--side-pad);
 
   background: transparent !important;
   box-shadow: none !important;
@@ -158,60 +161,52 @@
   box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 }
 
-/* ===== 큰 화면(≥1441px) 폭 제한 ===== */
+/* ===========================
+   데스크톱(≥1441px) — 1920 기준 좌우 패딩 137px
+   =========================== */
 @media (min-width: 1441px) {
+  .project-detail { --side-pad: 137px; }          /* ✅ 요구사항: 1920 기준 137px */
   .project-detail .pd-content { max-width: min(1100px, 100%); }
   .project-detail .pd-photo   { max-width: min(1100px, 100%); }
 }
 
-/* ===== 중간 화면 1281~1440 ===== */
-@media (min-width:1281px) and (max-width:1440px){
+/* ===========================
+   1025px ~ 1440px (중간 구간)
+   =========================== */
+@media (min-width:1025px) and (max-width:1440px){
+  .project-detail { --side-pad: 40px; }
   .project-detail .pd-content{ max-width:min(1000px,100%); }
   .project-detail .pd-photo  { max-width:min(1100px,100%); }
-}
-
-/* ===== 중간 화면 1081~1280 ===== */
-/* ✅ 여기서도 contain을 명시해 '양옆 잘림' 방지 */
-@media (min-width:1081px) and (max-width:1280px){
+  /* 히어로는 계속 contain 유지 */
   .pd-hero{
-    width: min(1400px, calc(100% - 80px));
-    background-size: contain !important; /* 재확인(덮어쓰기) */
-    background-position: center center;
-  }
-  .pd-hero__center{ bottom: 14%; }       /* 위치 유지 */
-  .project-detail .pd-content{ max-width:min(960px,100%); }
-  .project-detail .pd-photo  { max-width:min(1040px,100%); }
-}
-
-/* ===== 중간 화면 769~1080 ===== */
-@media (min-width:769px) and (max-width:1080px){
-  .pd-hero{
-    width: min(1200px, calc(100% - 80px));
+    width: min(var(--hero-max-w), calc(100% - (var(--side-pad) * 2)));
     background-size: contain !important;
     background-position: center center;
   }
-  .pd-hero__center{ bottom: 15%; }       /* 조금 더 올림 */
-  .project-detail .pd-content{ max-width:min(920px,100%); }
-  .project-detail .pd-photo  { max-width:min(1000px,100%); }
 }
 
-/* ===== 모바일 (≤768px) ===== */
-@media (max-width: 768px) {
-  /* 모바일에서도 자르지 않게 */
+/* ===========================
+   모바일 (≤1024px)
+   =========================== */
+@media (max-width: 1024px) {
+  .project-detail { --side-pad: 20px; }
+
+  /* 히어로도 자르지 않게 유지 */
   .pd-hero {
-    width: calc(100% - 40px);
+    width: calc(100% - (var(--side-pad) * 2));
     margin: 0 auto;
     aspect-ratio: 117 / 76;
-    background-size: contain !important;
+    background-size: contain !important;           /* ✅ 자르지 않음 */
     background-position: center;
   }
 
+  /* 모바일에서는 중앙 배지/장식 제거(요청 톤 유지시 숨김) */
   .pd-hero__overlay, .pd-hero__center, .pd-vline, .pd-vline-dot { display: none !important; }
 
   .project-detail .pd-content {
     max-width: 100%;
     margin: 0 !important;
-    padding: 20px 20px !important;
+    padding: 20px var(--side-pad) 20px !important;
     text-align: left !important;
     font-size: 16px !important;
     line-height: 1.9 !important;
