@@ -250,16 +250,16 @@
 
 /* ========== 모바일(≤1024px) ========== */
 @media (max-width: 1024px) {
+  /* 전반 패딩 확대 */
   .project-detail { --side-pad: 30px; }
 
-  /* 히어로: 카드형 + 헤더 56px 피하고, spacer로 아래와 확실히 분리 */
+  /* 헤더(56px) 밑에서 이미지 시작, 카드형 */
   .pd-hero {
     background: none !important;
-    margin-top: 56px;         /* 상단 고정 헤더 높이 */
+    margin-top: 56px;     /* 고정 헤더 피하기 */
     padding-top: 18px;
-    display: block;
     position: relative;
-    isolation: isolate;       /* 스택 컨텍스트 분리 */
+    z-index: 0;
   }
   .pd-hero::before {
     content: "";
@@ -275,12 +275,6 @@
     outline: 1px solid rgba(255,255,255,0.10);
     box-shadow: 0 6px 18px rgba(0,0,0,0.25);
   }
-  /* ★ 겹침 방지: 히어로 아래에 확정 여백 생성 */
-  .pd-hero::after {
-    content: "";
-    display: block;
-    height: clamp(40px, 7.5vw, 64px);
-  }
 
   /* 데스크톱 히어로 장식 숨김 */
   .pd-hero__overlay,
@@ -288,14 +282,16 @@
   .pd-vline,
   .pd-vline-dot { display: none !important; }
 
-  /* 모바일 헤더 (제목 위, 기수 아래 / 아이콘 오른쪽) */
+  /* ★ 겹침 방지: 히어로 다음에 오는 모바일 헤더를 확실히 아래로 밀기 */
   .pd-header--mobile {
     display: block;
-    position: static;         /* relative/z-index 제거로 겹침 여지 차단 */
+    position: static;
     padding-left: var(--side-pad);
     padding-right: var(--side-pad);
-    margin-top: 0;
+    margin-top: clamp(28px, 6vw, 44px) !important;  /* 핵심 */
   }
+
+  /* 모바일 헤더 내부 레이아웃 */
   .pd-hrow {
     display: flex;
     align-items: flex-start;
@@ -305,7 +301,7 @@
   }
   .pd-hleft {
     display: flex;
-    flex-direction: column;   /* 제목 밑에 기수 */
+    flex-direction: column;   /* 제목 아래에 기수 */
     align-items: flex-start;
     gap: 6px;
     min-width: 0;
@@ -339,6 +335,7 @@
     opacity: .92;
   }
 
+  /* 아이콘: 제목과 같은 행(우측) */
   .pd-hright {
     display: flex !important;
     align-items: center;
@@ -359,7 +356,7 @@
 
   /* 본문 */
   .project-detail .pd-content {
-    padding-top: clamp(28px, 5.2vw, 42px);
+    padding-top: clamp(24px, 4.8vw, 36px);
     text-align: left !important;
     font-size: 16px !important;
     line-height: 1.9 !important;
@@ -389,13 +386,14 @@
   .pd-hero { padding-top: 12px; }
   .pd-hero::before {
     width: calc(100% - var(--side-pad) * 2);
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 4 / 3;     /* 폰에서 더 자연스러운 비율 */
     border-radius: 10px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.25);
   }
-  .pd-hero::after { height: clamp(28px, 6vw, 40px); } /* spacer도 조금 줄임 */
 
-  .pd-header--mobile { padding-left: var(--side-pad); padding-right: var(--side-pad); }
+  /* 헤더를 조금 더 띄움 (겹침 여지 제로) */
+  .pd-header--mobile { margin-top: clamp(20px, 5.5vw, 32px) !important; }
+
   .pd-hrow { gap: 8px; }
   .pd-hleft { gap: 4px; }
   .pd-title--mobile { font-size: clamp(16px, 4.5vw, 20px); line-height: 1.2; }
