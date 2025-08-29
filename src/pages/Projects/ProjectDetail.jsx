@@ -153,13 +153,6 @@ export default function ProjectDetail() {
           </div>
         </div>
 
-        {/* 한 줄 소개 (모바일에선 숨김) */}
-        {intro && (
-          <div className="pd-text pd-text--intro">
-            <p>{intro}</p>
-          </div>
-        )}
-
         {/* 상세 설명(= description만) */}
         {detail && (
           <div className="pd-text">
