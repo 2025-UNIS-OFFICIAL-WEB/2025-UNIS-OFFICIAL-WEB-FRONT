@@ -79,6 +79,8 @@
     @apply border-border;
   }
   body {
+    font-family: 'Pretendard', sans-serif;
+    letter-spacing: -0.015em;
     @apply bg-background text-foreground;
   }
 }
