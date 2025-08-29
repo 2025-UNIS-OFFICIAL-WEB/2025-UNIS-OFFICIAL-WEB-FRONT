@@ -218,141 +218,133 @@
   outline: 1px solid rgba(255,255,255,0.10);
   box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 }
-/* ===========================
-   Breakpoints 리팩토링
-   1440 / 1280 / 1080 / 768 / 480
-   =========================== */
 
-/* 기본(>=1281 가정): 데스크톱 풀블리드 느낌 */
-.project-detail { --side-pad: 137px; }
-.pd-hero {
-  aspect-ratio: auto;
-  height: clamp(480px, 46vw, 760px);
-  background-image: var(--hero-bg);
-  background-position: top center;
-  background-repeat: no-repeat;
-  background-size: cover !important;   /* 가로 화면에서 꽉 차게 */
+/* ========== 데스크톱(≥1441px) ========== */
+@media (min-width: 1441px) {
+  .project-detail { --side-pad: 137px; }
 }
 
-/* ===== 1440 이하 (1281~1440) ===== */
-@media (max-width: 1440px) and (min-width: 1281px) {
+/* ========== 1025~1440px ========== */
+@media (min-width: 1025px) and (max-width: 1440px) {
   .project-detail { --side-pad: 40px; }
-  .pd-hero {
-    height: clamp(420px, 50vw, 680px);
-    background-position: center top;
-  }
 }
 
-/* ===== 1280 이하 (1081~1280) ===== */
-@media (max-width: 1280px) and (min-width: 1081px) {
-  .project-detail { --side-pad: 40px; }
+@media (min-width: 1025px) and (max-width: 1280px) {
   .pd-hero {
-    height: clamp(380px, 54vw, 660px);
-    background-size: cover !important;
-    background-position: center top;
-  }
-}
-
-/* ===== 1080 이하: 카드형(여백 있는 contain)로 전환 ===== */
-@media (max-width: 1080px) {
-  .project-detail { --side-pad: 24px; }
-
-  /* 배경 이미지는 숨기고, ::before 카드 위에 contain로 표시 */
-  .pd-hero {
-    position: relative;
-    height: auto;
-    background: none !important;     /* background-image 제거 */
     aspect-ratio: auto;
-    padding-top: clamp(12px, 3.5vw, 18px); /* 이미지 위 여백 */
-    padding-bottom: 0;
+    height: clamp(360px, 56vw, 680px);
+    background-size: cover !important;
+    background-position: top center !important;
   }
-  .pd-hero::before {
-    content: "";
-    display: block;
-    width: calc(100% - var(--side-pad) * 2); /* 양옆 여백 */
-    margin: 0 auto;
-    aspect-ratio: 117 / 76;                  /* 카드 비율 */
-    background-image: var(--hero-bg);
-    background-size: contain;
-    background-repeat: no-repeat;
+}
+
+/* ========== 1280px 이하: cover로 전환해 여백 제거 ========== */
+@media (max-width: 1280px) {
+  .pd-hero {
+    aspect-ratio: auto;
+    height: clamp(360px, 56vw, 680px);
+    background-size: cover !important;
     background-position: center;
-    border-radius: 14px;
-    outline: 1px solid rgba(255,255,255,0.10);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  }
+}
+
+/* ========== 모바일(≤1024px) ========== */
+@media (max-width: 1024px) {
+  .project-detail { --side-pad: 20px; }
+
+  .pd-hero {
+    width: 100%;
+    aspect-ratio: 117 / 76;
+    background-size: contain !important;
+    background-position: center;
   }
 
-  /* 히어로 오버레이/센터 장식 감춤 (모바일 헤더 사용) */
   .pd-hero__overlay,
   .pd-hero__center,
   .pd-vline,
-  .pd-vline-dot { display: none !important; }
+  .pd-vline-dot {
+    display: none !important;
+  }
 
-  /* 본문 타이포 & 레이아웃 */
-  .pd-content {
+  .project-detail .pd-content {
     margin: 0 !important;
-    padding-top: clamp(18px, 3vw, 28px);
+    padding-top: 24px;
     text-align: left !important;
-    font-size: clamp(15px, 1.8vw, 16px) !important;
+    font-size: 16px !important;
     line-height: 1.9 !important;
   }
 
-  /* 모바일 헤더(제목 + 기수 + 아이콘) 표시 */
-  .pd-header--mobile { display: block; margin-top: 12px; padding-left: var(--side-pad); padding-right: var(--side-pad); }
+  /* 모바일 헤더 */
+  .pd-header--mobile { display: block; margin-top: 12px; }
+
   .pd-hrow {
-    display: flex; align-items: center; justify-content: space-between;
-    gap: clamp(8px, 2.2vw, 14px); min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 32px;
   }
-  .pd-hleft { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1 1 auto; }
+
+  .pd-hleft {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
   .pd-title--mobile {
-    margin: 0; font-weight: 800;
-    font-size: clamp(18px, 3.6vw, 22px);
-    line-height: 1.1;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    margin: 0;
+    font-weight: 800;
+    font-size: clamp(18px, 5vw, 20px);
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
+
   .pd-gen {
-    margin-left: 6px; font-weight: 700;
-    font-size: clamp(14px, 3.2vw, 16px); line-height: 1;
-    opacity: .92; flex-shrink: 0;
+    margin-left: 6px;
+    font-weight: 700;
+    font-size: clamp(14px, 4vw, 16px);
+    line-height: 1;
+    color: #fff;
+    opacity: 0.92;
+    flex-shrink: 0;
   }
 
-  /* 우측 아이콘(반응형 크기/간격) */
-  .pd-hright { display: flex !important; align-items: center; gap: clamp(8px, 2.4vw, 14px); flex: 0 0 auto; }
-  .pd-social { display: inline-flex; align-items: center; justify-content: center; inline-size: clamp(28px, 5vw, 40px); block-size: clamp(28px, 5vw, 40px); }
-  .pd-social img { inline-size: clamp(18px, 3.8vw, 24px); block-size: clamp(18px, 3.8vw, 24px); object-fit: contain; }
+  .pd-hright { display: flex !important; align-items: center; gap: 12px; flex: 0 0 auto; }
+  .pd-social img { inline-size: clamp(18px, 4.2vw, 24px); block-size: clamp(18px, 4.2vw, 24px); }
 
-  /* 상세 설명 */
+  .pd-text--intro { display: none !important; }
+
   .pd-text {
-    padding-left: var(--side-pad); padding-right: var(--side-pad);
-    font-size: clamp(14px, 1.9vw, 15px);
-    line-height: 1.9; color: #e9eef6; margin-top: 10px;
+    padding-left: var(--side-pad);
+    padding-right: var(--side-pad);
+    font-size: 14px;
+    line-height: 1.9;
+    color: #e9eef6;
+    margin-top: 12px;
   }
 
-  /* 갤러리 */
-  .pd-photo { width: 100%; margin: clamp(22px, 4vw, 28px) 0 clamp(10px, 3vw, 14px); padding: 0; }
-  .pd-photo img { width: 100%; border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
+  .pd-photo {
+    width: 100%;
+    margin: 28px 0 12px;
+    padding: 0;
+  }
 
-  /* 데스크톱용 중앙 아이콘 묶음은 감춤 (모바일에선 헤더 우측만) */
-  .pd-socials--desktop { display: none !important; }
-}
+  .pd-photo img {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+  }
 
-/* ===== 768 이하: 여백 및 크기 더 압축 ===== */
-@media (max-width: 768px) {
-  .project-detail { --side-pad: 20px; }
-  .pd-hero { padding-top: clamp(10px, 3.4vw, 16px); }
-  .pd-hero::before { border-radius: 12px; }
-  .pd-title--mobile { font-size: clamp(17px, 4.2vw, 20px); }
-  .pd-gen { font-size: clamp(13px, 3.6vw, 15px); }
-  .pd-hright { gap: clamp(8px, 2.8vw, 12px); }
-  .pd-social { inline-size: clamp(26px, 6vw, 36px); block-size: clamp(26px, 6vw, 36px); }
-  .pd-social img { inline-size: clamp(16px, 4.2vw, 22px); block-size: clamp(16px, 4.2vw, 22px); }
-}
-
-/* ===== 480 이하: 가장 빽빽한 모바일 ===== */
-@media (max-width: 480px) {
-  .project-detail { --side-pad: 16px; }
-  .pd-hero { padding-top: 10px; }
-  .pd-hero::before { width: calc(100% - var(--side-pad) * 2); border-radius: 12px; }
-  .pd-title--mobile { font-size: clamp(16px, 5vw, 18px); }
-  .pd-gen { font-size: clamp(12px, 4.2vw, 14px); }
-  .pd-text { font-size: 14px; }
+  .project-detail .pd-title.pd-title--mobile {
+    display: inline !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    text-align: left !important;
+  }
 }
