@@ -179,16 +179,11 @@
 /* ========== 데스크톱(≥1441px): 1920 기준 텍스트 패딩 137px ========== */
 @media (min-width: 1441px) {
   .project-detail { --side-pad: 137px; } /* ✅ 텍스트만 137px 패딩 */
-  .project-detail .pd-content { max-width: min(1100px, 100%); }
-  .project-detail .pd-photo   { max-width: min(1100px, 100%); }
 }
 
 /* ========== 1025~1440px: 사진은 계속 contain, 텍스트 패딩 40px ========== */
 @media (min-width: 1025px) and (max-width: 1440px) {
   .project-detail { --side-pad: 40px; }
-
-  .project-detail .pd-content { max-width: min(1000px, 100%); }
-  .project-detail .pd-photo   { max-width: min(1100px, 100%); }
 
   .pd-hero {
     width: min(var(--hero-max-w), 100%);
