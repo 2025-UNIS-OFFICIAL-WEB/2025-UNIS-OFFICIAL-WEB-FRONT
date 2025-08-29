@@ -21,12 +21,12 @@
 .pd-hero {
   position: relative;
   z-index: 0;
-  width: 100%;                     
-  aspect-ratio: 117 / 76;          
+  width: 100%;
+  aspect-ratio: 117 / 76;
   background-image: var(--hero-bg);
   background-position: center;
   background-repeat: no-repeat;
-  background-size: contain !important; /* 기본은 contain (안 잘림) */
+  background-size: contain !important; /* 기본은 contain */
   overflow: visible;
 }
 
@@ -55,6 +55,7 @@
   z-index: 2;
 }
 
+/* 배지 */
 .pd-badge {
   display: inline-flex;
   align-items: center;
@@ -137,7 +138,7 @@
 
 .pd-text p { margin: 0 0 1em; }
 
-/* 소셜 */
+/* 소셜 아이콘 */
 .pd-socials {
   display: flex;
   justify-content: center;
@@ -153,9 +154,9 @@
 }
 
 /* 데스크톱 전용 소셜 */
-.pd-socials--desktop { display:flex; }
+.pd-socials--desktop { display: flex; }
 @media (max-width: 1024px){
-  .pd-socials--desktop { display:none; }
+  .pd-socials--desktop { display: none; }
 }
 
 /* 사진(갤러리) */
@@ -184,7 +185,7 @@
   .project-detail { --side-pad: 40px; }
 }
 
-/* ========== 1280px 이하: cover 전환으로 여백 제거 ========== */
+/* ========== 1280px 이하: cover로 전환해 여백 제거 ========== */
 @media (max-width: 1280px) {
   .pd-hero {
     aspect-ratio: auto;

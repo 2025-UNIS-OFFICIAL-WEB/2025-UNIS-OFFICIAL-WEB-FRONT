@@ -34,7 +34,7 @@ export default function Footer() {
           </a>
         </div>
           <p className="footer__makers">
-            만든 사람들 | 6기 강린아, 김겨레, 손하늘, 유혜민, 장현서
+            만든 사람들 | 6기 김겨레, 손하늘, 유혜민, 장현서
           </p>
         </div>
       </div>

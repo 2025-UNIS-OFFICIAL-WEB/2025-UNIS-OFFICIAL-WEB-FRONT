@@ -91,7 +91,6 @@ export default function ProjectDetail() {
 
   const DETAIL_MAX = 1000;
   const title = data?.title ?? "프로젝트명";
-  const intro = data?.intro ?? "";
   const gen = data?.gen;
   const detail = (data?.detail || "").slice(0, DETAIL_MAX).trim();
   const links = data?.links || {};
@@ -153,14 +152,32 @@ export default function ProjectDetail() {
           </div>
         </div>
 
-        {/* 상세 설명(= description만) */}
+        {/* 상세 설명 */}
         {detail && (
           <div className="pd-text">
             <p>{detail}</p>
           </div>
         )}
 
-        {/* 알럼니 전용 사진 섹션 */}
+        {/* ✅ 데스크톱 전용 소셜 아이콘: 상세 설명 아래 중앙 정렬 */}
+        {orderedLinks.length > 0 && (
+          <div className="pd-socials pd-socials--desktop" aria-label="프로젝트 링크">
+            {orderedLinks.map((l, i) => (
+              <a
+                key={i}
+                className="pd-social"
+                href={l.href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={l.label}
+              >
+                <img src={l.icon} alt={`${l.label} 아이콘`} />
+              </a>
+            ))}
+          </div>
+        )}
+
+        {/* 갤러리 */}
         {gallery.length > 0 && (
           <section className="pd-photo" aria-label="프로젝트 이미지">
             {gallery.map((src, i) => (
