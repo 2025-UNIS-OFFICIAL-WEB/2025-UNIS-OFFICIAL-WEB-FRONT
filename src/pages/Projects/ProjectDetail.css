@@ -250,22 +250,24 @@
 
 /* ========== 모바일(≤1024px) ========== */
 @media (max-width: 1024px) {
-  .project-detail { --side-pad: 20px; }
+  /* 1. 전반 패딩 1.5배 */
+  .project-detail { --side-pad: 30px; }
 
-  /* 배경 이미지는 섹션에서 제거하고, 카드형으로 ::before에 contain 렌더 */
+  /* 2. 고정 헤더(56px) 아래에서 이미지 시작 + 카드형 렌더 */
   .pd-hero {
     position: relative;
-    background: none !important;
-    aspect-ratio: auto;           /* 섹션 자체 비율 제거 */
-    padding-top: 14px;            /* 상단 여백 (헤더 아래) */
+    background: none !important;   /* 배경 제거, 카드로 그림 */
+    aspect-ratio: auto;
+    margin-top: 56px;              /* 헤더 아래부터 시작 */
+    padding-top: 18px;             /* 이미지 위 여백(약간) */
     padding-bottom: 0;
   }
   .pd-hero::before {
     content: "";
     display: block;
-    width: calc(100% - var(--side-pad) * 2);  /* 양옆 여백 */
-    margin: 0 auto;                            /* 가운데 정렬 */
-    aspect-ratio: 117 / 76;                    /* 카드 비율 */
+    width: calc(100% - var(--side-pad) * 2);  /* 좌우 여백 */
+    margin: 0 auto;
+    aspect-ratio: 117 / 76;
     background-image: var(--hero-bg);
     background-size: contain;
     background-repeat: no-repeat;
@@ -273,41 +275,35 @@
     border-radius: 14px;
     outline: 1px solid rgba(255,255,255,0.10);
     box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    /* 3. 이미지와 텍스트 겹침 방지 */
+    margin-bottom: clamp(16px, 3.2vw, 24px);
   }
 
-  /* 중앙 오버레이/타이틀 장식은 모바일에서 숨김 */
+  /* 데스크톱용 중앙 오버레이/장식 숨김 */
   .pd-hero__overlay,
   .pd-hero__center,
   .pd-vline,
   .pd-vline-dot { display: none !important; }
 
-  /* 본문 타이포 & 좌우 패딩 */
-  .project-detail .pd-content {
-    margin: 0 !important;
-    padding-top: 24px;
-    text-align: left !important;
-    font-size: 16px !important;
-    line-height: 1.9 !important;
-  }
-
-  /* 모바일 헤더: 좌(제목/기수) - 우(아이콘) */
+  /* 4-5. 모바일 헤더: 좌측(제목 + 아래줄 기수), 우측(아이콘) */
   .pd-header--mobile {
     display: block;
-    margin-top: 12px;
+    margin-top: 10px;
     padding-left: var(--side-pad);
     padding-right: var(--side-pad);
   }
   .pd-hrow {
     display: flex;
-    align-items: center;
+    align-items: flex-start;              /* 제목/기수 묶음의 상단 정렬 */
     justify-content: space-between;
     gap: 12px;
     min-height: 32px;
   }
   .pd-hleft {
     display: flex;
-    align-items: center;
-    gap: 8px;
+    flex-direction: column;               /* 제목 아래 줄에 기수 */
+    align-items: flex-start;
+    gap: 6px;
     min-width: 0;
     flex: 1 1 auto;
   }
@@ -315,27 +311,48 @@
     margin: 0;
     font-weight: 800;
     font-size: clamp(18px, 3.8vw, 22px);
-    line-height: 1.1;
+    line-height: 1.15;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
   .pd-gen {
-    margin-left: 6px;
+    /* 제목 아래 줄로 보이도록 블록화 */
+    display: block;
     font-weight: 700;
     font-size: clamp(14px, 3.4vw, 16px);
-    line-height: 1;
+    line-height: 1.1;
     color: #fff;
     opacity: 0.92;
-    flex-shrink: 0;
   }
 
-  /* 우측 소셜 아이콘: 반응형 크기/간격 */
-  .pd-hright { display: flex !important; align-items: center; gap: clamp(8px, 2.4vw, 14px); flex: 0 0 auto; }
-  .pd-social { display: inline-flex; align-items: center; justify-content: center; inline-size: clamp(28px, 5vw, 40px); block-size: clamp(28px, 5vw, 40px); }
-  .pd-social img { inline-size: clamp(18px, 3.8vw, 24px); block-size: clamp(18px, 3.8vw, 24px); object-fit: contain; }
+  /* 우측 아이콘(제목과 같은 행 유지) */
+  .pd-hright {
+    display: flex !important;
+    align-items: center;
+    gap: clamp(8px, 2.4vw, 14px);
+    flex: 0 0 auto;
+    padding-top: 2px;                     /* 제목 상단선 맞춤용 미세 조정 */
+  }
+  .pd-social {
+    display: inline-flex; align-items: center; justify-content: center;
+    inline-size: clamp(28px, 5vw, 40px);
+    block-size: clamp(28px, 5vw, 40px);
+  }
+  .pd-social img {
+    inline-size: clamp(18px, 3.8vw, 24px);
+    block-size: clamp(18px, 3.8vw, 24px);
+    object-fit: contain;
+  }
 
-  /* 상세 설명 */
+  /* 6. 본문(설명) 패딩/타이포 증대 */
+  .project-detail .pd-content {
+    margin: 0 !important;
+    padding-top: clamp(22px, 3.4vw, 30px);   /* 이미지와 본문 간격 조금 더 */
+    text-align: left !important;
+    font-size: 16px !important;
+    line-height: 1.9 !important;
+  }
   .pd-text--intro { display: none !important; }
   .pd-text {
     padding-left: var(--side-pad);
@@ -349,7 +366,7 @@
   /* 갤러리 */
   .pd-photo {
     width: 100%;
-    margin: 28px 0 12px;
+    margin: clamp(30px, 4.5vw, 40px) 0 clamp(14px, 3.6vw, 20px);
     padding: 0;
   }
   .pd-photo img {
