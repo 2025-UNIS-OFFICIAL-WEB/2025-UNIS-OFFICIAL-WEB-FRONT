@@ -255,17 +255,14 @@
 
   /* 2. 고정 헤더(56px) 아래에서 이미지 시작 + 카드형 렌더 */
   .pd-hero {
-    position: relative;
-    background: none !important;   /* 배경 제거, 카드로 그림 */
-    aspect-ratio: auto;
-    margin-top: 56px;              /* 헤더 아래부터 시작 */
-    padding-top: 18px;             /* 이미지 위 여백(약간) */
-    padding-bottom: 0;
+    background: none !important;
+    margin-top: 56px;                 /* 고정 헤더 피하기 */
+    padding-top: 18px;
   }
   .pd-hero::before {
     content: "";
     display: block;
-    width: calc(100% - var(--side-pad) * 2);  /* 좌우 여백 */
+    width: calc(100% - var(--side-pad) * 2);
     margin: 0 auto;
     aspect-ratio: 117 / 76;
     background-image: var(--hero-bg);
@@ -275,8 +272,9 @@
     border-radius: 14px;
     outline: 1px solid rgba(255,255,255,0.10);
     box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-    /* 3. 이미지와 텍스트 겹침 방지 */
-    margin-bottom: clamp(16px, 3.2vw, 24px);
+
+    /* ★ 핵심: 이미지와 텍스트가 겹치지 않도록 하단 여백을 충분히 확보 */
+    margin-bottom: clamp(28px, 6vw, 44px);
   }
 
   /* 데스크톱용 중앙 오버레이/장식 숨김 */
@@ -287,9 +285,10 @@
 
   /* 4-5. 모바일 헤더: 좌측(제목 + 아래줄 기수), 우측(아이콘) */
   .pd-header--mobile {
-    display: block;
-    margin-top: 10px;
-    padding-left: var(--side-pad);
+    position: relative;
+    z-index: 0;                       /* 굳이 위로 띄우지 않음 */
+    margin-top: 0;                    /* 겹치지 않도록 0으로 */
+    padding-left: var(--side-pad);    /* (이미 30px로 상향) */
     padding-right: var(--side-pad);
   }
   .pd-hrow {
@@ -299,14 +298,7 @@
     gap: 12px;
     min-height: 32px;
   }
-  .pd-hleft {
-    display: flex;
-    flex-direction: column;               /* 제목 아래 줄에 기수 */
-    align-items: flex-start;
-    gap: 6px;
-    min-width: 0;
-    flex: 1 1 auto;
-  }
+  .pd-hleft { flex-direction: column; align-items: flex-start; gap: 6px; }
   .pd-title--mobile {
     margin: 0;
     font-weight: 800;
@@ -347,11 +339,7 @@
 
   /* 6. 본문(설명) 패딩/타이포 증대 */
   .project-detail .pd-content {
-    margin: 0 !important;
-    padding-top: clamp(22px, 3.4vw, 30px);   /* 이미지와 본문 간격 조금 더 */
-    text-align: left !important;
-    font-size: 16px !important;
-    line-height: 1.9 !important;
+    padding-top: clamp(26px, 4.8vw, 36px);
   }
   .pd-text--intro { display: none !important; }
   .pd-text {
