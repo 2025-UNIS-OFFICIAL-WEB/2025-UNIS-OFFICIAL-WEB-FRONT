@@ -250,14 +250,16 @@
 
 /* ========== 모바일(≤1024px) ========== */
 @media (max-width: 1024px) {
-  /* 1. 전반 패딩 1.5배 */
+  /* 전반 패딩 확대 */
   .project-detail { --side-pad: 30px; }
 
-  /* 2. 고정 헤더(56px) 아래에서 이미지 시작 + 카드형 렌더 */
+  /* 헤더(56px) 밑에서 이미지 시작, 카드형으로 */
   .pd-hero {
     background: none !important;
-    margin-top: 56px;                 /* 고정 헤더 피하기 */
+    margin-top: 56px;
     padding-top: 18px;
+    position: relative;
+    z-index: 0;
   }
   .pd-hero::before {
     content: "";
@@ -272,62 +274,83 @@
     border-radius: 14px;
     outline: 1px solid rgba(255,255,255,0.10);
     box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-
-    /* ★ 핵심: 이미지와 텍스트가 겹치지 않도록 하단 여백을 충분히 확보 */
-    margin-bottom: clamp(28px, 6vw, 44px);
+    /* 이미지-텍스트 겹침 방지 */
+    margin-bottom: clamp(36px, 7vw, 52px);
+    position: relative;
+    z-index: 0;
   }
 
-  /* 데스크톱용 중앙 오버레이/장식 숨김 */
+  /* 데스크톱용 오버레이/장식 숨김 */
   .pd-hero__overlay,
   .pd-hero__center,
   .pd-vline,
   .pd-vline-dot { display: none !important; }
 
-  /* 4-5. 모바일 헤더: 좌측(제목 + 아래줄 기수), 우측(아이콘) */
+  /* 모바일 헤더: 제목/기수/아이콘 */
   .pd-header--mobile {
+    display: block;
     position: relative;
-    z-index: 0;                       /* 굳이 위로 띄우지 않음 */
-    margin-top: 0;                    /* 겹치지 않도록 0으로 */
-    padding-left: var(--side-pad);    /* (이미 30px로 상향) */
+    z-index: 3; /* 카드 위에 보이도록 */
+    margin-top: 0;
+    padding-left: var(--side-pad);
     padding-right: var(--side-pad);
   }
   .pd-hrow {
     display: flex;
-    align-items: flex-start;              /* 제목/기수 묶음의 상단 정렬 */
+    align-items: flex-start;   /* 제목+기수 묶음을 상단 기준으로 */
     justify-content: space-between;
     gap: 12px;
     min-height: 32px;
   }
-  .pd-hleft { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .pd-hleft {
+    display: flex;
+    flex-direction: column;    /* 제목 밑에 기수 */
+    align-items: flex-start;
+    gap: 6px;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
   .pd-title--mobile {
-    margin: 0;
+    display: block !important;
+    color: #fff !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+    min-inline-size: auto !important;
+    max-inline-size: 100% !important;
+
     font-weight: 800;
     font-size: clamp(18px, 3.8vw, 22px);
     line-height: 1.15;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-align: left;
   }
   .pd-gen {
-    /* 제목 아래 줄로 보이도록 블록화 */
     display: block;
+    margin: 0;
     font-weight: 700;
     font-size: clamp(14px, 3.4vw, 16px);
     line-height: 1.1;
     color: #fff;
-    opacity: 0.92;
+    opacity: .92;
   }
 
-  /* 우측 아이콘(제목과 같은 행 유지) */
+  /* 우측 아이콘 (제목과 같은 행) */
   .pd-hright {
     display: flex !important;
     align-items: center;
     gap: clamp(8px, 2.4vw, 14px);
     flex: 0 0 auto;
-    padding-top: 2px;                     /* 제목 상단선 맞춤용 미세 조정 */
+    padding-top: 2px; /* 상단선 맞춤 */
   }
   .pd-social {
-    display: inline-flex; align-items: center; justify-content: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     inline-size: clamp(28px, 5vw, 40px);
     block-size: clamp(28px, 5vw, 40px);
   }
@@ -337,9 +360,12 @@
     object-fit: contain;
   }
 
-  /* 6. 본문(설명) 패딩/타이포 증대 */
+  /* 본문 여백/패딩 확대 */
   .project-detail .pd-content {
-    padding-top: clamp(26px, 4.8vw, 36px);
+    padding-top: clamp(28px, 5.2vw, 42px);
+    text-align: left !important;
+    font-size: 16px !important;
+    line-height: 1.9 !important;
   }
   .pd-text--intro { display: none !important; }
   .pd-text {
@@ -363,16 +389,6 @@
     box-shadow: 0 4px 14px rgba(0,0,0,0.25);
   }
 
-  /* 데스크톱용 중앙 소셜 묶음은 모바일에서 숨김 */
+  /* 중앙 소셜 묶음 숨김 */
   .pd-socials--desktop { display: none !important; }
-
-  /* 데스크톱용 타이틀 칩 스타일이 모바일 타이틀에 묻지 않도록 */
-  .project-detail .pd-title.pd-title--mobile {
-    display: inline !important;
-    padding: 0 !important;
-    background: transparent !important;
-    border: 0 !important;
-    box-shadow: none !important;
-    text-align: left !important;
-  }
 }
