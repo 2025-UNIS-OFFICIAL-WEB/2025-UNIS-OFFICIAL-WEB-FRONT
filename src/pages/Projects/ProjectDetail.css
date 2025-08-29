@@ -137,13 +137,11 @@
   font-size: inherit;
   line-height: inherit;
   margin-top: 10px;
-  padding-left: var(--side-pad);  /* ✅ 텍스트에만 패딩 */
+  padding-left: var(--side-pad);
   padding-right: var(--side-pad);
 }
 
-.pd-text p {
-  margin: 0 0 1em;
-}
+.pd-text p { margin: 0 0 1em; }
 
 /* 소셜 */
 .pd-socials {
@@ -162,9 +160,10 @@
 
 /* 사진(갤러리) — 좌우 패딩 없음 */
 .pd-photo {
-  max-width: 1554px;
+  width: 100%;                  /* ✅ 화면 가로 꽉 채움 */
+  max-width: var(--hero-max-w); /* 필요하면 제한 */
   margin: 150px auto 80px;
-  padding: 0; /* ✅ 사진엔 패딩 X */
+  padding: 0 !important;        /* ✅ 패딩 강제 제거 */
 }
 
 .pd-photo img {
@@ -172,8 +171,8 @@
   width: 100%;
   height: auto;
   border-radius: 14px;
-  outline: 1px solid rgba(255, 255, 255, 0.10);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  outline: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 }
 
 /* ========== 데스크톱(≥1441px): 1920 기준 텍스트 패딩 137px ========== */
