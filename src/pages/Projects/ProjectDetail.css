@@ -164,22 +164,19 @@
 @media (min-width: 769px) and (max-width: 1440px) {
   /* 본문 컨테이너: 좌우 패딩 고정 + 폭 제한 */
   .project-detail .pd-content {
-    /* 화면이 넓어져도 좌우 여백은 항상 동일 */
     padding-left: 40px !important;
     padding-right: 40px !important;
+    max-width: min(1000px, 100%) !important;
 
-    /* 너무 넓어지지 않도록 본문 최대 폭 제한 */
-    max-width: min(1100px, 100%) !important;
-
-    /* 글자 크기/줄간격을 뷰포트에 맞춰 매끈하게 축소 */
-    font-size: clamp(18px, 1.6vw, 24px) !important;
-    line-height: clamp(30px, 2.6vw, 40px) !important;
-    text-align: center; /* 데스크톱 구간은 중앙 정렬 유지 */
+    /* ✅ 글씨 더 작게 */
+    font-size: clamp(14px, 1.3vw, 18px) !important;
+    line-height: clamp(22px, 2vw, 30px) !important;
+    text-align: center;
   }
 
   /* 단락 공통 – 모바일보다 살짝 넉넉한 타이포 */
   .project-detail .pd-text {
-    font-size: inherit;       /* 위에서 지정한 값 재사용 */
+    font-size: inherit;
     line-height: inherit;
     margin-top: 10px;
   }
