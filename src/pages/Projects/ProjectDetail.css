@@ -21,6 +21,7 @@
   height: var(--hero-h);
   background-size: cover;
   background-position: center 25%;
+  z-index: 0; /* 본문보다 아래 */
 }
 
 .pd-hero__overlay {
@@ -28,21 +29,21 @@
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.05) 0%,
-    rgba(0, 0, 0, 0.25) 85%,
-    rgba(0, 0, 0, 0.6) 95%,
-    rgba(0, 0, 0, 1) 100%
+    rgba(0, 0, 0, 0.05) 0%,   
+    rgba(0, 0, 0, 0.25) 85%,  
+    rgba(0, 0, 0, 0.6) 95%,   
+    rgba(0, 0, 0, 1) 100%     
   );
   pointer-events: none;
   z-index: 0;
 }
 
 .pd-hero__center {
-  position: relative;
+  position: relative; 
   display: flex;
   flex-direction: column;
   align-items: center;
-  transform: translateY(6px);
+  transform: translateY(6px); 
   z-index: 1;
 }
 
@@ -96,7 +97,6 @@
   position: relative;
   z-index: 2;
 }
-
 .pd-vline-dot {
   width: 13px;
   height: 13px;
@@ -107,23 +107,26 @@
 /* ===== 본문 ===== */
 .pd-content {
   position: relative;
-  z-index: 1;
+  z-index: 1;  /* 히어로 위 */
   max-width: 1638px;
   margin: 0 auto;
   font-weight: 500;
   text-align: center;
 
-  /* ✅ 기본(>=1441px) 값을 낮춰서 기준 안정화 */
+  /* ✅ 기본(>=1441px) */
   font-size: 18px;
   line-height: 32px;
 
-  margin-top: 100px;
+  /* margin-top 대신 padding-top으로 겹침 방지 */
+  margin-top: 0;
+  padding-top: 80px;
+
   background: transparent !important;
   box-shadow: none !important;
   border: 0;
 }
 
-/* 자식 요소가 별도 확대되지 않게 상속 고정 */
+/* 자식 요소 상속 고정 */
 .project-detail .pd-content,
 .project-detail .pd-content * { -webkit-text-size-adjust: 100%; }
 .pd-text { background: transparent !important; text-align: center; font-size: inherit; line-height: inherit; }
@@ -157,7 +160,26 @@
 }
 
 /* ===========================
-   769px ~ 1440px (세분화) — 좌우 40px 고정
+   1920px 이상 (추가 안정화)
+   =========================== */
+@media (min-width: 1441px) {
+  .project-detail .pd-content {
+    max-width: min(1100px, 100%);
+    padding-left: 40px;
+    padding-right: 40px;
+    font-size: 18px;
+    line-height: 32px;
+    text-align: center;
+  }
+  .project-detail .pd-photo {
+    max-width: min(1100px, 100%);
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+}
+
+/* ===========================
+   769px ~ 1440px (세분화)
    =========================== */
 
 /* 1281 ~ 1440 */
@@ -168,7 +190,6 @@
     max-width:min(1000px,100%) !important;
     font-size:17px !important;
     line-height:30px !important;
-    text-align:center;
   }
   .project-detail .pd-photo{
     max-width:min(1100px,100%);
@@ -184,7 +205,6 @@
     max-width:min(960px,100%) !important;
     font-size:16px !important;
     line-height:28px !important;
-    text-align:center;
   }
   .project-detail .pd-photo{
     max-width:min(1040px,100%);
@@ -200,7 +220,6 @@
     max-width:min(920px,100%) !important;
     font-size:15px !important;
     line-height:26px !important;
-    text-align:center;
   }
   .project-detail .pd-photo{
     max-width:min(1000px,100%);
@@ -209,12 +228,11 @@
 }
 
 /* ===========================
-   0 ~ 768px (모바일)
+   모바일 (≤768px)
    =========================== */
 @media (max-width: 768px) {
   .project-detail { --hero-h: auto; line-height: 1.75; }
 
-  /* 히어로: grid → block, 변수 배경 유지 */
   .pd-hero {
     display: block;
     position: relative;
@@ -226,7 +244,6 @@
     background-repeat: no-repeat;
   }
 
-  /* 사진 상/좌/우 여백 20px, 라운드 카드 */
   .pd-hero::before {
     content: "";
     display: block;
@@ -241,10 +258,8 @@
     box-shadow: 0 2px 0 rgba(255,255,255,0.06) inset;
   }
 
-  /* 히어로 내부 장식 숨김 */
   .pd-hero__overlay, .pd-hero__center, .pd-vline, .pd-vline-dot { display: none !important; }
 
-  /* 본문 패딩/타이포 확정 */
   .project-detail .pd-content {
     max-width: 100%;
     margin: 0 !important;
@@ -254,26 +269,10 @@
     line-height: 1.9 !important;
   }
 
-  /* ── 헤더 행: 제목+기수(왼쪽) / 아이콘(오른쪽) ── */
   .pd-header--mobile { display: block; margin-top: 12px; }
+  .pd-hrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 32px; }
+  .pd-hleft { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1 1 auto; }
 
-  .pd-hrow {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    min-height: 32px;
-  }
-
-  .pd-hleft {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-width: 0;
-    flex: 1 1 auto;
-  }
-
-  /* 텍스트만(뱃지 제거), 한 줄 말줄임, 동일 높이 */
   .pd-title--mobile {
     margin: 0;
     font-weight: 800;
@@ -297,21 +296,17 @@
     flex-shrink: 0;
   }
 
-  /* 아이콘: 같은 줄 오른쪽, flex 강제 */
   .pd-hright { display: flex !important; align-items: center; gap: 12px; flex: 0 0 auto; }
   .pd-social img { width: 20px; height: 20px; display: block; object-fit: contain; }
 
-  /* intro는 모바일에서 숨김, description만 */
   .pd-text--intro { display: none !important; }
 
   .pd-text { font-size: 14px; line-height: 1.9; color: #e9eef6; margin-top: 12px; }
   .pd-text + .pd-text { margin-top: 16px; }
 
-  /* 갤러리 */
   .pd-photo { width: 100%; margin: 28px 0 12px; padding: 0; }
   .pd-photo img { width: 100%; border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
 
-  /* 배지 스타일(.pd-title) 완전 제거: 모바일 제목은 텍스트만 */
   .project-detail .pd-title.pd-title--mobile {
     display: inline !important;
     min-width: 0 !important;
