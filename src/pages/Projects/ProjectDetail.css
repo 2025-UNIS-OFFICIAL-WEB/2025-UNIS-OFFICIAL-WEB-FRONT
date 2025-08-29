@@ -61,13 +61,13 @@
   align-items: center;
   justify-content: center;
   line-height: normal;
-  margin-bottom: 18px;
+  margin-bottom: clamp(10px, 1.8vw, 18px);
 }
 
 .pd-badge--small {
-  width: 91px;
-  height: 35px;
-  font-size: 24px;
+  inline-size: clamp(70px, 7vw, 91px);
+  block-size: clamp(28px, 3.2vw, 35px);
+  font-size: clamp(16px, 2.2vw, 24px);
   font-weight: 600;
   background: transparent !important;
   border: 1px solid #CCC;
@@ -79,24 +79,41 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
+  /* ↙ 기존 고정치 제거
   min-width: 318px;
   height: 81px;
+  */
+  min-inline-size: 260px;           /* 최소 가로폭만 보수적으로 유지 */
+  inline-size: fit-content;         /* 내용에 맞는 가로폭 */
+  max-inline-size: min(90vw, 1100px); /* 너무 길면 적당히 줄바꿈 */
+
   margin: 0;
   color: #fff;
-  font-size: clamp(22px, 3vw, 50px); /* 1920px = 50px */
+  font-size: clamp(22px, 3vw, 50px);
   font-weight: 700;
-  line-height: 1;
-  border-radius: 51px;
+  line-height: 1.15;                /* 글자 라인 높이 (칩 높이는 패딩으로) */
+
+  /* 패딩 기반으로 칩 높이를 유동화 */
+  padding-block: clamp(10px, 1.2vw, 18px);  /* 상하 패딩 */
+  padding-inline: clamp(20px, 2.2vw, 28px); /* 좌우 패딩 */
+
+  /* 캡슐 스타일 */
+  border-radius: clamp(24px, 4vw, 51px);
   border: 1.5px solid rgba(255, 255, 255, 0.50);
   background: rgba(221, 221, 221, 0.30);
   box-shadow: 0 0 9px 1px rgba(0, 0, 0, 0.60);
   backdrop-filter: blur(7.5px);
-  padding: 0 25px;
+
+  /* 긴 제목 줄바꿈 허용 */
+  white-space: normal;
+  text-align: center;
+  word-break: keep-all; /* 한국어 단어 단위 유지 */
 }
 
 .pd-vline {
   width: 3px;
-  height: 95px;
+  height: clamp(60px, 8vw, 95px);
   margin: 0 auto;
   background: #696969;
 }
@@ -143,14 +160,43 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 32px;
-  margin: 100px auto 80px;
+  gap: clamp(12px, 2.2vw, 32px);             /* 12px ~ 32px */
+  margin: clamp(40px, 7vw, 100px) auto clamp(24px, 5vw, 80px);
+}
+.pd-social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: clamp(36px, 5vw, 60px);       /* 버튼 최소/최대(누를 면적) */
+  block-size: clamp(36px, 5vw, 60px);
+  border-radius: 12px;                        /* 살짝 라운드 */
+  transition: transform .15s ease, opacity .15s ease;
 }
 
+.pd-social:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.6);
+  outline-offset: 2px;
+}
+
+.pd-socials--desktop { display: flex; }
+
+.pd-hright {
+  display: flex !important;
+  align-items: center;
+  gap: clamp(8px, 2.4vw, 14px);
+  flex: 0 0 auto;
+}
+
+.pd-social:hover { transform: translateY(-1px); opacity: .95; }
+
+/* 실제 아이콘 비트맵은 버튼 안에서 유동 크기 */
 .pd-social img {
-  width: 48px;
-  height: 48px;
+  display: block;
+  inline-size: clamp(20px, 3.2vw, 48px);     /* 20px ~ 48px */
+  block-size: clamp(20px, 3.2vw, 48px);
   object-fit: contain;
+  max-inline-size: 100%;
+  max-block-size: 100%;
 }
 
 
@@ -185,13 +231,10 @@
 
 @media (min-width: 1025px) and (max-width: 1280px) {
   .pd-hero {
-    /* 비율 고정 대신 높이로 제어 (여백 제거 목적 유지) */
     aspect-ratio: auto;
     height: clamp(360px, 56vw, 680px);
-
-    /* 여백 없이 채우되, 위쪽을 기준으로 정렬해서 Top이 절대 안 잘림 */
     background-size: cover !important;
-    background-position: top center !important;  /* ★ 핵심 */
+    background-position: top center !important;
   }
 }
 
@@ -271,7 +314,7 @@
   }
 
   .pd-hright { display: flex !important; align-items: center; gap: 12px; flex: 0 0 auto; }
-  .pd-social img { width: 20px; height: 20px; }
+  .pd-social img { inline-size: clamp(18px, 4.2vw, 24px); block-size: clamp(18px, 4.2vw, 24px); }
 
   .pd-text--intro { display: none !important; }
 
