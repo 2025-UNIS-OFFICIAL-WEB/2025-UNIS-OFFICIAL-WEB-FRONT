@@ -71,6 +71,26 @@
   margin-bottom: 140px;
 }
 
+/* ===== 카드 링크 기본 장식 제거 ===== */
+.projectlist a.project-card.as-link {
+  display: block;                  /* 블록화(이미지/메타 통째로 클릭) */
+  color: inherit;                  /* 색상 상속 */
+  text-decoration: none !important;/* 밑줄 제거 */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.projectlist a.project-card.as-link:hover,
+.projectlist a.project-card.as-link:focus,
+.projectlist a.project-card.as-link:active {
+  text-decoration: none !important;/* 호버/포커스에서도 밑줄 금지 */
+}
+
+/* 혹시 전역 a * 밑줄 규칙이 있다면 자식까지 확실히 차단 */
+.projectlist a.project-card.as-link *,
+.projectlist a.project-card.as-link:hover *,
+.projectlist a.project-card.as-link:focus * {
+  text-decoration: none !important;
+}
 /* ===========================
    1441px ~ 1920px 대응 (3열 유지)
    =========================== */
