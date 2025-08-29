@@ -183,6 +183,18 @@
   .project-detail { --side-pad: 40px; }
 }
 
+@media (min-width: 1025px) and (max-width: 1280px) {
+  .pd-hero {
+    /* 비율 고정 대신 높이로 제어 (여백 제거 목적 유지) */
+    aspect-ratio: auto;
+    height: clamp(360px, 56vw, 680px);
+
+    /* 여백 없이 채우되, 위쪽을 기준으로 정렬해서 Top이 절대 안 잘림 */
+    background-size: cover !important;
+    background-position: top center !important;  /* ★ 핵심 */
+  }
+}
+
 /* ========== 1280px 이하: cover로 전환해 여백 제거 ========== */
 @media (max-width: 1280px) {
   .pd-hero {
