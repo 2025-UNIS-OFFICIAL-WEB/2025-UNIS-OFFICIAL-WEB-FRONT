@@ -144,7 +144,7 @@
   justify-content: center;
   align-items: center;
   gap: 32px;
-  margin-top: 100px;
+  margin: 100px auto 80px;
 }
 
 .pd-social img {
@@ -153,11 +153,9 @@
   object-fit: contain;
 }
 
+
 /* 데스크톱 전용 소셜 */
 .pd-socials--desktop { display: flex; }
-@media (max-width: 1024px){
-  .pd-socials--desktop { display: none; }
-}
 
 /* 사진(갤러리) */
 .pd-photo {
