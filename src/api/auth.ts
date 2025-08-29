@@ -1,57 +1,47 @@
-// src/api/auth.ts
-import axios from 'axios'
+import axiosInstance from './axiosInstance';
 
-export interface LoginRequest {
-  password: string
+// ===== 타입 정의 ===== //
+interface LoginRequest {
+  password: string;
 }
-export interface LoginResponse {
-  accessToken: string
-  refreshToken: string
+// 로그인 또는 토큰 재발급 성공 시 응답 Body
+interface TokenResponse {
+  accessToken: string;
+  refreshToken: string;
 }
 
-const API = 'https://admin-unis.com'
-
-/** 헬퍼: 응답에서 토큰을 헤더/바디 모두 시도해 추출 */
-function extractTokens(res: any): LoginResponse {
-  const hAuth: string | undefined =
-    res.headers?.authorization ?? res.headers?.Authorization
-  const hRefresh: string | undefined =
-    res.headers?.refresh ?? res.headers?.Refresh
-
-  // 헤더에 Bearer 토큰이 오면 Bearer 제거
-  const headerAccess =
-    hAuth?.replace(/^Bearer\s+/i, '').trim() || undefined
-  const headerRefresh =
-    hRefresh?.replace(/^Bearer\s+/i, '').trim() || undefined
-
-  const bodyAccess = res.data?.data?.accessToken ?? res.data?.accessToken
-  const bodyRefresh = res.data?.data?.refreshToken ?? res.data?.refreshToken
-
-  const accessToken = headerAccess || bodyAccess
-  const refreshToken = headerRefresh || bodyRefresh
-
-  if (!accessToken || !refreshToken) {
-    // 디버깅에 도움
-    // console.error('No tokens in response', { headers: res.headers, body: res.data })
-    throw new Error('토큰이 응답에 없습니다.')
+// ===== API 함수 ===== //
+export const login = async (credentials: LoginRequest): Promise<TokenResponse> => {
+  try {
+    const response = await axiosInstance.post<{ data: TokenResponse }>(
+      '/admin/user/login',
+      credentials
+    );
+    return response.data.data;
+  } catch (error) {
+    console.error('Login API request failed:', error);
+    // 에러를 호출한 쪽(Login.tsx)으로 다시 던져서 처리
+    throw error;
   }
+};
 
-  return { accessToken, refreshToken }
-}
+export const refreshAccessToken = async (refreshToken: string): Promise<TokenResponse> => {
+  try {
+    const response = await axiosInstance.post<{ data: TokenResponse }>(
+      '/admin/user/refresh',
+      {},
+      {
+        headers: {
+          // 재발급 요청 시에는 헤더에 리프레시 토큰을 담아 보냄.
+          Authorization: `Bearer ${refreshToken}`,
+        },
+      }
+    );
+    return response.data.data;
+  } catch (error)
+    {
+    console.error('Token refresh API request failed:', error);
+    throw error;
+  }
+};
 
-export const login = async (credentials: LoginRequest): Promise<LoginResponse> => {
-  const res = await axios.post(`${API}/admin/user/login`, credentials, {
-    headers: { 'Content-Type': 'application/json' }
-  })
-  return extractTokens(res)
-}
-
-export const refreshAccessToken = async (refreshToken: string): Promise<LoginResponse> => {
-  const res = await axios.post(`${API}/admin/user/refresh`, undefined, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${refreshToken}`,
-    }
-  })
-  return extractTokens(res)
-}
