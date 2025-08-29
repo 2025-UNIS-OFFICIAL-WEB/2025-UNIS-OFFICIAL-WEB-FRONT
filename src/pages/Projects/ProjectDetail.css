@@ -252,20 +252,36 @@
 @media (max-width: 1024px) {
   .project-detail { --side-pad: 20px; }
 
+  /* 배경 이미지는 섹션에서 제거하고, 카드형으로 ::before에 contain 렌더 */
   .pd-hero {
-    width: 100%;
-    aspect-ratio: 117 / 76;
-    background-size: contain !important;
+    position: relative;
+    background: none !important;
+    aspect-ratio: auto;           /* 섹션 자체 비율 제거 */
+    padding-top: 14px;            /* 상단 여백 (헤더 아래) */
+    padding-bottom: 0;
+  }
+  .pd-hero::before {
+    content: "";
+    display: block;
+    width: calc(100% - var(--side-pad) * 2);  /* 양옆 여백 */
+    margin: 0 auto;                            /* 가운데 정렬 */
+    aspect-ratio: 117 / 76;                    /* 카드 비율 */
+    background-image: var(--hero-bg);
+    background-size: contain;
+    background-repeat: no-repeat;
     background-position: center;
+    border-radius: 14px;
+    outline: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
   }
 
+  /* 중앙 오버레이/타이틀 장식은 모바일에서 숨김 */
   .pd-hero__overlay,
   .pd-hero__center,
   .pd-vline,
-  .pd-vline-dot {
-    display: none !important;
-  }
+  .pd-vline-dot { display: none !important; }
 
+  /* 본문 타이포 & 좌우 패딩 */
   .project-detail .pd-content {
     margin: 0 !important;
     padding-top: 24px;
@@ -274,9 +290,13 @@
     line-height: 1.9 !important;
   }
 
-  /* 모바일 헤더 */
-  .pd-header--mobile { display: block; margin-top: 12px; }
-
+  /* 모바일 헤더: 좌(제목/기수) - 우(아이콘) */
+  .pd-header--mobile {
+    display: block;
+    margin-top: 12px;
+    padding-left: var(--side-pad);
+    padding-right: var(--side-pad);
+  }
   .pd-hrow {
     display: flex;
     align-items: center;
@@ -284,7 +304,6 @@
     gap: 12px;
     min-height: 32px;
   }
-
   .pd-hleft {
     display: flex;
     align-items: center;
@@ -292,32 +311,32 @@
     min-width: 0;
     flex: 1 1 auto;
   }
-
   .pd-title--mobile {
     margin: 0;
     font-weight: 800;
-    font-size: clamp(18px, 5vw, 20px);
-    line-height: 1;
+    font-size: clamp(18px, 3.8vw, 22px);
+    line-height: 1.1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-
   .pd-gen {
     margin-left: 6px;
     font-weight: 700;
-    font-size: clamp(14px, 4vw, 16px);
+    font-size: clamp(14px, 3.4vw, 16px);
     line-height: 1;
     color: #fff;
     opacity: 0.92;
     flex-shrink: 0;
   }
 
-  .pd-hright { display: flex !important; align-items: center; gap: 12px; flex: 0 0 auto; }
-  .pd-social img { inline-size: clamp(18px, 4.2vw, 24px); block-size: clamp(18px, 4.2vw, 24px); }
+  /* 우측 소셜 아이콘: 반응형 크기/간격 */
+  .pd-hright { display: flex !important; align-items: center; gap: clamp(8px, 2.4vw, 14px); flex: 0 0 auto; }
+  .pd-social { display: inline-flex; align-items: center; justify-content: center; inline-size: clamp(28px, 5vw, 40px); block-size: clamp(28px, 5vw, 40px); }
+  .pd-social img { inline-size: clamp(18px, 3.8vw, 24px); block-size: clamp(18px, 3.8vw, 24px); object-fit: contain; }
 
+  /* 상세 설명 */
   .pd-text--intro { display: none !important; }
-
   .pd-text {
     padding-left: var(--side-pad);
     padding-right: var(--side-pad);
@@ -327,18 +346,22 @@
     margin-top: 12px;
   }
 
+  /* 갤러리 */
   .pd-photo {
     width: 100%;
     margin: 28px 0 12px;
     padding: 0;
   }
-
   .pd-photo img {
     width: 100%;
     border-radius: 12px;
     box-shadow: 0 4px 14px rgba(0,0,0,0.25);
   }
 
+  /* 데스크톱용 중앙 소셜 묶음은 모바일에서 숨김 */
+  .pd-socials--desktop { display: none !important; }
+
+  /* 데스크톱용 타이틀 칩 스타일이 모바일 타이틀에 묻지 않도록 */
   .project-detail .pd-title.pd-title--mobile {
     display: inline !important;
     padding: 0 !important;
