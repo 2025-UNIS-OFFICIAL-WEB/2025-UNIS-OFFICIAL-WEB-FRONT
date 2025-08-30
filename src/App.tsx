@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useEffect } from 'react'
-
+import useAuthInterceptor from '@/hooks/useAuthInterceptor';
 import Login from '@/pages/Login'
 import ProjectList from '@/pages/ProjectList'
 import AddProject from '@/pages/AddProject'
@@ -17,6 +17,7 @@ const PrivateRoute = ({ children }: PrivateRouteProps) => {
 }
 
 const App = () => {
+  useAuthInterceptor();
   useEffect(() => {
     // 글로벌 에러 핸들링: JS 에러 발생 시 로그인으로 이동
     window.onerror = () => {
