@@ -11,17 +11,21 @@ export interface PutApplyInfoResponse {
   data: null
 }
 
-export const updateApplyInfo = async (
-  data: PutApplyInfoRequest
-): Promise<PutApplyInfoResponse> => {
-  const payload: any = { isAvailable: data.isAvailable }
+interface ApplyInfoPayload {
+  isAvailable: boolean;
+  applyUrl?: string;
+}
 
-  // 지원 가능 상태일 때만 applyUrl 포함
+export const updateApplyInfo = async (data: PutApplyInfoRequest): Promise<PutApplyInfoResponse> => {
+  const payload: ApplyInfoPayload = { isAvailable: data.isAvailable };
+
+  // '지원 가능' 상태일 때만 applyUrl을 페이로드에 포함합니다.
   if (data.isAvailable) {
-    payload.applyUrl = data.applyUrl
+    payload.applyUrl = data.applyUrl;
   }
 
-  const response = await axiosInstance.put('/admin/apply', payload)
-  return response.data
-}
+  const response = await axiosInstance.put('/admin/apply', payload);
+  return response.data;
+};
+
 
