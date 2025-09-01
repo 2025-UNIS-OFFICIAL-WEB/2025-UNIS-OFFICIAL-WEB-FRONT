@@ -26,8 +26,19 @@
   background-image: var(--hero-bg);
   background-position: center;
   background-repeat: no-repeat;
-  background-size: contain !important;
+  background-size: contain !important; /* 데스크톱 기본은 배경 이미지 */
   overflow: visible;
+}
+
+/* 👉 모바일에서 사용할 “실제 이미지” (데스크톱에서는 숨김) */
+.pd-hero__img {
+  display: none; /* ≤1024px 에서 block 처리 */
+  width: calc(100% - var(--side-pad) * 2);
+  height: auto;
+  margin: 0 auto;
+  border-radius: 14px;
+  outline: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 }
 
 .pd-hero__overlay {
@@ -234,53 +245,31 @@
 @media (max-width: 1024px) {
   .project-detail { --side-pad: 30px; }
 
-  /* 모바일: 카드형 히어로 이미지
-     - 기존 이미지를 배경으로 쓰되, 모서리 둥글게가 '이미지 자체'처럼 보이도록 처리
-     - overflow:hidden + clip-path로 라운딩 보장 */
+  /* 모바일: 배경 대신 실제 이미지 사용 */
   .pd-hero {
-    background: none !important;
-    margin-top: 56px;
-    padding-top: 18px;
-    position: relative;
-    z-index: 0;
+    background: none !important;   /* 배경 제거 */
+    margin-top: 56px;              /* 상단 고정 헤더 회피 */
+    padding-top: 0;                /* 쓸모없는 패딩 제거 → 겹침 방지 */
   }
-  .pd-hero::before {
-    content: "";
-    display: block;
-    width: calc(100% - var(--side-pad) * 2);
-    margin: 0 auto;
-    aspect-ratio: 117 / 76;
-    background-image: var(--hero-bg);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+  .pd-hero__img {
+    display: block;                /* ✅ 여기서만 보이도록 */
+    margin-bottom: clamp(12px, 3.2vw, 20px); /* 이미지와 다음 요소 간격 */
     border-radius: 14px;
-    outline: 1px solid rgba(255,255,255,0.10);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-
-    /* ✅ 진짜 이미지처럼 둥근 모서리 보이도록 강제 */
-    overflow: hidden;
-    -webkit-clip-path: inset(0 round 14px);
-            clip-path: inset(0 round 14px);
-
-    /* 이미지와 아래 콘텐츠 간 간격: 살짝 줄임 */
-    margin-bottom: clamp(14px, 3.8vw, 22px);
   }
 
-  /* 데스크톱 히어로 장식 숨김 */
+  /* 데스크톱용 장식 숨김 */
   .pd-hero__overlay,
   .pd-hero__center,
   .pd-vline,
   .pd-vline-dot { display: none !important; }
 
-  /* ★ 모바일 헤더: 캡슐 스타일 제거(잘림 방지) + 상단 여백 조정 */
+  /* 모바일 헤더: 잘림 방지 + 간격 튜닝 */
   .pd-header--mobile {
     display: block;
     position: static;
     padding-left: var(--side-pad);
     padding-right: var(--side-pad);
-    /* 이미지와의 간격을 줄이되, 768 부근 겹침 방지 */
-    margin-top: clamp(12px, 3.6vw, 20px) !important;
+    margin-top: clamp(10px, 2.8vw, 18px) !important;
   }
   .pd-hrow {
     display: flex;
@@ -302,7 +291,7 @@
     color: #fff !important;
     background: transparent !important;
     border: 0 !important;
-    border-radius: 0 !important;   /* ✅ 캡슐 라운드 제거로 잘림 방지 */
+    border-radius: 0 !important;   /* ✅ 캡슐 영향 제거 */
     box-shadow: none !important;
     backdrop-filter: none !important;
     padding: 0 !important;
@@ -312,7 +301,7 @@
     font-size: clamp(18px, 3.8vw, 22px);
     line-height: 1.2;
     white-space: nowrap;
-    overflow: visible;             /* ✅ 잘림 방지 */
+    overflow: visible;
     text-overflow: ellipsis;
     text-align: left;
   }
@@ -342,9 +331,9 @@
     block-size: 100%;
   }
 
-  /* 본문 상단 패딩: 살짝 줄여 붙게 */
+  /* 본문 상단 패딩: 줄여서 붙이되 겹침 방지 */
   .project-detail .pd-content {
-    padding-top: clamp(16px, 3.5vw, 28px);
+    padding-top: clamp(12px, 2.8vw, 20px);
     text-align: left !important;
     font-size: 16px !important;
     line-height: 1.9 !important;
@@ -369,21 +358,14 @@
 @media (max-width: 768px) {
   .project-detail { --side-pad: 20px; }
 
-  .pd-hero { padding-top: 12px; }
-  .pd-hero::before {
+  .pd-hero { margin-top: 56px; padding-top: 0; }
+  .pd-hero__img {
     width: calc(100% - var(--side-pad) * 2);
-    aspect-ratio: 4 / 3;
-    border-radius: 10px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.25);
-
-    /* 768 부근에서 겹침 방지를 위해 여유 간격 */
-    margin-bottom: clamp(12px, 4.5vw, 20px);
-    -webkit-clip-path: inset(0 round 10px);
-            clip-path: inset(0 round 10px);
+    border-radius: 10px; /* 살짝 더 작게 */
+    margin-bottom: clamp(14px, 4.5vw, 22px); /* 768 근방 겹침 방지 */
   }
 
-  /* 헤더와의 간격 살짝 더 확보 */
-  .pd-header--mobile { margin-top: clamp(14px, 4.5vw, 22px) !important; }
+  .pd-header--mobile { margin-top: clamp(12px, 4.2vw, 20px) !important; }
 
   .pd-hrow { gap: 8px; }
   .pd-hleft { gap: 4px; }

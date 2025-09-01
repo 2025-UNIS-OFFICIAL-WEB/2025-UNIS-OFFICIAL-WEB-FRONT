@@ -110,6 +110,9 @@ export default function ProjectDetail() {
         style={{ backgroundImage: `url(${heroImage})`, "--hero-bg": `url(${heroImage})` }}
         aria-label="프로젝트 대표 이미지"
       >
+        {/* ✅ 모바일에서만 보이는 실제 이미지 (진짜 border-radius 적용) */}
+        <img className="pd-hero__img" src={heroImage} alt={`${title} 대표 이미지`} />
+
         <div className="pd-hero__overlay" />
         <div className="pd-hero__center">
           {Number.isFinite(gen) && (
