@@ -142,7 +142,6 @@ export default function ProjectDetail() {
                     target="_blank"
                     rel="noreferrer"
                     aria-label={l.label}
-                    style={{ "--icon": `url(${l.icon})` }}
                   >
                     <img src={l.icon} alt={`${l.label} 아이콘`} />
                   </a>
@@ -170,7 +169,6 @@ export default function ProjectDetail() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={l.label}
-                style={{ "--icon": `url(${l.icon})` }}
               >
                 <img src={l.icon} alt={`${l.label} 아이콘`} />
               </a>
