@@ -148,7 +148,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* 👉 간격: 1920px에서 22px, 작아질수록 8px까지 */
+  /* 1920px에서 22px, 작아지면 8px까지 */
   gap: clamp(8px, 1.15vw, 22px);
   margin: clamp(40px, 7vw, 100px) auto clamp(24px, 5vw, 80px);
 }
@@ -159,7 +159,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  /* 👉 크기: 1920px에서 46px, 작아질수록 24px까지 */
+  /* 1920px에서 46px, 작아지면 24px까지 */
   inline-size: clamp(24px, 2.4vw, 46px);
   block-size: clamp(24px, 2.4vw, 46px);
   border-radius: 12px;
@@ -169,11 +169,9 @@
 /* PNG 그대로 두고 색을 #808792에 가깝게 보정 */
 .pd-social img {
   display: block;
-  /* 👉 내부 아이콘은 부모 100% 채움 */
   inline-size: 100%;
   block-size: 100%;
   object-fit: contain;
-  /* 대략 #808792 근사치 */
   filter: invert(57%) sepia(7%) saturate(321%) hue-rotate(181deg) brightness(92%) contrast(90%);
 }
 
@@ -236,6 +234,9 @@
 @media (max-width: 1024px) {
   .project-detail { --side-pad: 30px; }
 
+  /* 모바일: 카드형 히어로 이미지
+     - 기존 이미지를 배경으로 쓰되, 모서리 둥글게가 '이미지 자체'처럼 보이도록 처리
+     - overflow:hidden + clip-path로 라운딩 보장 */
   .pd-hero {
     background: none !important;
     margin-top: 56px;
@@ -256,21 +257,31 @@
     border-radius: 14px;
     outline: 1px solid rgba(255,255,255,0.10);
     box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+
+    /* ✅ 진짜 이미지처럼 둥근 모서리 보이도록 강제 */
+    overflow: hidden;
+    -webkit-clip-path: inset(0 round 14px);
+            clip-path: inset(0 round 14px);
+
+    /* 이미지와 아래 콘텐츠 간 간격: 살짝 줄임 */
+    margin-bottom: clamp(14px, 3.8vw, 22px);
   }
 
+  /* 데스크톱 히어로 장식 숨김 */
   .pd-hero__overlay,
   .pd-hero__center,
   .pd-vline,
   .pd-vline-dot { display: none !important; }
 
+  /* ★ 모바일 헤더: 캡슐 스타일 제거(잘림 방지) + 상단 여백 조정 */
   .pd-header--mobile {
     display: block;
     position: static;
     padding-left: var(--side-pad);
     padding-right: var(--side-pad);
-    margin-top: clamp(28px, 6vw, 44px) !important;
+    /* 이미지와의 간격을 줄이되, 768 부근 겹침 방지 */
+    margin-top: clamp(12px, 3.6vw, 20px) !important;
   }
-
   .pd-hrow {
     display: flex;
     align-items: flex-start;
@@ -291,6 +302,7 @@
     color: #fff !important;
     background: transparent !important;
     border: 0 !important;
+    border-radius: 0 !important;   /* ✅ 캡슐 라운드 제거로 잘림 방지 */
     box-shadow: none !important;
     backdrop-filter: none !important;
     padding: 0 !important;
@@ -298,9 +310,9 @@
     max-inline-size: 100% !important;
     font-weight: 800;
     font-size: clamp(18px, 3.8vw, 22px);
-    line-height: 1.15;
+    line-height: 1.2;
     white-space: nowrap;
-    overflow: hidden;
+    overflow: visible;             /* ✅ 잘림 방지 */
     text-overflow: ellipsis;
     text-align: left;
   }
@@ -317,7 +329,6 @@
   .pd-hright {
     display: flex !important;
     align-items: center;
-    /* 👉 모바일도 동일 변수 사용 */
     gap: clamp(8px, 1.15vw, 22px);
     flex: 0 0 auto;
     padding-top: 2px;
@@ -331,8 +342,9 @@
     block-size: 100%;
   }
 
+  /* 본문 상단 패딩: 살짝 줄여 붙게 */
   .project-detail .pd-content {
-    padding-top: clamp(24px, 4.8vw, 36px);
+    padding-top: clamp(16px, 3.5vw, 28px);
     text-align: left !important;
     font-size: 16px !important;
     line-height: 1.9 !important;
@@ -344,10 +356,10 @@
     font-size: 14px;
     line-height: 1.9;
     color: #e9eef6;
-    margin-top: 12px;
+    margin-top: 10px;
   }
 
-  .pd-photo { width: 100%; margin: clamp(30px, 4.5vw, 40px) 0 clamp(14px, 3.6vw, 20px); padding: 0; }
+  .pd-photo { width: 100%; margin: clamp(24px, 4vw, 36px) 0 clamp(14px, 3.6vw, 20px); padding: 0; }
   .pd-photo img { width: 100%; border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
 
   .pd-socials--desktop { display: none !important; }
@@ -363,24 +375,24 @@
     aspect-ratio: 4 / 3;
     border-radius: 10px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+
+    /* 768 부근에서 겹침 방지를 위해 여유 간격 */
+    margin-bottom: clamp(12px, 4.5vw, 20px);
+    -webkit-clip-path: inset(0 round 10px);
+            clip-path: inset(0 round 10px);
   }
 
-  .pd-header--mobile { margin-top: clamp(20px, 5.5vw, 32px) !important; }
+  /* 헤더와의 간격 살짝 더 확보 */
+  .pd-header--mobile { margin-top: clamp(14px, 4.5vw, 22px) !important; }
 
   .pd-hrow { gap: 8px; }
   .pd-hleft { gap: 4px; }
-  .pd-title--mobile { font-size: clamp(16px, 4.5vw, 20px); line-height: 1.2; }
+  .pd-title--mobile { font-size: clamp(16px, 4.5vw, 20px); line-height: 1.2; border-radius: 0 !important; overflow: visible; }
   .pd-gen { font-size: clamp(12px, 3.6vw, 14px); opacity: .9; }
 
   .pd-hright { gap: clamp(8px, 1.15vw, 22px); }
-  .pd-social {
-    inline-size: clamp(24px, 2.4vw, 46px);
-    block-size: clamp(24px, 2.4vw, 46px);
-  }
-  .pd-social img {
-    inline-size: 100%;
-    block-size: 100%;
-  }
+  .pd-social { inline-size: clamp(24px, 2.4vw, 46px); block-size: clamp(24px, 2.4vw, 46px); }
+  .pd-social img { inline-size: 100%; block-size: 100%; }
 
   .project-detail .pd-content { padding-top: 20px; font-size: 15px !important; line-height: 1.7 !important; }
   .pd-text { font-size: 13px; line-height: 1.7; margin-top: 8px; }
