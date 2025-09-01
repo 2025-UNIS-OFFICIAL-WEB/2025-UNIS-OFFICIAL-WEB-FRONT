@@ -7,14 +7,13 @@ html, body, #root {
   overflow-x: hidden;
 }
 
-/* ✅ 스크롤바 제거 (전역 적용) */
-html, body {
-  -ms-overflow-style: none;  /* IE/Edge */
+/* ✅ 스크롤바 제거 (전역 적용: 모든 요소 대상) */
+* {
+  -ms-overflow-style: none;  /* IE/구형 Edge */
   scrollbar-width: none;     /* Firefox */
 }
-html::-webkit-scrollbar,
-body::-webkit-scrollbar {
-  display: none;             /* Chrome/Safari/Edge */
+*::-webkit-scrollbar {
+  display: none;             /* Chrome/Safari/Edge/iOS Safari */
 }
 
 :root {
