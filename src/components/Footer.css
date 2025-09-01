@@ -38,6 +38,7 @@
   font-weight: 700;   /* 회칙만 굵게 */
   cursor: pointer;
   line-height: 2;
+  text-decoration: none;
 }
 
 .footer__meta .meta-vector {
