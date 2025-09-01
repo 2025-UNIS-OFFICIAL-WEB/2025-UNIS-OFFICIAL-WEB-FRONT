@@ -12,7 +12,6 @@ export default function ProjectDetail() {
   const { state } = useLocation();
   const preview = state?.preview || null;
 
-  // 프리뷰로 먼저 그리기(제목/인트로/임시 커버 + gen)
   const [data, setData] = useState(
     preview
       ? {
@@ -126,7 +125,7 @@ export default function ProjectDetail() {
 
       {/* 본문 */}
       <main className="pd-content">
-        {/* ▶ 모바일 전용 헤더: 제목 + (같은 줄) 기수, 오른쪽 아이콘 */}
+        {/* ▶ 모바일 전용 헤더 */}
         <div className="pd-header--mobile">
           <div className="pd-hrow">
             <div className="pd-hleft">
@@ -143,6 +142,7 @@ export default function ProjectDetail() {
                     target="_blank"
                     rel="noreferrer"
                     aria-label={l.label}
+                    style={{ "--icon": `url(${l.icon})` }}
                   >
                     <img src={l.icon} alt={`${l.label} 아이콘`} />
                   </a>
@@ -159,7 +159,7 @@ export default function ProjectDetail() {
           </div>
         )}
 
-        {/* ✅ 데스크톱 전용 소셜 아이콘: 상세 설명 아래 중앙 정렬 */}
+        {/* ✅ 데스크톱 전용 소셜 아이콘 */}
         {orderedLinks.length > 0 && (
           <div className="pd-socials pd-socials--desktop" aria-label="프로젝트 링크">
             {orderedLinks.map((l, i) => (
@@ -170,6 +170,7 @@ export default function ProjectDetail() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={l.label}
+                style={{ "--icon": `url(${l.icon})` }}
               >
                 <img src={l.icon} alt={`${l.label} 아이콘`} />
               </a>
