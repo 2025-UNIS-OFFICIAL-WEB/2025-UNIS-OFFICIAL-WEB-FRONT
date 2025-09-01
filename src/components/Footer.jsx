@@ -11,10 +11,16 @@ export default function Footer() {
         {/* 왼쪽: 하나의 클래스 안에 3줄 배치, 첫 줄(회칙)만 굵게 */}
         <div className="footer__left">
           <div className="footer__meta">
-            <button type="button" className="meta-link" aria-label="UNIS 회칙 보기">
+            <a
+              href="https://docs.google.com/document/d/14bFA00r38JdqjQ61W0HmJBDF23AHgrrFV-VBs_qZ62s/edit?tab=t.0"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="meta-link"
+              aria-label="UNIS 회칙 보기"
+            >
               <span>UNIS 회칙</span>
-              <img src={vectorIcon} alt="" className="meta-vector" />
-            </button>
+              <img src={vectorIcon} alt="회칙 아이콘" className="meta-vector" />
+            </a>
             <p>UNIS (유니스, 이화여자대학교 중앙 실전IT창업학회)</p>
             <p>Copyright©2025.UNIS. All rights reserved.</p>
           </div>
@@ -22,17 +28,25 @@ export default function Footer() {
 
         {/* 오른쪽 */}
         <div className="footer__right">
-        <div className="footer__icons">
-          <a href="http://disquiet.io/club/egl" target="_blank" rel="noopener noreferrer">
-            <img src={disquietLogo} alt="Disquiet" />
-          </a>
-          <a href="mailto:unisewha@gmail.com">
-            <img src={mailLogo} alt="Mail" />
-          </a>
-          <a href="https://www.instagram.com/unis_ewha?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer">
-            <img src={instagramLogo} alt="Instagram" />
-          </a>
-        </div>
+          <div className="footer__icons">
+            <a
+              href="http://disquiet.io/club/egl"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src={disquietLogo} alt="Disquiet" />
+            </a>
+            <a href="mailto:unisewha@gmail.com">
+              <img src={mailLogo} alt="Mail" />
+            </a>
+            <a
+              href="https://www.instagram.com/unis_ewha?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src={instagramLogo} alt="Instagram" />
+            </a>
+          </div>
           <p className="footer__makers">
             만든 사람들 | 6기 김겨레, 손하늘, 유혜민, 장현서
           </p>
