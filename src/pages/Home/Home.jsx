@@ -3,7 +3,7 @@ import homeBackground from "../../assets/home-background.png";
 import logo from "../../assets/unis-logo.svg";
 import mockImage from "../../assets/mock-image.png";
 import homeimage1 from "../../assets/home-image-1.png";
-import homeimage2 from "../../assets/home-2.png";
+import homeimage2 from "../../assets/home-2.jpg";
 
 export default function Home() {
   return (
