@@ -376,3 +376,42 @@
   .pd-photo { margin: 20px 0 12px; }
   .pd-photo img { border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.25); }
 }
+
+/* ===========================
+   PATCH — 모바일 겹침 확실 제거
+   =========================== */
+   @media (max-width: 1024px) {
+    /* 히어로는 자신 영역 밖으로 삐져나오지 않도록 막음 */
+    .pd-hero {
+      overflow: hidden;              /* ✅ 자식이 밑으로 겹치지 않게 */
+      margin-bottom: 0 !important;   /* 여분 마진 제거 */
+      z-index: auto !important;      /* 불필요 스택 해제 */
+    }
+  
+    /* 실제 이미지와 본문 사이 간격을 확실히 띄움 */
+    .pd-hero__img {
+      display: block;
+      margin: 0 auto 36px !important;  /* ✅ 간격 늘림 (필요시 40~48px까지) */
+      position: relative;
+      z-index: 0;
+    }
+  
+    /* 본문은 히어로 바로 다음에 자연스럽게 붙도록 */
+    .pd-content {
+      position: relative;
+      z-index: 1;                      /* ✅ 시각적으로 항상 이미지 아래로 이어지게 */
+      margin-top: 0 !important;        /* 상단 음수/겹침 마진 방지 */
+      padding-top: 0 !important;
+    }
+  
+    /* 본문 첫 요소가 자체 마진으로 위로 파고들지 않도록 */
+    .pd-content > *:first-child {
+      margin-top: 0 !important;        /* ✅ 파란 블록이 위로 겹치는 현상 방지 */
+    }
+  }
+  
+  /* 더 작은 화면에서는 간격을 조금 더 주면 안정적 */
+  @media (max-width: 768px) {
+    .pd-hero__img { margin-bottom: 32px !important; }
+  }
+  
