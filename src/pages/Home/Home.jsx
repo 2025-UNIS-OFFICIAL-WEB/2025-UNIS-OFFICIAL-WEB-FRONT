@@ -3,6 +3,7 @@ import homeBackground from "../../assets/home-background.png";
 import logo from "../../assets/unis-logo.svg";
 import mockImage from "../../assets/mock-image.png";
 import homeimage1 from "../../assets/home-image-1.png";
+import homeimage2 from "../../assets/home-2.png";
 
 export default function Home() {
   return (
@@ -112,7 +113,7 @@ export default function Home() {
 
           {/* RIGHT */}
           <div className="program-media">
-            <img src={mockImage} alt="활동 미리보기" />
+            <img src={homeimage2} alt="활동 미리보기" />
           </div>
         </div>
       </section>
